@@ -29,6 +29,8 @@ jobs:
           cp -r threat-model _site/threat-model
           cp index.html _site/
           cp README.md _site/
+          cp _sidebar.md _site/
+          touch _site/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
       - name: Deploy to GitHub Pages
