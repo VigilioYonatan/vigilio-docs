@@ -1,5 +1,5 @@
-* **🚀 Inicio**
-  * [📖 Portada Principal](README.md)
+* **👋 Bienvenid@s**
+  * [👋 Portada Principal](README.md)
 
 * **⚡ Backend Node / NestJS**
   * [📄 Overview de Arquitectura](backend-node-nest/README.md)
