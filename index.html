@@ -12,9 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Base Docsify Theme & VS Code Dark Plus Code Theme -->
+  <!-- Base Docsify Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1/themes/prism-vsc-dark-plus.min.css">
 
   <!-- Microsoft Loop UI Exact Styling & Custom Fixes -->
   <style>
@@ -34,15 +33,23 @@
     }
 
     /* ----------------------------------------------------
-       FIX 1: HEADINGS IN LIGHT MODE - NEGRO OSCURO NÍTIDO (0% PLOMO)
+       FIX 1: HEADINGS IN LIGHT MODE - NEGRO ABSOLUTO #000000 (0% PLOMO)
        ---------------------------------------------------- */
     html[data-theme="light"] .markdown-section h1,
     html[data-theme="light"] .markdown-section h2,
     html[data-theme="light"] .markdown-section h3,
     html[data-theme="light"] .markdown-section h4,
     html[data-theme="light"] .markdown-section h5,
-    html[data-theme="light"] .markdown-section h6 {
-      color: #0f172a !important; /* Negro Oscuro Slate - 100% Nítido */
+    html[data-theme="light"] .markdown-section h6,
+    body[data-theme="light"] .markdown-section h1,
+    body[data-theme="light"] .markdown-section h2,
+    body[data-theme="light"] .markdown-section h3,
+    body[data-theme="light"] .markdown-section h4,
+    body[data-theme="light"] h1,
+    body[data-theme="light"] h2,
+    body[data-theme="light"] h3,
+    body[data-theme="light"] h4 {
+      color: #000000 !important; /* Pure Black - 100% Nítido */
       opacity: 1 !important;
       font-weight: 700 !important;
     }
@@ -56,7 +63,7 @@
     html[data-theme="light"] .markdown-section h2 {
       font-size: 1.5rem !important;
       margin-top: 2.2rem;
-      border-bottom: 1px solid #e2e8f0 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
       padding-bottom: 0.4rem;
     }
     html[data-theme="light"] .markdown-section h3 {
@@ -65,10 +72,10 @@
     }
 
     /* ----------------------------------------------------
-       FIX 2: VS CODE LIGHT THEME FOR LIGHT MODE (TOKENS & BRACES FIX)
+       FIX 2: VS CODE LIGHT THEME (LIGHT MODE - PERFECT CONTRAST)
        ---------------------------------------------------- */
     html[data-theme="light"] .markdown-section pre {
-      background: #ffffff !important; /* Pure Light VS Code Editor Background */
+      background: #ffffff !important;
       border: 1px solid #cbd5e1 !important;
       border-radius: 8px !important;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
@@ -77,8 +84,9 @@
       position: relative !important;
     }
     html[data-theme="light"] .markdown-section pre,
-    html[data-theme="light"] .markdown-section pre > code {
-      color: #001080 !important; /* Base Identifiers (endosoShowResponseDto, z, etc.) in VS Code Dark Blue */
+    html[data-theme="light"] .markdown-section pre > code,
+    html[data-theme="light"] .markdown-section pre code span {
+      color: #001080 !important; /* VS Code Light Dark Blue Identifiers */
       background: transparent !important;
       border: none !important;
       padding: 0 !important;
@@ -97,18 +105,19 @@
     }
     html[data-theme="light"] .token.property,
     html[data-theme="light"] .token.parameter,
-    html[data-theme="light"] .token.variable {
-      color: #001080 !important; /* VS Code Light Dark-Blue Properties (success, message, nro_poliza) */
-      font-weight: 500 !important;
+    html[data-theme="light"] .token.variable,
+    html[data-theme="light"] .token.imports {
+      color: #001080 !important; /* VS Code Light Dark-Blue (createZodDto, nro_poliza, tipo_endoso) */
+      font-weight: 600 !important;
     }
     html[data-theme="light"] .token.keyword,
     html[data-theme="light"] .token.operator {
       color: #0000ff !important; /* VS Code Light Blue Keywords (import, from, const, export, type, class) */
-      font-weight: 600 !important;
+      font-weight: 700 !important;
     }
     html[data-theme="light"] .token.string,
     html[data-theme="light"] .token.attr-value {
-      color: #a31515 !important; /* VS Code Light Red Strings ('zod', './endoso-show...') */
+      color: #a31515 !important; /* VS Code Light Crimson Strings ('zod', 'nest-zod') */
     }
     html[data-theme="light"] .token.comment {
       color: #008000 !important; /* VS Code Light Green Comments */
@@ -117,18 +126,19 @@
     }
     html[data-theme="light"] .token.function,
     html[data-theme="light"] .token.method {
-      color: #795e26 !important; /* VS Code Light Gold/Brown Functions (pick, object, infer) */
+      color: #795e26 !important; /* VS Code Light Brown Functions (pick, object, infer) */
+      font-weight: 600 !important;
     }
     html[data-theme="light"] .token.class-name,
     html[data-theme="light"] .token.type-annotation,
     html[data-theme="light"] .token.builtin {
-      color: #267f99 !important; /* VS Code Light Teal Types (EndosoUpdateResponseDto) */
+      color: #267f99 !important; /* VS Code Light Teal Types (EndosoStoreRequestDto) */
       font-weight: 600 !important;
     }
-    html[data-theme="light"] .token.number,
-    html[data-theme="light"] .token.boolean {
+    html[data-theme="light"] .token.boolean,
+    html[data-theme="light"] .token.number {
       color: #098658 !important; /* VS Code Light Green Booleans (true, false) */
-      font-weight: 600 !important;
+      font-weight: 700 !important;
     }
     html[data-theme="light"] .token.decorator {
       color: #af00db !important; /* VS Code Light Purple Decorators */
@@ -245,7 +255,7 @@
 
 
     /* ----------------------------------------------------
-       VS CODE DARK PLUS SYNTAX HIGHLIGHTING (DARK MODE)
+       FIX 3: VS CODE DARK PLUS THEME (DARK MODE - PERFECT CONTRAST)
        ---------------------------------------------------- */
     html[data-theme="dark"] .markdown-section pre {
       background: #1e1e1e !important; /* Authentic VS Code Dark Editor Background */
@@ -256,7 +266,10 @@
       margin: 1.5rem 0 !important;
       position: relative !important;
     }
-    html[data-theme="dark"] .markdown-section pre > code {
+    html[data-theme="dark"] .markdown-section pre,
+    html[data-theme="dark"] .markdown-section pre > code,
+    html[data-theme="dark"] .markdown-section pre code span {
+      color: #9cdcfe !important; /* VS Code Light Blue Identifiers (createZodDto, nro_poliza, tipo_endoso) */
       background: transparent !important;
       border: none !important;
       padding: 0 !important;
@@ -266,12 +279,47 @@
       line-height: 1.6 !important;
     }
 
-    /* Dark Mode Braces & Punctuation Contrast Fix */
+    /* VS Code Dark Token Colors - High Contrast */
     html[data-theme="dark"] .token.punctuation,
     html[data-theme="dark"] .token.delimiter,
     html[data-theme="dark"] .token.brace {
-      color: #ffd700 !important; /* Bright Gold Braces { } ( ) : ; , for VS Code Dark */
+      color: #ffd700 !important; /* Gold Braces { } ( ) : ; , */
       font-weight: 700 !important;
+    }
+    html[data-theme="dark"] .token.property,
+    html[data-theme="dark"] .token.variable,
+    html[data-theme="dark"] .token.parameter,
+    html[data-theme="dark"] .token.imports {
+      color: #9cdcfe !important; /* VS Code Light Blue Identifiers (createZodDto, nro_poliza, tipo_endoso) */
+      font-weight: 500 !important;
+    }
+    html[data-theme="dark"] .token.keyword,
+    html[data-theme="dark"] .token.operator {
+      color: #569cd6 !important; /* VS Code Blue Keywords (import, from, const, export, type, class, extends) */
+      font-weight: 600 !important;
+    }
+    html[data-theme="dark"] .token.string,
+    html[data-theme="dark"] .token.attr-value {
+      color: #ce9178 !important; /* VS Code Orange Strings ('zod', 'nest-zod') */
+    }
+    html[data-theme="dark"] .token.comment {
+      color: #6a9955 !important; /* VS Code Green Comments */
+      font-style: italic !important;
+    }
+    html[data-theme="dark"] .token.function,
+    html[data-theme="dark"] .token.method {
+      color: #dcdcaa !important; /* VS Code Yellow Functions (pick, object, infer) */
+    }
+    html[data-theme="dark"] .token.class-name,
+    html[data-theme="dark"] .token.type-annotation,
+    html[data-theme="dark"] .token.builtin {
+      color: #4ec9b0 !important; /* VS Code Teal Types (EndosoStoreRequestDto) */
+      font-weight: 600 !important;
+    }
+    html[data-theme="dark"] .token.boolean,
+    html[data-theme="dark"] .token.number {
+      color: #b5cea8 !important; /* VS Code Light Green Booleans (true, false) */
+      font-weight: 600 !important;
     }
 
     /* Fix Badge / Copy Button Overlap */
