@@ -77,16 +77,17 @@
     }
 
     /* ----------------------------------------------------
-       FIX 2: LIGHT MODE CODE BLOCKS - TARJETA CON BORDE OSCURO Y SOMBRA VISIBLE
+       FIX 2: LIGHT MODE CODE BLOCK CARD WITH CRISP BORDER & DROP SHADOW
        ---------------------------------------------------- */
     html[data-theme="light"] .markdown-section pre,
+    html[data-theme="light"] .markdown-section pre[class*="language-"],
+    html[data-theme="light"] .markdown-section pre[data-lang],
     body[data-theme="light"] .markdown-section pre,
-    html[data-theme="light"] pre[data-lang],
-    body[data-theme="light"] pre[data-lang] {
+    body[data-theme="light"] .markdown-section pre[class*="language-"] {
       background-color: #f1f5f9 !important;
-      border: 1.5px solid #64748b !important; /* Borde oscuro bien marcado */
+      border: 1.5px solid #64748b !important;
       border-radius: 10px !important;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14), 0 2px 6px rgba(15, 23, 42, 0.08) !important;
       padding: 1.25rem 1.5rem !important;
       margin: 1.8rem 0 !important;
       position: relative !important;
@@ -266,14 +267,15 @@
 
 
     /* ----------------------------------------------------
-       FIX 3: DARK MODE CODE BLOCKS - TARJETA DESTACADA CON BORDE Y SOMBRA MARCADOS
+       FIX 3: DARK MODE CODE BLOCK CARD WITH CRISP BORDER & DEEP SHADOW
        ---------------------------------------------------- */
     html[data-theme="dark"] .markdown-section pre,
+    html[data-theme="dark"] .markdown-section pre[class*="language-"],
+    html[data-theme="dark"] .markdown-section pre[data-lang],
     body[data-theme="dark"] .markdown-section pre,
-    html[data-theme="dark"] pre[data-lang],
-    body[data-theme="dark"] pre[data-lang] {
-      background-color: #212127 !important; /* Tarjeta carbón VS Code contrastada contra el fondo #16161a */
-      border: 1.5px solid #4a4a5a !important; /* Borde fino gris claro 100% VISIBLE */
+    body[data-theme="dark"] .markdown-section pre[class*="language-"] {
+      background-color: #1e1e24 !important; /* Tarjeta carbón VS Code bien delimitada */
+      border: 1.5px solid #4a4a5a !important; /* Borde gris claro 100% VISIBLE */
       border-radius: 10px !important;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35) !important; /* Sombra profunda */
       padding: 1.25rem 1.5rem !important;
@@ -336,7 +338,7 @@
       font-weight: 600 !important;
     }
 
-    /* Fix Badge / Copy Button Overlap */
+    /* Fix Badge & Copy Button Positioning */
     .markdown-section pre[data-lang]::after {
       position: absolute !important;
       top: 12px !important;
@@ -346,6 +348,7 @@
       font-weight: 600 !important;
       text-transform: uppercase !important;
       letter-spacing: 0.05em !important;
+      z-index: 10 !important;
     }
     .docsify-copy-code-button {
       position: absolute !important;
@@ -357,6 +360,10 @@
       border-radius: 6px !important;
       padding: 3px 10px !important;
       font-size: 0.78rem !important;
+      z-index: 10 !important;
+      display: inline-block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
       transition: all 0.2s ease !important;
     }
     .docsify-copy-code-button:hover {
