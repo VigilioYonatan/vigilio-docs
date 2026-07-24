@@ -2,7 +2,7 @@
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <title>Vigilio Docs - Portal de Arquitectura</title>
+  <title>Vigilio Docs - Portal Microsoft Loop</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Documentación de Arquitectura Centralizada Vigilio">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
@@ -16,154 +16,207 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" />
 
-  <!-- Microsoft Loop & Custom Table Contrast Fix Styles -->
+  <!-- Microsoft Loop UI Exact Styling & Table Contrast Fix -->
   <style>
     :root {
       --theme-color: #38bdf8;
     }
     
     /* ----------------------------------------------------
-       DARK MODE STYLES (Microsoft Loop Dark Theme)
+       MICROSOFT LOOP DARK MODE (Imagen 2)
        ---------------------------------------------------- */
     html[data-theme="dark"] body {
-      background-color: #0f172a !important;
-      color: #e2e8f0 !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #16161a !important;
+      color: #d4d4d8 !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 16px;
+      line-height: 1.7;
     }
     html[data-theme="dark"] .sidebar {
-      background-color: #0b1329 !important;
-      border-right: 1px solid #1e293b !important;
+      background-color: #1b1b20 !important;
+      border-right: 1px solid #27272a !important;
+      padding-top: 1rem;
     }
     html[data-theme="dark"] .sidebar-nav strong {
-      color: #38bdf8 !important;
+      color: #94a3b8 !important;
       font-size: 0.95rem;
       font-weight: 700;
+      letter-spacing: 0.01em;
     }
     html[data-theme="dark"] .sidebar-nav ul li a {
-      color: #94a3b8 !important;
+      color: #a1a1aa !important;
       font-size: 0.92rem;
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      transition: all 0.15s ease;
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      margin: 0.2rem 0.6rem;
+      transition: all 0.15s ease-in-out;
     }
     html[data-theme="dark"] .sidebar-nav ul li a:hover {
-      color: #38bdf8 !important;
-      background-color: #1e293b !important;
+      color: #ffffff !important;
+      background-color: #27272a80 !important;
     }
+    /* Microsoft Loop Dark Active Pill Card */
     html[data-theme="dark"] .sidebar-nav ul li.active > a {
       color: #ffffff !important;
-      font-weight: 600;
-      background-color: #1e293b !important;
+      font-weight: 600 !important;
+      background-color: #2b2b36 !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
       border-left: 3px solid #38bdf8 !important;
     }
-    
-    /* Dark Mode Content & Code */
-    html[data-theme="dark"] .markdown-section h1,
-    html[data-theme="dark"] .markdown-section h2,
+
+    /* Headings */
+    html[data-theme="dark"] .markdown-section h1 {
+      color: #ffffff !important;
+      font-size: 2.2rem !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #27272a !important;
+      padding-bottom: 0.5rem;
+    }
+    html[data-theme="dark"] .markdown-section h2 {
+      color: #ffffff !important;
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+      margin-top: 2rem;
+      border-bottom: 1px solid #27272a !important;
+      padding-bottom: 0.4rem;
+    }
     html[data-theme="dark"] .markdown-section h3 {
-      color: #f8fafc !important;
-      border-bottom-color: #1e293b !important;
+      color: #f4f4f5 !important;
+      font-size: 1.2rem !important;
+      font-weight: 600 !important;
     }
     html[data-theme="dark"] .markdown-section p,
     html[data-theme="dark"] .markdown-section li {
-      color: #cbd5e1 !important;
+      color: #d4d4d8 !important;
+      font-size: 1rem;
+      line-height: 1.7;
     }
     html[data-theme="dark"] .markdown-section code {
-      background: #1e293b !important;
+      background: #27272a !important;
       color: #38bdf8 !important;
-      border: 1px solid #334155 !important;
+      border: 1px solid #3f3f46 !important;
       border-radius: 6px;
-      padding: 0.15rem 0.4rem;
+      padding: 0.2rem 0.45rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88em;
     }
     html[data-theme="dark"] .markdown-section pre {
-      background: #090d16 !important;
-      border: 1px solid #1e293b !important;
+      background: #111114 !important;
+      border: 1px solid #27272a !important;
       border-radius: 8px;
     }
 
-    /* DARK MODE TABLE FIX (No invisible rows) */
+    /* DARK MODE TABLE FIX (PERFECT CONTRAST - Imagen 2 Resuelta) */
     html[data-theme="dark"] .markdown-section table {
       width: 100% !important;
       border-collapse: separate !important;
       border-spacing: 0 !important;
       margin: 1.5rem 0 !important;
       border-radius: 8px !important;
-      border: 1px solid #1e293b !important;
+      border: 1px solid #27272a !important;
       overflow: hidden !important;
       display: table !important;
     }
     html[data-theme="dark"] .markdown-section table th {
-      background-color: #1e293b !important;
-      color: #f8fafc !important;
+      background-color: #23232a !important;
+      color: #ffffff !important;
       font-weight: 600 !important;
-      padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #334155 !important;
-      border-right: 1px solid #334155 !important;
+      padding: 0.8rem 1rem !important;
+      border-bottom: 1px solid #3f3f46 !important;
+      border-right: 1px solid #27272a !important;
     }
     html[data-theme="dark"] .markdown-section table td {
-      background-color: #0f172a !important;
-      color: #e2e8f0 !important;
-      padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #1e293b !important;
-      border-right: 1px solid #1e293b !important;
+      background-color: #16161a !important;
+      color: #e4e4e7 !important;
+      padding: 0.8rem 1rem !important;
+      border-bottom: 1px solid #27272a !important;
+      border-right: 1px solid #27272a !important;
     }
     html[data-theme="dark"] .markdown-section table tr:nth-child(2n) td {
-      background-color: #172554 !important; /* Contrasted subtle blue dark row */
-      color: #f8fafc !important;
+      background-color: #1c1c22 !important; /* Elegant dark charcoal zebra row */
+      color: #e4e4e7 !important;
     }
 
     /* ----------------------------------------------------
-       LIGHT MODE STYLES (Microsoft Loop Light Theme)
+       MICROSOFT LOOP LIGHT MODE (Imagen 1)
        ---------------------------------------------------- */
     html[data-theme="light"] body {
       background-color: #ffffff !important;
-      color: #0f172a !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #334155 !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-size: 16px;
+      line-height: 1.7;
     }
     html[data-theme="light"] .sidebar {
-      background-color: #f8fafc !important;
+      background-color: #f0f2f7 !important;
       border-right: 1px solid #e2e8f0 !important;
+      padding-top: 1rem;
     }
     html[data-theme="light"] .sidebar-nav strong {
-      color: #0284c7 !important;
+      color: #1e293b !important;
       font-size: 0.95rem;
       font-weight: 700;
     }
     html[data-theme="light"] .sidebar-nav ul li a {
-      color: #334155 !important;
+      color: #475569 !important;
       font-size: 0.92rem;
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      transition: all 0.15s ease;
+      padding: 0.45rem 0.8rem;
+      border-radius: 8px;
+      margin: 0.2rem 0.6rem;
+      transition: all 0.15s ease-in-out;
     }
     html[data-theme="light"] .sidebar-nav ul li a:hover {
-      color: #0284c7 !important;
+      color: #0f172a !important;
       background-color: #e2e8f0 !important;
     }
+    /* Microsoft Loop Light Active Pill Card */
     html[data-theme="light"] .sidebar-nav ul li.active > a {
       color: #0f172a !important;
-      font-weight: 600;
-      background-color: #e2e8f0 !important;
+      font-weight: 600 !important;
+      background-color: #ffffff !important;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       border-left: 3px solid #0284c7 !important;
     }
 
-    /* Light Mode Content & Code */
-    html[data-theme="light"] .markdown-section h1,
-    html[data-theme="light"] .markdown-section h2,
-    html[data-theme="light"] .markdown-section h3 {
+    /* Headings */
+    html[data-theme="light"] .markdown-section h1 {
       color: #0f172a !important;
-      border-bottom-color: #e2e8f0 !important;
+      font-size: 2.2rem !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #e2e8f0 !important;
+      padding-bottom: 0.5rem;
+    }
+    html[data-theme="light"] .markdown-section h2 {
+      color: #0f172a !important;
+      font-size: 1.5rem !important;
+      font-weight: 700 !important;
+      margin-top: 2rem;
+      border-bottom: 1px solid #e2e8f0 !important;
+      padding-bottom: 0.4rem;
+    }
+    html[data-theme="light"] .markdown-section h3 {
+      color: #1e293b !important;
+      font-size: 1.2rem !important;
+      font-weight: 600 !important;
     }
     html[data-theme="light"] .markdown-section p,
     html[data-theme="light"] .markdown-section li {
       color: #334155 !important;
+      font-size: 1rem;
+      line-height: 1.7;
     }
     html[data-theme="light"] .markdown-section code {
       background: #f1f5f9 !important;
       color: #0284c7 !important;
       border: 1px solid #cbd5e1 !important;
       border-radius: 6px;
-      padding: 0.15rem 0.4rem;
+      padding: 0.2rem 0.45rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88em;
     }
     html[data-theme="light"] .markdown-section pre {
       background: #f8fafc !important;
@@ -186,14 +239,14 @@
       background-color: #f1f5f9 !important;
       color: #0f172a !important;
       font-weight: 600 !important;
-      padding: 0.75rem 1rem !important;
+      padding: 0.8rem 1rem !important;
       border-bottom: 1px solid #cbd5e1 !important;
       border-right: 1px solid #cbd5e1 !important;
     }
     html[data-theme="light"] .markdown-section table td {
       background-color: #ffffff !important;
       color: #334155 !important;
-      padding: 0.75rem 1rem !important;
+      padding: 0.8rem 1rem !important;
       border-bottom: 1px solid #e2e8f0 !important;
       border-right: 1px solid #e2e8f0 !important;
     }
@@ -204,21 +257,21 @@
 
     /* Copy Button & General UI */
     .docsify-copy-code-button {
-      background: #1e293b !important;
+      background: #27272a !important;
       color: #38bdf8 !important;
       border-radius: 6px !important;
     }
     
     /* Scrollbars */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #16161a; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
   </style>
 </head>
 <body>
   <!-- BULLETPROOF THEME TOGGLE BUTTON (☀️ / 🌙) -->
-  <div id="theme-toggle" onclick="toggleTheme()" title="Cambiar Tema (Claro/Oscuro)" style="position: fixed; top: 16px; right: 16px; z-index: 9999; cursor: pointer; background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease;">
+  <div id="theme-toggle" onclick="toggleTheme()" title="Cambiar Modo (Claro/Oscuro)" style="position: fixed; top: 16px; right: 16px; z-index: 9999; cursor: pointer; background: #1b1b20; color: #38bdf8; border: 1px solid #27272a; padding: 7px 15px; border-radius: 20px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease;">
     <span id="theme-toggle-icon">🌙</span> <span id="theme-toggle-text">Oscuro</span>
   </div>
 
@@ -265,7 +318,7 @@
         if (icon) icon.textContent = '☀️';
         if (text) text.textContent = 'Claro';
         if (btn) {
-          btn.style.background = '#e2e8f0';
+          btn.style.background = '#f0f2f7';
           btn.style.color = '#0284c7';
           btn.style.borderColor = '#cbd5e1';
         }
@@ -273,9 +326,9 @@
         if (icon) icon.textContent = '🌙';
         if (text) text.textContent = 'Oscuro';
         if (btn) {
-          btn.style.background = '#1e293b';
+          btn.style.background = '#1b1b20';
           btn.style.color = '#38bdf8';
-          btn.style.borderColor = '#334155';
+          btn.style.borderColor = '#27272a';
         }
       }
     }
