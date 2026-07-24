@@ -34,19 +34,51 @@
     }
 
     /* ----------------------------------------------------
-       VS CODE DARK PLUS SYNTAX HIGHLIGHTING FIXES
+       FIX 1: HEADINGS IN LIGHT MODE - NEGRO OSCURO NÍTIDO (0% PLOMO)
        ---------------------------------------------------- */
-    .markdown-section pre {
-      background: #1e1e1e !important; /* Authentic VS Code Editor Background */
-      border: 1px solid #2d2d2d !important;
+    html[data-theme="light"] .markdown-section h1,
+    html[data-theme="light"] .markdown-section h2,
+    html[data-theme="light"] .markdown-section h3,
+    html[data-theme="light"] .markdown-section h4,
+    html[data-theme="light"] .markdown-section h5,
+    html[data-theme="light"] .markdown-section h6 {
+      color: #0f172a !important; /* Negro Oscuro Slate - 100% Nítido */
+      opacity: 1 !important;
+      font-weight: 700 !important;
+    }
+    html[data-theme="light"] .markdown-section h1 {
+      font-size: 2.1rem !important;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #e2e8f0 !important;
+      padding-bottom: 0.5rem;
+    }
+    html[data-theme="light"] .markdown-section h2 {
+      font-size: 1.5rem !important;
+      margin-top: 2.2rem;
+      border-bottom: 1px solid #e2e8f0 !important;
+      padding-bottom: 0.4rem;
+    }
+    html[data-theme="light"] .markdown-section h3 {
+      font-size: 1.25rem !important;
+      margin-top: 1.8rem;
+    }
+
+    /* ----------------------------------------------------
+       FIX 2: VS CODE LIGHT THEME FOR LIGHT MODE
+       ---------------------------------------------------- */
+    html[data-theme="light"] .markdown-section pre {
+      background: #f8fafc !important; /* Light VS Code Editor Background */
+      border: 1px solid #cbd5e1 !important;
       border-radius: 8px !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
       padding: 1.2rem !important;
       margin: 1.5rem 0 !important;
       position: relative !important;
     }
-    .markdown-section pre > code {
+    html[data-theme="light"] .markdown-section pre > code {
       background: transparent !important;
+      color: #0f172a !important;
       border: none !important;
       padding: 0 !important;
       box-shadow: none !important;
@@ -55,44 +87,62 @@
       line-height: 1.6 !important;
     }
 
-    /* Fix overlap between Language Badge ("typescript") and Copy Button */
-    .markdown-section pre[data-lang]::after {
-      position: absolute !important;
-      top: 10px !important;
-      right: 90px !important;
-      color: #858585 !important;
-      font-size: 0.75rem !important;
-      font-weight: 500 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.05em !important;
+    /* VS Code Light Syntax Colors Override */
+    html[data-theme="light"] .token.keyword,
+    html[data-theme="light"] .token.operator {
+      color: #0000ff !important; /* VS Code Light Blue Keywords */
+      font-weight: 600;
     }
-    .docsify-copy-code-button {
-      position: absolute !important;
-      top: 8px !important;
-      right: 12px !important;
-      background: #252526 !important;
-      color: #cccccc !important;
-      border: 1px solid #3c3c3c !important;
-      border-radius: 6px !important;
-      padding: 3px 10px !important;
-      font-size: 0.78rem !important;
-      transition: all 0.2s ease !important;
+    html[data-theme="light"] .token.string,
+    html[data-theme="light"] .token.attr-value {
+      color: #a31515 !important; /* VS Code Light Red Strings */
     }
-    .docsify-copy-code-button:hover {
-      background: #0e639c !important;
+    html[data-theme="light"] .token.comment {
+      color: #008000 !important; /* VS Code Light Green Comments */
+      font-style: italic;
+    }
+    html[data-theme="light"] .token.function,
+    html[data-theme="light"] .token.class-name {
+      color: #795e26 !important; /* VS Code Light Brown Functions */
+    }
+    html[data-theme="light"] .token.type-annotation,
+    html[data-theme="light"] .token.builtin {
+      color: #267f99 !important; /* VS Code Light Teal Types */
+    }
+    html[data-theme="light"] .token.decorator {
+      color: #af00db !important; /* VS Code Light Purple Decorators */
+    }
+    html[data-theme="light"] .markdown-section pre[data-lang]::after {
+      color: #64748b !important;
+    }
+    html[data-theme="light"] .docsify-copy-code-button {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    html[data-theme="light"] .docsify-copy-code-button:hover {
+      background: #0284c7 !important;
       color: #ffffff !important;
-      border-color: #1177bb !important;
+      border-color: #0369a1 !important;
+    }
+
+    /* Inline Code Badges (Light Mode) */
+    html[data-theme="light"] .markdown-section code:not(pre code) {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 6px;
+      padding: 0.18rem 0.45rem;
+      font-family: var(--code-font-family);
+      font-size: 0.88em;
     }
 
     /* ----------------------------------------------------
-       MICROSOFT LOOP LIGHT MODE
+       MICROSOFT LOOP LIGHT MODE UI
        ---------------------------------------------------- */
     html[data-theme="light"] body {
       background-color: #ffffff !important;
       color: #334155 !important;
-      font-family: var(--base-font-family) !important;
-      font-size: 16px;
-      line-height: 1.7;
     }
     html[data-theme="light"] .sidebar {
       background-color: #f0f2f7 !important;
@@ -129,7 +179,7 @@
       border-left: 3px solid #0284c7 !important;
     }
 
-    /* Light Mode Search Input Fix */
+    /* Light Mode Search Bar Fix */
     html[data-theme="light"] .search input {
       background-color: #ffffff !important;
       color: #0f172a !important;
@@ -139,50 +189,6 @@
     }
     html[data-theme="light"] .search input::placeholder {
       color: #64748b !important;
-    }
-
-    /* Light Mode Headings */
-    html[data-theme="light"] .markdown-section h1 {
-      color: #0f172a !important;
-      font-size: 2.1rem !important;
-      font-weight: 700 !important;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px solid #e2e8f0 !important;
-      padding-bottom: 0.5rem;
-    }
-    html[data-theme="light"] .markdown-section h2 {
-      color: #1e293b !important;
-      font-size: 1.5rem !important;
-      font-weight: 700 !important;
-      margin-top: 2rem;
-      border-bottom: 1px solid #e2e8f0 !important;
-      padding-bottom: 0.4rem;
-    }
-    html[data-theme="light"] .markdown-section h3 {
-      color: #334155 !important;
-      font-size: 1.2rem !important;
-      font-weight: 600 !important;
-    }
-    html[data-theme="light"] .markdown-section h4 {
-      color: #475569 !important;
-      font-size: 1.05rem !important;
-      font-weight: 600 !important;
-    }
-    html[data-theme="light"] .markdown-section p,
-    html[data-theme="light"] .markdown-section li {
-      color: #334155 !important;
-    }
-
-    /* Inline Code Badges (Light Mode) */
-    html[data-theme="light"] .markdown-section code:not(pre code) {
-      background: #f1f5f9 !important;
-      color: #0284c7 !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 6px;
-      padding: 0.18rem 0.45rem;
-      font-family: var(--code-font-family);
-      font-size: 0.88em;
     }
 
     /* Light Mode Table Fix */
@@ -216,8 +222,60 @@
       color: #1e293b !important;
     }
 
+
     /* ----------------------------------------------------
-       MICROSOFT LOOP DARK MODE
+       VS CODE DARK PLUS SYNTAX HIGHLIGHTING (DARK MODE)
+       ---------------------------------------------------- */
+    html[data-theme="dark"] .markdown-section pre {
+      background: #1e1e1e !important; /* Authentic VS Code Dark Editor Background */
+      border: 1px solid #2d2d2d !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+      padding: 1.2rem !important;
+      margin: 1.5rem 0 !important;
+      position: relative !important;
+    }
+    html[data-theme="dark"] .markdown-section pre > code {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      font-family: var(--code-font-family) !important;
+      font-size: 0.9em !important;
+      line-height: 1.6 !important;
+    }
+
+    /* Fix Badge / Copy Button Overlap */
+    .markdown-section pre[data-lang]::after {
+      position: absolute !important;
+      top: 10px !important;
+      right: 90px !important;
+      color: #858585 !important;
+      font-size: 0.75rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+    }
+    .docsify-copy-code-button {
+      position: absolute !important;
+      top: 8px !important;
+      right: 12px !important;
+      background: #252526 !important;
+      color: #cccccc !important;
+      border: 1px solid #3c3c3c !important;
+      border-radius: 6px !important;
+      padding: 3px 10px !important;
+      font-size: 0.78rem !important;
+      transition: all 0.2s ease !important;
+    }
+    .docsify-copy-code-button:hover {
+      background: #0e639c !important;
+      color: #ffffff !important;
+      border-color: #1177bb !important;
+    }
+
+    /* ----------------------------------------------------
+       MICROSOFT LOOP DARK MODE UI
        ---------------------------------------------------- */
     html[data-theme="dark"] body {
       background-color: #16161a !important;
@@ -438,7 +496,7 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
 
-  <!-- Syntax Highlighting with VS Code Dark Plus -->
+  <!-- Syntax Highlighting -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
