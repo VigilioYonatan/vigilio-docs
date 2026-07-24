@@ -7,11 +7,11 @@
   <meta name="description" content="Documentación de Arquitectura Centralizada Vigilio">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   
-  <!-- CSS Theme & Sidebar Collapse -->
+  <!-- CSS Theme & Sidebar Collapse plugin styles -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" />
   
-  <!-- Custom VitePress Style Adjustments -->
+  <!-- Custom Aesthetics -->
   <style>
     :root {
       --theme-color: #38bdf8;
@@ -24,23 +24,33 @@
     .sidebar {
       background-color: #0b1329 !important;
       border-right: 1px solid #1e293b !important;
+      padding-top: 1rem;
     }
     .sidebar-nav > ul > li {
-      margin-top: 0.5rem;
-      font-weight: 600;
+      margin-top: 0.8rem;
+    }
+    .sidebar-nav strong {
+      color: #38bdf8 !important;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
     .sidebar-nav ul li a {
       color: #94a3b8 !important;
       font-size: 0.92rem;
-      transition: color 0.2s ease;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s ease;
     }
     .sidebar-nav ul li a:hover {
       color: #38bdf8 !important;
+      background-color: #1e293b;
     }
     .sidebar-nav ul li.active > a {
       color: #38bdf8 !important;
       font-weight: bold;
-      border-right: 2px solid #38bdf8;
+      background-color: #1e293b;
+      border-left: 3px solid #38bdf8;
     }
     .markdown-section h1, .markdown-section h2, .markdown-section h3 {
       color: #f8fafc;
@@ -62,9 +72,9 @@
       color: #38bdf8 !important;
       border-radius: 4px;
     }
-    /* Accordion Indicator Styling */
-    .sidebar-nav li.collapse > a::after {
-      border-left-color: #38bdf8 !important;
+    /* Smooth Accordion transition */
+    .sidebar-nav li.collapse > ul {
+      transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
     }
   </style>
 </head>
@@ -75,7 +85,7 @@
       name: '📚 Vigilio Docs',
       repo: 'https://github.com/VigilioYonatan/vigilio-docs',
       loadSidebar: true,
-      subMaxLevel: 3,
+      subMaxLevel: 2,
       sidebarDisplayLevel: 1,
       auto2top: true,
       homepage: 'README.md',
@@ -102,7 +112,7 @@
   <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   
-  <!-- Plugins -->
+  <!-- Plugins: Acordeón Folder Style, Buscador, Copiar y Paginador -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
