@@ -1,0 +1,524 @@
+# Buenas Practicas - `bus-impl` 2026
+
+Este documento resume las reglas que deben mantenerse para que el backend actualizado siga siendo DDD de verdad y no solo por carpetas.
+
+---
+
+## 1. Regla de oro: el dominio no conoce frameworks
+
+`domain/` no debe importar:
+
+- `@nestjs/*`
+- `zod`
+- `drizzle-orm`
+- `pg`
+- `aws-sdk`
+- `process.env`
+
+El dominio solo conoce:
+
+- features
+- servicios de dominio
+- eventos de dominio
+- interfaces de repositorio
+
+---
+
+## 2. Zod reemplaza a Joi
+
+Regla:
+
+- no crear schemas Joi nuevos
+- toda validacion nueva se hace con Zod
+
+Ubicaciones recomendadas:
+
+- `shared/application/schemas/` para schemas reutilizables: `querySchema`, `createPaginatorSchema`, `timestampSchema`
+- `application/schemas/` para schemas Zod base del modulo y derivados realmente reutilizables
+- `application/dtos/` para contratos Zod de request y response derivados por endpoint
+- clases `createZodDto` de Nest/Swagger dentro del mismo `*.request.dto.ts` o `*.response.dto.ts`
+- `shared/infrastructure/http/pipes/` para `ZodPipe` y `ZodQueryPipe`
+- `shared/infrastructure/persistence/drizzle/custom-types/` para tipos Drizzle reutilizables como `numericStringCustom` y `numericNumberCustom`
+- `shared/infrastructure/config/environment.schema.ts` para variables de entorno validadas con Zod
+
+Convencion recomendada:
+
+- por accion/caso de uso usar maximo 2 archivos DTO: `*.request.dto.ts` y `*.response.dto.ts`.
+- `renovacion-index.request.dto.ts` contiene query params y params de `index`.
+- `renovacion-store.request.dto.ts` contiene body, query y params de `store`.
+- `renovacion-update.request.dto.ts` contiene body, query y params de `update`.
+- `renovacion-store.response.dto.ts` contiene response exitoso, errores esperados y class DTOs de Swagger si hacen falta.
+- no crear `*.query.dto.ts`, `*.params.dto.ts`, `*.response.class.dto.ts` separados por defecto.
+- todos los DTOs viven dentro de la carpeta de la feature para mantener alta cohesion; no van en carpetas globales por comodidad.
+
+Convencion de metodos:
+
+- controllers y services usan `index`, `show`, `store`, `update` y `destroy`.
+- evitar `findAll`, `getOne`, `create`, `listar`, `registrar` o variantes por gusto personal.
+- si una feature tiene CRUD con `store`, su `index` debe usar paginacion.
+- si una feature solo es catalogo pequeno sin CRUD, puede tener `index` sin paginacion.
+- services y controllers retornan `ResponseDto`, por ejemplo `RenovacionIndexResponseDto` o `RenovacionStoreResponseDto`.
+- `ResponseClassDto` existe solo como adaptador para `@ZodResponse` y Swagger; si existe, vive dentro del mismo `*.response.dto.ts`.
+
+Uso:
+
+- `schema.ts` define campos base como `id`, `nombre`, `estado`, fechas y reglas comunes
+- los campos de objetos, DTOs, schemas y tablas usan `snake_case`: `nro_poliza`, `tipo_renovacion`, `broker_id`
+- no usar `camelCase` en contratos de datos: evitar `nroPoliza`, `tipoEndoso`, `idBroker`
+- las FK siempre terminan en `_id`: `broker_id`, `poliza_id`, `cliente_id`
+- los enums de datos van en minusculas: `inclusion`, `exclusion`, `pendiente`
+- si hay paginacion, reutilizar `querySchema` con `cursor`, `offset`, `limit`, `search`, `sort_by`, `sort_dir`
+- si hay response paginada, reutilizar `createPaginatorSchema(itemSchema)`
+- si hay fechas auditables, reutilizar `timestampSchema` con `created_at` y `updated_at`
+- los DTOs especificos de endpoint viven en `application/dtos/*.request.dto.ts` o `*.response.dto.ts`, no en `application/schemas`.
+- `pick`, `omit`, `partial` y `extend` del request se hacen dentro del `*.request.dto.ts`.
+- `pick`, `omit`, `partial` y `extend` del response se hacen dentro del `*.response.dto.ts`.
+- schemas reutilizables entre varios endpoints pueden vivir en `application/schemas`, por ejemplo `userPublicSchema` o `renovacionSummarySchema`.
+- no duplicar defaults de DB en DTOs; si Drizzle/PostgreSQL tiene `.default("active")`, no incluir ese campo en el `store.request.dto.ts`.
+- usar `.default(...)` en DTO solo si el default forma parte del contrato HTTP documentado, no por comodidad de insert.
+- en body DTOs de `store/create`, preferir `nullable` sobre `.optional()` para campos de negocio que deben venir explicitamente como `null`.
+- si el campo tiene default en DB, no ponerlo en el `store.request.dto.ts`; dejar que Drizzle/PostgreSQL aplique el default.
+- reservar `.optional()` para query params, filtros y `partial()` de `update/PATCH`.
+- `@Body()` valida con schemas de `*.request.dto.ts` y `ZodPipe`
+- `@Query()` valida con schemas de `*.request.dto.ts` y `ZodQueryPipe`
+- `@Param()` valida con schemas de `*.request.dto.ts` cuando el parametro necesita reglas extra
+- responses se declaran con `application/dtos/*.response.dto.ts` usando Zod y `@ZodResponse(...)`
+
+Alta cohesion:
+
+- todo lo relacionado a una funcionalidad vive en su carpeta de bounded context.
+- un service solo inyecta repositorios/cache propios o services de otro modulo cuando quiere delegar una accion.
+- `UserCache` pertenece a `UserService`; `AuthService` no debe manipularlo directamente.
+- despues de `store`, `update` o `destroy`, invalidar cache de la feature; no hacer `.set()` optimista salvo excepcion documentada.
+
+Regla para decimales:
+
+- dinero, primas, tasas regulatorias y saldos no deben convertirse a `number`.
+- usar string decimal exacto, `Decimal` o enteros menores segun el dominio.
+- `number` queda permitido solo para metricas, porcentajes no regulatorios o valores donde la perdida binaria sea aceptable.
+
+---
+
+## 3. Swagger y Scalar son adaptadores de infraestructura
+
+Swagger no define el dominio. Solo genera el contrato HTTP.
+Scalar tampoco define el dominio. Solo renderiza ese contrato con una UI mejor.
+
+Por eso:
+
+- `@ApiOperation`, `@ApiBody`, `@ApiResponse` viven en controllers
+- `patchNestJsSwagger()` vive en bootstrap
+- los DTOs `createZodDto(...)` de infraestructura adaptan los contratos Zod de `application/dtos/`
+- Scalar debe consumir el mismo documento OpenAPI, no un contrato paralelo
+
+---
+
+## 4. Endpoints validados y auth explicita
+
+Regla:
+
+- todo endpoint valida `body`, `query` y `params` en la entrada.
+- usar `ZodPipe` para body y `ZodQueryPipe` para query params.
+- la validacion del endpoint no reemplaza la validacion de negocio del `domain/`.
+
+Regla de autenticacion:
+
+- preferir backend `private-by-default` con guard global.
+- usar `@Public()` solo en endpoints que realmente deben saltar autenticacion.
+- `@Public()` no es decoracion; debe estar conectado al guard real.
+
+Casos tipicos de `@Public()`:
+
+- `login`
+- `register`
+- `forgot-password`
+- `health` o `ready` si el equipo decide exponerlos sin auth
+- docs publicas si el entorno lo permite
+
+Evitar:
+
+- dejar rutas publicas por omision
+- usar `@Public()` por costumbre en endpoints internos
+- confiar solo en validacion HTTP sin reglas de dominio
+
+---
+
+## 5. Un repositorio por aggregate root
+
+Evitar:
+
+- un repositorio por tabla
+- consultas SQL desperdigadas por services
+- logica de negocio dentro del repositorio
+
+Preferir:
+
+- una interfaz por caso de uso/aggregate en `application/repositories/`
+- una implementacion Drizzle en `infrastructure/persistence/drizzle/`
+
+---
+
+## 6. Application service delgado y dominio pragmatico
+
+La capa `application/`:
+
+- orquesta
+- coordina transacciones
+- llama al dominio solo cuando hay reglas reales
+- publica eventos cuando corresponda
+
+La capa `domain/`:
+
+- modela estados y transiciones solo cuando la feature lo necesita
+- decide reglas de negocio si existe comportamiento real de dominio
+
+Para CRUD simple, no crear entities de dominio por obligacion. Es mejor un service claro usando DTOs Zod y un repository Drizzle que una clase vacia sin comportamiento real.
+
+---
+
+## 7. `schema.ts` de Drizzle no es entity de dominio
+
+Regla:
+
+- `src/product/infrastructure/persistence/drizzle/schema.ts` define tablas Drizzle, columnas, indices y enums de PostgreSQL.
+- no llamarlo `product.entity.ts` si no representa una entidad de dominio con comportamiento.
+- en este proyecto, CRUD simple usa `application/schemas/*.schema.ts` para contratos Zod y `infrastructure/persistence/drizzle/schema.ts` para persistencia.
+- crear `domain/entities/product.entity.ts` solo si existe comportamiento real de negocio, por ejemplo transiciones, invariantes o reglas que viven fuera de HTTP/DB.
+
+Por que:
+
+- `entity.ts` en DDD comunica modelo de dominio.
+- Drizzle `pgTable(...)` es mapping de persistencia, no comportamiento de negocio.
+- renombrarlo a `product.entity.ts` puede confundir a devs y mezclar dominio con infraestructura.
+
+Si el equipo quiere nombres mas explicitos para Drizzle, la alternativa sana seria `product.table.ts`, no `product.entity.ts`. Pero mantener `schema.ts` por feature es consistente con `user`, `product` y `endoso`.
+
+---
+
+## 8. Configuracion NestJS validada con Zod
+
+Regla:
+
+- `ConfigModule.forRoot({ isGlobal: true, validate })` centraliza el entorno.
+- `src/shared/infrastructure/config/environment.schema.ts` valida variables con Zod.
+- controllers, services, repositories, guards y providers leen config mediante `ConfigService`.
+- `process.env` directo queda permitido solo en bootstrap de config, CDK, scripts y helpers fuera de Nest.
+- `.env` es local; AWS debe inyectar variables por Lambda/CDK y secretos por Secrets Manager o SSM.
+- production ignora `.env` para evitar configuracion accidental de maquina.
+
+Esto hace mas facil:
+
+- testear
+- tipar
+- detectar errores de boot
+- separar local, development, staging y production
+
+---
+
+## 9. PostgreSQL real en integration tests
+
+No se recomienda simular la base de datos en integration tests si el flujo depende de:
+
+- constraints
+- indices
+- transacciones
+- SQL generado por Drizzle
+
+Unit tests si pueden usar dobles. Integration tests no deben mentir.
+
+---
+
+## 10. Playwright para smoke y flujos criticos
+
+Aunque sea backend, Playwright si tiene valor cuando se usa para:
+
+- probar Scalar o Swagger UI
+- validar `/health` y `/ready`
+- recorrer flujos criticos con `request.newContext()`
+- verificar contratos publicados en entornos preview
+
+---
+
+## 11. Logging estructurado
+
+Usar:
+
+- `pino`
+- `nestjs-pino`
+
+Incluir siempre:
+
+- `requestId`
+- `correlationId`
+- `tenantId` si aplica
+- `user_id` si aplica
+- `action` o `eventName`
+
+No loguear:
+
+- passwords
+- tokens
+- cookies
+- payloads sensibles completos
+
+Buenas practicas:
+
+- `stdout` JSON como salida canonica en cloud
+- `pino-pretty` solo en local
+- usar redaction para `authorization`, `cookie`, `set-cookie`, `password`, `token`, `secret`
+- si usas Nest, preferir `app.useLogger(app.get(Logger))` con `nestjs-pino`
+- mantener `Logger` de `@nestjs/common` en servicios para no acoplar todo el codigo a una libreria concreta
+- en workers, agregar `eventName`, `messageId`, `queue`, `retry_count` y contexto del bounded context
+- no loguear bodies completos de requests salvo debugging muy controlado
+- si hay error, loguear stack, clase de error y metadatos utiles, no ruido duplicado
+
+Evitar:
+
+- `console.log` disperso
+- mezclar logs texto y JSON en el mismo runtime
+- pretty logs en `production`
+- mandar PII a CloudWatch por costumbre
+
+---
+
+## 12. Handlers async explicitos
+
+No volver al patron de:
+
+```ts
+controller[action](event)
+```
+
+Preferir:
+
+```ts
+const handlers = {
+  endosoRegistrado: endosoRegistradoHandler,
+  validarTrama: validarTramaHandler,
+};
+```
+
+Beneficios:
+
+- mejor tipado
+- menor superficie de error
+- trazabilidad mas clara
+
+---
+
+## 13. CDK con naming y tags centralizados
+
+No hardcodear nombres de recursos en stacks sueltos.
+
+Crear un modulo de naming y tags:
+
+- `lib/config/naming.ts`
+- `lib/tags/default-tags.ts`
+
+Para que:
+
+- el stage defina sufijos
+- el equipo aplique FinOps y observabilidad consistente
+
+---
+
+## 14. No mezclar persistencia con DTOs HTTP
+
+Evitar:
+
+- usar directamente la fila de Drizzle como response del controller
+- reusar schema de DB como input HTTP sin filtro
+
+Separar:
+
+- schema DB
+- DTO Zod de application
+- entity de dominio solo si aporta comportamiento real
+- respuesta HTTP final
+
+---
+
+## 15. Imports absolutos con TypeScript paths
+
+Evitar imports relativos largos como:
+
+```ts
+import { setupTestDb } from '../../../helpers/setup-integration';
+```
+
+Preferir aliases estables:
+
+```ts
+import { setupTestDb } from '@tests/helpers/setup-integration';
+```
+
+Configuracion recomendada:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@tests/*": ["tests/*"],
+      "@shared/*": ["src/shared/*"]
+    }
+  }
+}
+```
+
+Reglas:
+
+- usar `@/` para codigo productivo dentro de `src`.
+- usar `@tests/` solo en tests.
+- no crear alias para cada carpeta pequena; demasiados aliases vuelven opaca la arquitectura.
+- los imports dentro del mismo folder pueden seguir siendo relativos: `./schema`, `./constants`.
+- `domain/` puede usar alias, pero no puede importar `application/` ni `infrastructure/`.
+- mantener los mismos aliases en `tsconfig`, `vitest.config.ts`, `tsconfig-paths` o el bundler usado por Nest/Lambda.
+
+---
+
+## 16. Scripts canonicos
+
+Todos los equipos deben hablar el mismo idioma:
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
+- `pnpm test:integration`
+- `pnpm test:e2e`
+- `pnpm openapi:export`
+- `pnpm cdk:synth`
+
+---
+
+## 17. Ramas, PRs y Jira
+
+Buenas practicas:
+
+- la rama debe describir tipo, ticket y cambio corto.
+- el PR debe repetir el ticket de Jira en el titulo.
+- cada commit debe repetir el mismo ticket de la rama.
+- Husky valida localmente, pero CI debe validar otra vez.
+
+Formato recomendado de rama:
+
+```text
+feat/ABC-123/crear-endoso
+fix/ABC-456/corregir-openapi
+hotfix/ABC-789/reintento-sqs
+```
+
+Regex recomendada:
+
+```regex
+^(feat|fix|hotfix|refactor|docs|test|ci|build|chore|perf)\/[A-Z][A-Z0-9]+-[0-9]+\/[a-z0-9-]+$
+```
+
+Titulo de PR recomendado:
+
+```text
+[ABC-123] - feat: Crear endoso
+[ABC-456] - fix: Corregir contrato OpenAPI
+```
+
+Commit recomendado:
+
+```text
+[ABC-123] - feat: crear endoso
+[ABC-456] - fix: corregir contrato openapi
+```
+
+Reglas:
+
+- no abrir ramas como `feature/nuevo-cambio`, `bugfix/prueba` o `juan/cambio`.
+- el ticket del PR y de los commits debe coincidir con el ticket de la rama.
+- el ticket de Jira debe existir de verdad cuando el equipo tenga Jira integrado.
+- si no hay ticket por una urgencia real, documentar la excepcion en el PR.
+
+---
+
+## 18. Gobierno de package manager y lockfile
+
+Reglas:
+
+- fijar `packageManager` exacto en `package.json`: `pnpm@11.7.0`.
+- fijar `engines.node` y `engines.pnpm`.
+- fijar `nodeVersion` exacto en `pnpm-workspace.yaml`.
+- correr `pnpm install --frozen-lockfile` en CI.
+- si cambia `packageManager`, `engines`, `nodeVersion` o `pnpm-lock.yaml`, pedir review de plataforma.
+
+Evitar:
+
+- cambiar la version de `pnpm` por error local y subirlo sin explicacion.
+- cambiar el lockfile sin revisar por que cambio.
+- mezclar upgrade de runtime con cambio funcional en el mismo PR si no es necesario.
+
+Preferir:
+
+- PR dedicado para upgrade de `Node` o `pnpm`.
+- changelog corto en el PR cuando cambia tooling base.
+- etiqueta como `dependencies`, `platform` o similar para cambios de runtime.
+
+---
+
+## 19. `.npmrc` y registries privados
+
+Reglas:
+
+- `.npmrc` no guarda secretos hardcodeados.
+- `.npmrc` seguro puede commitearse para scopes y registry, sin `_authToken`.
+- en pnpm 11, settings fuertes de supply chain viven en `pnpm-workspace.yaml`.
+- tokens privados van en `~/.npmrc`, variable de entorno o secreto de CI.
+- `tokenHelper` solo en el `.npmrc` del usuario.
+
+Ejemplo sano:
+
+```ini
+engine-strict=true
+save-exact=true
+package-manager-strict=true
+strict-peer-dependencies=true
+@vigilio-services:registry=https://npm.pkg.github.com
+@vigilioyonatan:registry=https://npm.pkg.github.com
+always-auth=true
+```
+
+La autenticacion vive en `~/.npmrc` o la agrega CI mediante
+`vigilio-platform-actions/actions/configure-github-packages`.
+
+CI debe tener:
+
+```yaml
+permissions:
+  contents: read
+  packages: read
+```
+
+Y en install:
+
+```yaml
+- run: pnpm install --frozen-lockfile
+  env:
+    GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+```
+
+Resultado: paquetes privados `@vigilio-services/*` y `@vigilioyonatan/*` no se instalan sin token
+con permiso.
+
+Si hay registry corporativo con CA privada:
+
+- documentar `cafile` o `ca` por desarrollador.
+- no commitear llaves o certificados sensibles en el repo de aplicacion.
+
+## 20. Regla corta para revisar PRs
+
+Un PR de `bus-impl` esta sano si cumple esto:
+
+- respeta DDD
+- valida con Zod
+- documenta con Swagger y expone Scalar si aplica
+- persiste con Drizzle
+- prueba con Vitest o Playwright segun capa
+- pasa Biome y typecheck
+- no mete secretos ni `any`

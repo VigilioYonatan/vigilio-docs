@@ -1,0 +1,104 @@
+# Cucumber BDD - `bus-impl`
+
+Cucumber no reemplaza Vitest ni Playwright. Se usa para acceptance tests legibles por negocio cuando el flujo tiene lenguaje funcional claro.
+
+`endoso`, `emision`, `renovacion` y otros nombres de seguros se usan solo como ejemplos de un flujo
+con lenguaje de negocio; no son modulos obligatorios del template.
+
+## Cuándo usar Cucumber
+
+- Flujos de negocio con reglas compartidas entre negocio, QA y desarrollo.
+- Acceptance criteria de Jira que conviene convertir a escenarios.
+- Casos críticos donde el wording importa: endosos, emisión, pagos, anulaciones, renovaciones.
+- Reglas que deben sobrevivir refactors internos.
+
+## Cuándo no usar Cucumber
+
+- Unit tests de services.
+- Validaciones simples de DTO.
+- Repositories Drizzle.
+- Tests técnicos de cache, logger, health checks o migrations.
+
+Para eso usar Vitest o Playwright.
+
+## Estructura
+
+```txt
+tests/
+`-- bdd/
+    `-- endoso/
+        |-- endoso-store.feature
+        `-- endoso-store.steps.ts
+```
+
+Regla: BDD tambien sigue `tests/bdd/<modulo>`. No dejar features sueltas en `tests/bdd` porque con varios bounded contexts se vuelve dificil saber que negocio rompio.
+
+## Script
+
+```json
+{
+  "scripts": {
+    "test:bdd": "node --import tsx ./node_modules/@cucumber/cucumber/bin/cucumber-js tests/bdd/**/*.feature --import tests/bdd/**/*.steps.ts --format progress"
+  }
+}
+```
+
+## Regla de arquitectura
+
+Los steps deben usar application services, DTOs Zod y ports. No deben importar controllers HTTP, Drizzle repositories reales ni Nest testing module salvo que el escenario sea explicitamente e2e.
+
+Bien:
+
+```ts
+const body = endosoStoreRequestDto.parse(payload);
+const service = new EndosoApplicationService(repository);
+const response = await service.store(body);
+```
+
+Evitar:
+
+```ts
+await request(app.getHttpServer()).post('/endosos').send(payload);
+```
+
+Eso es e2e HTTP, no BDD de application.
+
+## Naming
+
+- Feature en español si negocio trabaja en español.
+- Steps cortos y declarativos.
+- No poner detalles técnicos en Gherkin.
+- No abusar de `Scenario Outline`; usarlo solo si la tabla aporta claridad.
+
+Ejemplo:
+
+```gherkin
+Feature: Registrar endoso
+
+  Scenario: Registrar un endoso de inclusion
+    Given un request valido para registrar un endoso
+    When registro el endoso
+    Then la respuesta confirma el endoso registrado
+```
+
+## CI
+
+`test:bdd` debe correr después de unit tests y antes de e2e HTTP:
+
+```txt
+lint -> typecheck -> test:coverage -> test:bdd -> openapi -> e2e
+```
+
+Si el BDD empieza a ser lento, separar por tags:
+
+```bash
+pnpm test:bdd -- --tags "@critical" # ejecuta script definido en package.json
+```
+
+## Reglas senior
+
+- Cucumber solo para comportamiento observable de negocio.
+- Los steps no tienen `any`.
+- Los fixtures entran por DTOs Zod.
+- No duplicar assertions técnicas que ya cubre Vitest.
+- Cada feature debe mapear a una capacidad real del bounded context.

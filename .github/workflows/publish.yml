@@ -1,0 +1,34 @@
+name: publish-docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build
+        run: |
+          mkdir -p _site
+          cp -r backend-node-nest _site/backend-node-nest
+          cp -r adr _site/adr
+          cp -r threat-model _site/threat-model
+          cp README.md _site/
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
