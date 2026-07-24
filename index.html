@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <title>Vigilio Docs - Portal de Arquitectura</title>
@@ -12,190 +12,216 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- CSS Base Theme & Plugins -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@3/dist/docsify-themeable/style.min.css" type="text/css">
+  <!-- Base Docsify Theme & Folder Accordion CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" />
 
-  <!-- Custom Microsoft Loop UI & Table Contrast Fix Styles -->
+  <!-- Microsoft Loop & Custom Table Contrast Fix Styles -->
   <style>
-    /* Microsoft Loop Theme Variables */
     :root {
       --theme-color: #38bdf8;
-      --base-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --base-font-size: 15px;
-      --sidebar-width: 320px;
-      --content-max-width: 980px;
-      --code-font-family: 'Fira Code', monospace;
     }
-
-    /* DARK MODE STYLES (Microsoft Loop Dark) */
-    body[data-theme="dark"] {
-      background-color: #121214 !important;
-      color: #e4e4e7 !important;
+    
+    /* ----------------------------------------------------
+       DARK MODE STYLES (Microsoft Loop Dark Theme)
+       ---------------------------------------------------- */
+    html[data-theme="dark"] body {
+      background-color: #0f172a !important;
+      color: #e2e8f0 !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    body[data-theme="dark"] .sidebar {
-      background-color: #18181b !important;
-      border-right: 1px solid #27272a !important;
+    html[data-theme="dark"] .sidebar {
+      background-color: #0b1329 !important;
+      border-right: 1px solid #1e293b !important;
     }
-    body[data-theme="dark"] .sidebar-nav strong {
-      color: #a1a1aa !important;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 1rem;
-      display: block;
+    html[data-theme="dark"] .sidebar-nav strong {
+      color: #38bdf8 !important;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
-    body[data-theme="dark"] .sidebar-nav ul li a {
-      color: #d4d4d8 !important;
+    html[data-theme="dark"] .sidebar-nav ul li a {
+      color: #94a3b8 !important;
       font-size: 0.92rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
-      margin: 0.15rem 0.5rem;
-      transition: all 0.15s ease-in-out;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
     }
-    body[data-theme="dark"] .sidebar-nav ul li a:hover {
-      background-color: #27272a80 !important;
-      color: #ffffff !important;
+    html[data-theme="dark"] .sidebar-nav ul li a:hover {
+      color: #38bdf8 !important;
+      background-color: #1e293b !important;
     }
-    /* Microsoft Loop Active Pill Card */
-    body[data-theme="dark"] .sidebar-nav ul li.active > a {
-      background-color: #27272a !important;
+    html[data-theme="dark"] .sidebar-nav ul li.active > a {
       color: #ffffff !important;
       font-weight: 600;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      background-color: #1e293b !important;
       border-left: 3px solid #38bdf8 !important;
     }
-
-    /* LIGHT MODE STYLES (Microsoft Loop Light) */
-    body[data-theme="light"] {
-      background-color: #ffffff !important;
-      color: #18181b !important;
+    
+    /* Dark Mode Content & Code */
+    html[data-theme="dark"] .markdown-section h1,
+    html[data-theme="dark"] .markdown-section h2,
+    html[data-theme="dark"] .markdown-section h3 {
+      color: #f8fafc !important;
+      border-bottom-color: #1e293b !important;
     }
-    body[data-theme="light"] .sidebar {
-      background-color: #f4f4f5 !important;
-      border-right: 1px solid #e4e4e7 !important;
+    html[data-theme="dark"] .markdown-section p,
+    html[data-theme="dark"] .markdown-section li {
+      color: #cbd5e1 !important;
     }
-    body[data-theme="light"] .sidebar-nav strong {
-      color: #71717a !important;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: 1rem;
-      display: block;
+    html[data-theme="dark"] .markdown-section code {
+      background: #1e293b !important;
+      color: #38bdf8 !important;
+      border: 1px solid #334155 !important;
+      border-radius: 6px;
+      padding: 0.15rem 0.4rem;
     }
-    body[data-theme="light"] .sidebar-nav ul li a {
-      color: #3f3f46 !important;
-      font-size: 0.92rem;
-      padding: 0.4rem 0.75rem;
+    html[data-theme="dark"] .markdown-section pre {
+      background: #090d16 !important;
+      border: 1px solid #1e293b !important;
       border-radius: 8px;
-      margin: 0.15rem 0.5rem;
-      transition: all 0.15s ease-in-out;
-    }
-    body[data-theme="light"] .sidebar-nav ul li a:hover {
-      background-color: #e4e4e7 !important;
-      color: #09090b !important;
-    }
-    body[data-theme="light"] .sidebar-nav ul li.active > a {
-      background-color: #e4e4e7 !important;
-      color: #09090b !important;
-      font-weight: 600;
-      border-left: 3px solid #0284c7 !important;
     }
 
-    /* CRITICAL FIX: MARKDOWN TABLE RENDERING (PREVENT BLIND WHITE-ON-WHITE ROWS) */
-    .markdown-section table {
+    /* DARK MODE TABLE FIX (No invisible rows) */
+    html[data-theme="dark"] .markdown-section table {
       width: 100% !important;
       border-collapse: separate !important;
       border-spacing: 0 !important;
       margin: 1.5rem 0 !important;
       border-radius: 8px !important;
+      border: 1px solid #1e293b !important;
       overflow: hidden !important;
       display: table !important;
     }
-    
-    /* Dark Mode Table Fix */
-    body[data-theme="dark"] .markdown-section table {
-      border: 1px solid #27272a !important;
-    }
-    body[data-theme="dark"] .markdown-section table th {
-      background-color: #1e1e24 !important;
-      color: #f4f4f5 !important;
+    html[data-theme="dark"] .markdown-section table th {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
       font-weight: 600 !important;
       padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #27272a !important;
-      border-right: 1px solid #27272a !important;
+      border-bottom: 1px solid #334155 !important;
+      border-right: 1px solid #334155 !important;
     }
-    body[data-theme="dark"] .markdown-section table td {
-      background-color: #121214 !important;
-      color: #e4e4e7 !important;
+    html[data-theme="dark"] .markdown-section table td {
+      background-color: #0f172a !important;
+      color: #e2e8f0 !important;
       padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #27272a !important;
-      border-right: 1px solid #27272a !important;
+      border-bottom: 1px solid #1e293b !important;
+      border-right: 1px solid #1e293b !important;
     }
-    body[data-theme="dark"] .markdown-section table tr:nth-child(2n) td {
-      background-color: #18181b !important;
-      color: #e4e4e7 !important;
-    }
-    body[data-theme="dark"] .markdown-section table code {
-      background-color: #27272a !important;
-      color: #38bdf8 !important;
-      border: 1px solid #3f3f46 !important;
-      padding: 0.15rem 0.4rem !important;
-      border-radius: 6px !important;
-      font-size: 0.88em !important;
+    html[data-theme="dark"] .markdown-section table tr:nth-child(2n) td {
+      background-color: #172554 !important; /* Contrasted subtle blue dark row */
+      color: #f8fafc !important;
     }
 
-    /* Light Mode Table Fix */
-    body[data-theme="light"] .markdown-section table {
-      border: 1px solid #e4e4e7 !important;
+    /* ----------------------------------------------------
+       LIGHT MODE STYLES (Microsoft Loop Light Theme)
+       ---------------------------------------------------- */
+    html[data-theme="light"] body {
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    body[data-theme="light"] .markdown-section table th {
+    html[data-theme="light"] .sidebar {
+      background-color: #f8fafc !important;
+      border-right: 1px solid #e2e8f0 !important;
+    }
+    html[data-theme="light"] .sidebar-nav strong {
+      color: #0284c7 !important;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    html[data-theme="light"] .sidebar-nav ul li a {
+      color: #334155 !important;
+      font-size: 0.92rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+    }
+    html[data-theme="light"] .sidebar-nav ul li a:hover {
+      color: #0284c7 !important;
+      background-color: #e2e8f0 !important;
+    }
+    html[data-theme="light"] .sidebar-nav ul li.active > a {
+      color: #0f172a !important;
+      font-weight: 600;
+      background-color: #e2e8f0 !important;
+      border-left: 3px solid #0284c7 !important;
+    }
+
+    /* Light Mode Content & Code */
+    html[data-theme="light"] .markdown-section h1,
+    html[data-theme="light"] .markdown-section h2,
+    html[data-theme="light"] .markdown-section h3 {
+      color: #0f172a !important;
+      border-bottom-color: #e2e8f0 !important;
+    }
+    html[data-theme="light"] .markdown-section p,
+    html[data-theme="light"] .markdown-section li {
+      color: #334155 !important;
+    }
+    html[data-theme="light"] .markdown-section code {
+      background: #f1f5f9 !important;
+      color: #0284c7 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 6px;
+      padding: 0.15rem 0.4rem;
+    }
+    html[data-theme="light"] .markdown-section pre {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 8px;
+    }
+
+    /* LIGHT MODE TABLE FIX */
+    html[data-theme="light"] .markdown-section table {
+      width: 100% !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+      margin: 1.5rem 0 !important;
+      border-radius: 8px !important;
+      border: 1px solid #e2e8f0 !important;
+      overflow: hidden !important;
+      display: table !important;
+    }
+    html[data-theme="light"] .markdown-section table th {
       background-color: #f1f5f9 !important;
       color: #0f172a !important;
       font-weight: 600 !important;
       padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #e4e4e7 !important;
-      border-right: 1px solid #e4e4e7 !important;
+      border-bottom: 1px solid #cbd5e1 !important;
+      border-right: 1px solid #cbd5e1 !important;
     }
-    body[data-theme="light"] .markdown-section table td {
+    html[data-theme="light"] .markdown-section table td {
       background-color: #ffffff !important;
       color: #334155 !important;
       padding: 0.75rem 1rem !important;
-      border-bottom: 1px solid #e4e4e7 !important;
-      border-right: 1px solid #e4e4e7 !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      border-right: 1px solid #e2e8f0 !important;
     }
-    body[data-theme="light"] .markdown-section table tr:nth-child(2n) td {
+    html[data-theme="light"] .markdown-section table tr:nth-child(2n) td {
       background-color: #f8fafc !important;
-      color: #334155 !important;
-    }
-    body[data-theme="light"] .markdown-section table code {
-      background-color: #f1f5f9 !important;
-      color: #0284c7 !important;
-      border: 1px solid #cbd5e1 !important;
-      padding: 0.15rem 0.4rem !important;
-      border-radius: 6px !important;
-      font-size: 0.88em !important;
+      color: #1e293b !important;
     }
 
-    /* General Code Blocks & Copy Button */
-    .markdown-section pre {
-      border-radius: 8px !important;
-      border: 1px solid #27272a !important;
-    }
+    /* Copy Button & General UI */
     .docsify-copy-code-button {
-      background: #27272a !important;
+      background: #1e293b !important;
       color: #38bdf8 !important;
       border-radius: 6px !important;
     }
     
     /* Scrollbars */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #121214; }
-    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
   </style>
 </head>
 <body>
+  <!-- BULLETPROOF THEME TOGGLE BUTTON (☀️ / 🌙) -->
+  <div id="theme-toggle" onclick="toggleTheme()" title="Cambiar Tema (Claro/Oscuro)" style="position: fixed; top: 16px; right: 16px; z-index: 9999; cursor: pointer; background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: all 0.2s ease;">
+    <span id="theme-toggle-icon">🌙</span> <span id="theme-toggle-text">Oscuro</span>
+  </div>
+
   <div id="app">⚡ Cargando portal de documentación Microsoft Loop...</div>
   <script>
     window.$docsify = {
@@ -206,22 +232,6 @@
       sidebarDisplayLevel: 1,
       auto2top: true,
       homepage: 'README.md',
-      darklightTheme: {
-        siteFont: 'Inter',
-        defaultTheme: 'dark',
-        codeFontFamily: 'Fira Code',
-        bodyBaseColor: '#e4e4e7',
-        dark: {
-          background: '#121214',
-          sidebarSublink: '#a1a1aa',
-          codeTypeColor: '#38bdf8'
-        },
-        light: {
-          background: '#ffffff',
-          sidebarSublink: '#71717a',
-          codeTypeColor: '#0284c7'
-        }
-      },
       copyCode: {
         buttonText: 'Copiar',
         errorText: 'Error',
@@ -242,13 +252,48 @@
       }
     }
   </script>
+
+  <!-- Theme Switcher Script -->
+  <script>
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('docsify-theme', theme);
+      var icon = document.getElementById('theme-toggle-icon');
+      var text = document.getElementById('theme-toggle-text');
+      var btn = document.getElementById('theme-toggle');
+      if (theme === 'light') {
+        if (icon) icon.textContent = '☀️';
+        if (text) text.textContent = 'Claro';
+        if (btn) {
+          btn.style.background = '#e2e8f0';
+          btn.style.color = '#0284c7';
+          btn.style.borderColor = '#cbd5e1';
+        }
+      } else {
+        if (icon) icon.textContent = '🌙';
+        if (text) text.textContent = 'Oscuro';
+        if (btn) {
+          btn.style.background = '#1e293b';
+          btn.style.color = '#38bdf8';
+          btn.style.borderColor = '#334155';
+        }
+      }
+    }
+
+    function toggleTheme() {
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Initialize Theme
+    var savedTheme = localStorage.getItem('docsify-theme') || 'dark';
+    applyTheme(savedTheme);
+  </script>
+
   <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  
-  <!-- Darklight Theme Switcher (☀️ / 🌙) -->
-  <script src="https://cdn.jsdelivr.net/npm/docsify-darklight-theme@3/dist/docsify-themeable/main.min.js" type="text/javascript"></script>
 
-  <!-- Plugins -->
+  <!-- Plugins: Buscador, Acordeón Folder, Copiar y Paginador -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
