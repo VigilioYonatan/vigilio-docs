@@ -12,23 +12,36 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Base Docsify Theme & Folder Accordion CSS -->
+  <!-- Base Docsify Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" />
 
-  <!-- Microsoft Loop UI Exact Styling & Table Contrast Fix -->
+  <!-- Microsoft Loop UI Exact Styling & Custom CSS Fixes -->
   <style>
     :root {
       --theme-color: #38bdf8;
+      --base-font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --code-font-family: 'Fira Code', monospace;
     }
     
     /* ----------------------------------------------------
-       MICROSOFT LOOP DARK MODE (Imagen 2)
+       GLOBAL OVERRIDES & ICON COLLISION FIXES
+       ---------------------------------------------------- */
+    /* Remove any weird duplicate pseudo-element icons from plugins */
+    .sidebar-nav li::before,
+    .sidebar-nav li a::before,
+    .sidebar-nav ul li::before,
+    .sidebar-nav ul li a::before {
+      display: none !important;
+      content: "" !important;
+    }
+
+    /* ----------------------------------------------------
+       MICROSOFT LOOP DARK MODE
        ---------------------------------------------------- */
     html[data-theme="dark"] body {
       background-color: #16161a !important;
       color: #d4d4d8 !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-family: var(--base-font-family) !important;
       font-size: 16px;
       line-height: 1.7;
     }
@@ -37,25 +50,28 @@
       border-right: 1px solid #27272a !important;
       padding-top: 1rem;
     }
+    html[data-theme="dark"] .sidebar .app-name-link {
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 1.25rem !important;
+    }
     html[data-theme="dark"] .sidebar-nav strong {
-      color: #94a3b8 !important;
+      color: #38bdf8 !important;
       font-size: 0.95rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
     }
     html[data-theme="dark"] .sidebar-nav ul li a {
       color: #a1a1aa !important;
       font-size: 0.92rem;
       padding: 0.45rem 0.8rem;
       border-radius: 8px;
-      margin: 0.2rem 0.6rem;
+      margin: 0.15rem 0.5rem;
       transition: all 0.15s ease-in-out;
     }
     html[data-theme="dark"] .sidebar-nav ul li a:hover {
       color: #ffffff !important;
       background-color: #27272a80 !important;
     }
-    /* Microsoft Loop Dark Active Pill Card */
     html[data-theme="dark"] .sidebar-nav ul li.active > a {
       color: #ffffff !important;
       font-weight: 600 !important;
@@ -64,10 +80,22 @@
       border-left: 3px solid #38bdf8 !important;
     }
 
-    /* Headings */
+    /* Dark Mode Search Bar Fix */
+    html[data-theme="dark"] .search input {
+      background-color: #27272a !important;
+      color: #f4f4f5 !important;
+      border: 1px solid #3f3f46 !important;
+      border-radius: 8px !important;
+      padding: 0.5rem 0.75rem !important;
+    }
+    html[data-theme="dark"] .search input::placeholder {
+      color: #a1a1aa !important;
+    }
+
+    /* Dark Mode Headings (Soft White, NOT Harsh White) */
     html[data-theme="dark"] .markdown-section h1 {
-      color: #ffffff !important;
-      font-size: 2.2rem !important;
+      color: #f8fafc !important;
+      font-size: 2.1rem !important;
       font-weight: 700 !important;
       letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
@@ -75,31 +103,31 @@
       padding-bottom: 0.5rem;
     }
     html[data-theme="dark"] .markdown-section h2 {
-      color: #ffffff !important;
-      font-size: 1.5rem !important;
-      font-weight: 700 !important;
+      color: #e2e8f0 !important;
+      font-size: 1.45rem !important;
+      font-weight: 600 !important;
       margin-top: 2rem;
       border-bottom: 1px solid #27272a !important;
       padding-bottom: 0.4rem;
     }
     html[data-theme="dark"] .markdown-section h3 {
-      color: #f4f4f5 !important;
-      font-size: 1.2rem !important;
+      color: #cbd5e1 !important;
+      font-size: 1.18rem !important;
       font-weight: 600 !important;
     }
     html[data-theme="dark"] .markdown-section p,
     html[data-theme="dark"] .markdown-section li {
       color: #d4d4d8 !important;
-      font-size: 1rem;
-      line-height: 1.7;
     }
+
+    /* Dark Mode Code & Pre */
     html[data-theme="dark"] .markdown-section code {
       background: #27272a !important;
       color: #38bdf8 !important;
       border: 1px solid #3f3f46 !important;
       border-radius: 6px;
       padding: 0.2rem 0.45rem;
-      font-family: 'Fira Code', monospace;
+      font-family: var(--code-font-family);
       font-size: 0.88em;
     }
     html[data-theme="dark"] .markdown-section pre {
@@ -108,7 +136,7 @@
       border-radius: 8px;
     }
 
-    /* DARK MODE TABLE FIX (PERFECT CONTRAST - Imagen 2 Resuelta) */
+    /* Dark Mode Table Fix */
     html[data-theme="dark"] .markdown-section table {
       width: 100% !important;
       border-collapse: separate !important;
@@ -135,17 +163,17 @@
       border-right: 1px solid #27272a !important;
     }
     html[data-theme="dark"] .markdown-section table tr:nth-child(2n) td {
-      background-color: #1c1c22 !important; /* Elegant dark charcoal zebra row */
+      background-color: #1c1c22 !important;
       color: #e4e4e7 !important;
     }
 
     /* ----------------------------------------------------
-       MICROSOFT LOOP LIGHT MODE (Imagen 1)
+       MICROSOFT LOOP LIGHT MODE
        ---------------------------------------------------- */
     html[data-theme="light"] body {
       background-color: #ffffff !important;
       color: #334155 !important;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-family: var(--base-font-family) !important;
       font-size: 16px;
       line-height: 1.7;
     }
@@ -154,8 +182,13 @@
       border-right: 1px solid #e2e8f0 !important;
       padding-top: 1rem;
     }
-    html[data-theme="light"] .sidebar-nav strong {
+    html[data-theme="light"] .sidebar .app-name-link {
       color: #1e293b !important;
+      font-weight: 700 !important;
+      font-size: 1.25rem !important;
+    }
+    html[data-theme="light"] .sidebar-nav strong {
+      color: #0284c7 !important;
       font-size: 0.95rem;
       font-weight: 700;
     }
@@ -164,14 +197,13 @@
       font-size: 0.92rem;
       padding: 0.45rem 0.8rem;
       border-radius: 8px;
-      margin: 0.2rem 0.6rem;
+      margin: 0.15rem 0.5rem;
       transition: all 0.15s ease-in-out;
     }
     html[data-theme="light"] .sidebar-nav ul li a:hover {
       color: #0f172a !important;
       background-color: #e2e8f0 !important;
     }
-    /* Microsoft Loop Light Active Pill Card */
     html[data-theme="light"] .sidebar-nav ul li.active > a {
       color: #0f172a !important;
       font-weight: 600 !important;
@@ -180,10 +212,22 @@
       border-left: 3px solid #0284c7 !important;
     }
 
-    /* Headings */
-    html[data-theme="light"] .markdown-section h1 {
+    /* Light Mode Search Bar Fix */
+    html[data-theme="light"] .search input {
+      background-color: #ffffff !important;
       color: #0f172a !important;
-      font-size: 2.2rem !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      padding: 0.5rem 0.75rem !important;
+    }
+    html[data-theme="light"] .search input::placeholder {
+      color: #64748b !important;
+    }
+
+    /* Light Mode Headings (Soft Slate, NO Harsh Black) */
+    html[data-theme="light"] .markdown-section h1 {
+      color: #1e293b !important; /* Soft deep slate, NOT pure black */
+      font-size: 2.1rem !important;
       font-weight: 700 !important;
       letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
@@ -191,31 +235,31 @@
       padding-bottom: 0.5rem;
     }
     html[data-theme="light"] .markdown-section h2 {
-      color: #0f172a !important;
-      font-size: 1.5rem !important;
-      font-weight: 700 !important;
+      color: #334155 !important; /* Soft slate */
+      font-size: 1.45rem !important;
+      font-weight: 600 !important;
       margin-top: 2rem;
       border-bottom: 1px solid #e2e8f0 !important;
       padding-bottom: 0.4rem;
     }
     html[data-theme="light"] .markdown-section h3 {
-      color: #1e293b !important;
-      font-size: 1.2rem !important;
+      color: #475569 !important;
+      font-size: 1.18rem !important;
       font-weight: 600 !important;
     }
     html[data-theme="light"] .markdown-section p,
     html[data-theme="light"] .markdown-section li {
       color: #334155 !important;
-      font-size: 1rem;
-      line-height: 1.7;
     }
+
+    /* Light Mode Code & Pre */
     html[data-theme="light"] .markdown-section code {
       background: #f1f5f9 !important;
       color: #0284c7 !important;
       border: 1px solid #cbd5e1 !important;
       border-radius: 6px;
       padding: 0.2rem 0.45rem;
-      font-family: 'Fira Code', monospace;
+      font-family: var(--code-font-family);
       font-size: 0.88em;
     }
     html[data-theme="light"] .markdown-section pre {
@@ -224,7 +268,7 @@
       border-radius: 8px;
     }
 
-    /* LIGHT MODE TABLE FIX */
+    /* Light Mode Table Fix */
     html[data-theme="light"] .markdown-section table {
       width: 100% !important;
       border-collapse: separate !important;
@@ -257,7 +301,7 @@
 
     /* Copy Button & General UI */
     .docsify-copy-code-button {
-      background: #27272a !important;
+      background: #1e293b !important;
       color: #38bdf8 !important;
       border-radius: 6px !important;
     }
@@ -346,7 +390,7 @@
   <!-- Docsify Core -->
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
 
-  <!-- Plugins: Buscador, Acordeón Folder, Copiar y Paginador -->
+  <!-- Plugins: Buscador, Acordeón, Copiar y Paginador -->
   <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
