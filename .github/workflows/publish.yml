@@ -27,6 +27,7 @@ jobs:
           cp -r backend-node-nest _site/backend-node-nest
           cp -r adr _site/adr
           cp -r threat-model _site/threat-model
+          cp index.html _site/
           cp README.md _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
