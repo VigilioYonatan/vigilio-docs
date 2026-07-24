@@ -12,8 +12,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Base Docsify Theme -->
+  <!-- Base Docsify Theme & VS Code Dark Plus Code Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1/themes/prism-vsc-dark-plus.min.css">
 
   <!-- Microsoft Loop UI Exact Styling & Custom Fixes -->
   <style>
@@ -33,7 +34,58 @@
     }
 
     /* ----------------------------------------------------
-       MICROSOFT LOOP LIGHT MODE (FIXED CONTRAST & TITLES)
+       VS CODE DARK PLUS SYNTAX HIGHLIGHTING FIXES
+       ---------------------------------------------------- */
+    .markdown-section pre {
+      background: #1e1e1e !important; /* Authentic VS Code Editor Background */
+      border: 1px solid #2d2d2d !important;
+      border-radius: 8px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+      padding: 1.2rem !important;
+      margin: 1.5rem 0 !important;
+      position: relative !important;
+    }
+    .markdown-section pre > code {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      font-family: var(--code-font-family) !important;
+      font-size: 0.9em !important;
+      line-height: 1.6 !important;
+    }
+
+    /* Fix overlap between Language Badge ("typescript") and Copy Button */
+    .markdown-section pre[data-lang]::after {
+      position: absolute !important;
+      top: 10px !important;
+      right: 90px !important;
+      color: #858585 !important;
+      font-size: 0.75rem !important;
+      font-weight: 500 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+    }
+    .docsify-copy-code-button {
+      position: absolute !important;
+      top: 8px !important;
+      right: 12px !important;
+      background: #252526 !important;
+      color: #cccccc !important;
+      border: 1px solid #3c3c3c !important;
+      border-radius: 6px !important;
+      padding: 3px 10px !important;
+      font-size: 0.78rem !important;
+      transition: all 0.2s ease !important;
+    }
+    .docsify-copy-code-button:hover {
+      background: #0e639c !important;
+      color: #ffffff !important;
+      border-color: #1177bb !important;
+    }
+
+    /* ----------------------------------------------------
+       MICROSOFT LOOP LIGHT MODE
        ---------------------------------------------------- */
     html[data-theme="light"] body {
       background-color: #ffffff !important;
@@ -89,9 +141,9 @@
       color: #64748b !important;
     }
 
-    /* LIGHT MODE HEADINGS FIX (NÍTIDOS Y OSCUROS, NADA DE PLOMO) */
+    /* Light Mode Headings */
     html[data-theme="light"] .markdown-section h1 {
-      color: #0f172a !important; /* Dark Slate Navy - 100% Nítido */
+      color: #0f172a !important;
       font-size: 2.1rem !important;
       font-weight: 700 !important;
       letter-spacing: -0.02em;
@@ -100,7 +152,7 @@
       padding-bottom: 0.5rem;
     }
     html[data-theme="light"] .markdown-section h2 {
-      color: #1e293b !important; /* Deep Slate - 100% Nítido */
+      color: #1e293b !important;
       font-size: 1.5rem !important;
       font-weight: 700 !important;
       margin-top: 2rem;
@@ -131,24 +183,6 @@
       padding: 0.18rem 0.45rem;
       font-family: var(--code-font-family);
       font-size: 0.88em;
-    }
-
-    /* FIX: CODE BLOCK PRE SINGLE BORDER (ELIMINADO SEGUNDO BORDE REPETIDO) */
-    html[data-theme="light"] .markdown-section pre {
-      background: #f8fafc !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 8px !important;
-      box-shadow: none !important;
-      padding: 1rem !important;
-      margin: 1.5rem 0 !important;
-    }
-    html[data-theme="light"] .markdown-section pre > code {
-      background: transparent !important;
-      border: none !important;
-      color: #0369a1 !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      font-family: var(--code-font-family) !important;
     }
 
     /* Light Mode Table Fix */
@@ -182,9 +216,8 @@
       color: #1e293b !important;
     }
 
-
     /* ----------------------------------------------------
-       MICROSOFT LOOP DARK MODE (FIXED CONTRAST & TITLES)
+       MICROSOFT LOOP DARK MODE
        ---------------------------------------------------- */
     html[data-theme="dark"] body {
       background-color: #16161a !important;
@@ -240,7 +273,7 @@
       color: #a1a1aa !important;
     }
 
-    /* DARK MODE HEADINGS FIX (BLANCO NÍTIDO Y LUMINOSO) */
+    /* Dark Mode Headings */
     html[data-theme="dark"] .markdown-section h1 {
       color: #ffffff !important;
       font-size: 2.1rem !important;
@@ -284,23 +317,6 @@
       font-size: 0.88em;
     }
 
-    /* FIX: CODE BLOCK PRE SINGLE BORDER (ELIMINADO SEGUNDO BORDE REPETIDO) */
-    html[data-theme="dark"] .markdown-section pre {
-      background: #111114 !important;
-      border: 1px solid #27272a !important;
-      border-radius: 8px !important;
-      box-shadow: none !important;
-      padding: 1rem !important;
-      margin: 1.5rem 0 !important;
-    }
-    html[data-theme="dark"] .markdown-section pre > code {
-      background: transparent !important;
-      border: none !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      font-family: var(--code-font-family) !important;
-    }
-
     /* Dark Mode Table Fix */
     html[data-theme="dark"] .markdown-section table {
       width: 100% !important;
@@ -332,13 +348,6 @@
       color: #e4e4e7 !important;
     }
 
-    /* Copy Button & General UI */
-    .docsify-copy-code-button {
-      background: #27272a !important;
-      color: #38bdf8 !important;
-      border-radius: 6px !important;
-    }
-    
     /* Scrollbars */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #16161a; }
@@ -429,7 +438,7 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
 
-  <!-- Syntax Highlighting -->
+  <!-- Syntax Highlighting with VS Code Dark Plus -->
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
