@@ -58,6 +58,18 @@ jobs:
         run: node scripts/validate-workflows.mjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Move Jira issue to Code Review
+        if: github.event_name == 'pull_request'
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@39abbd403efc2112461bb3511ebf4561081b212f # v2026.1.0
+        with:
+          mode: transition
+          issue-keys: ${{ github.head_ref }} ${{ github.event.pull_request.title }}
+          transition-name: "Code Review"
+          comment: "Pull Request de documentación abierto: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
   build:
     name: Build site
@@ -95,3 +107,14 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Notify Jira on docs published
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@39abbd403efc2112461bb3511ebf4561081b212f # v2026.1.0
+        with:
+          mode: transition
+          issue-keys: ${{ github.event.head_commit.message }}
+          transition-name: "Done"
+          comment: "📖 Documentación publicada en GitHub Pages: https://vigiliyonatan.github.io/vigilio-docs/"
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
