@@ -60,7 +60,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Move Jira issue to Code Review
         if: github.event_name == 'pull_request'
-        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@39abbd403efc2112461bb3511ebf4561081b212f # v2026.1.0
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@cc0b2e178648d35e0d694d2f7a0151ed2d32ea71 # v2026.1.0
         with:
           mode: transition
           issue-keys: ${{ github.head_ref }} ${{ github.event.pull_request.title }}
@@ -107,14 +107,15 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
-      - name: Auto-tag release in GitHub
+      - name: Auto-tag Senior Release in GitHub
         uses: mathieudutour/github-tag-action@fcfd061f216a69a844962e245a49800e238f830d # v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: v2026.1.${{ github.run_number }}
-          tag_prefix: ""
+          tag_prefix: "v"
+          default_bump: patch
+          release_branches: main
       - name: Notify Jira on docs published
-        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@39abbd403efc2112461bb3511ebf4561081b212f # v2026.1.0
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@cc0b2e178648d35e0d694d2f7a0151ed2d32ea71 # v2026.1.0
         with:
           mode: transition
           issue-keys: ${{ github.event.head_commit.message }}
