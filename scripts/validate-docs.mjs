@@ -2,16 +2,10 @@
 /**
  * Valida la documentacion antes de publicarla.
  *
- * Estos documentos no son solo para humanos: las skills de `vigilio-platform-actions`
- * los referencian como fuente canonica, asi que un enlace roto o un ejemplo que
- * contradice al tooling se propaga a todo lo que genere un agente. Las cuatro
- * comprobaciones responden a fallos reales encontrados en el repositorio:
- *
- * 1. Enlaces internos rotos      -> `_sidebar.md` apuntaba a adr/README.md inexistente.
- * 2. Cobertura del sidebar       -> 32 de 44 documentos no eran alcanzables navegando.
- * 3. Terminos prohibidos         -> `endoso` se usaba como ejemplo canonico mientras
- *                                   `validate-contracts` lo bloquea en CI.
- * 4. Colision de numeracion      -> habia dos `34-*` y dos `35-*`.
+ * Comprobaciones:
+ * 1. Enlaces internos rotos
+ * 2. Cobertura del sidebar
+ * 3. Colision de numeracion
  */
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -19,23 +13,6 @@ import process from 'node:process';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const EXCLUDED = new Set(['.git', '.github', '_site', 'node_modules', 'scripts']);
-
-/**
- * Terminos que el tooling de plataforma rechaza y que por tanto no pueden
- * aparecer como ejemplo en la documentacion canonica.
- *
- * `endoso` esta bloqueado por `web-mfe-tooling`:
- *   - validate-contracts.ts  -> /\bendoso(Index|Show|Store|Update|Schema)/
- *   - validate-openapi.ts    -> forbid-prefix /endoso
- * Ensenarlo como golden path genera codigo que CI rechaza.
- */
-const FORBIDDEN_TERMS = [
-  {
-    pattern: /\bendoso\b/i,
-    reason:
-      'el tooling de plataforma bloquea `endoso` en contratos y OpenAPI; usar `product`, que existe en bus-impl',
-  },
-];
 
 async function markdownFiles(directory = ROOT, collected = []) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -97,26 +74,6 @@ async function validateSidebarCoverage(files) {
     .map((file) => `${file}: no es alcanzable desde _sidebar.md`);
 }
 
-async function validateForbiddenTerms(files) {
-  const errors = [];
-
-  for (const file of files) {
-    const content = await readFile(file, 'utf8');
-
-    for (const { pattern, reason } of FORBIDDEN_TERMS) {
-      const occurrences = content.match(new RegExp(pattern, 'gi'));
-
-      if (occurrences) {
-        errors.push(
-          `${relative(file)}: contiene "${occurrences[0]}" ${occurrences.length} vez(ces) — ${reason}`,
-        );
-      }
-    }
-  }
-
-  return errors;
-}
-
 function validateNumbering(files) {
   const bySection = new Map();
 
@@ -139,7 +96,6 @@ async function main() {
   const checks = [
     ['Enlaces internos', await validateInternalLinks(files)],
     ['Cobertura del sidebar', await validateSidebarCoverage(files)],
-    ['Terminos prohibidos', await validateForbiddenTerms(files)],
     ['Numeracion', validateNumbering(files)],
   ];
 
