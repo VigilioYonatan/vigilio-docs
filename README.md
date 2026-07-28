@@ -23,4 +23,4 @@ policy central; despues se corrige esta documentacion.
 Los nombres de negocio usados en ejemplos, como `product`, `renovacion`, `emision` o `constancia`,
 no representan modulos obligatorios ni garantizan que existan en un proyecto consumidor.
 
-Publicado en GitHub Pages: https://vigiliyonatan.github.io/vigilio-docs/
+Publicado en GitHub Pages: https://vigilioyonatan.github.io/vigilio-docs
