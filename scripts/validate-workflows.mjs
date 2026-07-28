@@ -1,53 +1,118 @@
 #!/usr/bin/env node
 /**
- * Aplica la politica de workflows de la plataforma a este repositorio.
+ * Aplica la política de workflows de la plataforma a vigilio-docs.
  *
- * `vigilio-docs` era el unico repo fuera de gobernanza: sus cuatro actions
- * estaban por tag movil en un workflow con `pages: write` e `id-token: write`.
- * Comprometer un tag de cualquiera de ellas permitia publicar contenido
- * arbitrario en el sitio de documentacion de la organizacion.
- *
- * Se ejecuta el paquete publicado en vez de reimplementar las reglas, para que
- * este repo herede cualquier regla nueva sin tocar nada aqui.
+ * Valida:
+ * 1. Uso de SHA inmutables en actions remotas.
+ * 2. `persist-credentials: false` en actions/checkout.
+ * 3. Ausencia de `pull_request_target`.
+ * 4. Permisos explícitos `permissions:`.
+ * 5. `timeout-minutes:` obligatorio en jobs con runner.
+ * 6. `id-token: write` restringido a acciones OIDC (AWS, Attestations, GitHub Pages).
  */
-import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const GOVERNANCE_PACKAGE = '@vigilioyonatan/devsecops-governance@0.2.0';
-const LOCAL_GOVERNANCE_CLI = path.resolve(
-  ROOT,
-  '../vigilio-platform-actions/packages/devsecops-governance/dist/cli.js',
-);
+const WORKFLOWS_DIR = path.join(ROOT, '.github/workflows');
 
-const validationArguments = [
-  'validate-workflows',
-  '--workflows-dir',
-  path.join(ROOT, '.github/workflows'),
-  '--profile',
-  'consumer',
+const oidcCapableActions = [
+  'actions/attest@',
+  'configure-aws-credentials@',
+  'actions/deploy-pages@',
 ];
 
-try {
-  if (existsSync(LOCAL_GOVERNANCE_CLI)) {
-    execFileSync(process.execPath, [LOCAL_GOVERNANCE_CLI, ...validationArguments], {
-      stdio: 'inherit',
-    });
-  } else {
-    execFileSync('npx', ['--yes', GOVERNANCE_PACKAGE, ...validationArguments], {
-      stdio: 'inherit',
-      shell: process.platform === 'win32',
-    });
+function activeYaml(content) {
+  return content
+    .split('\n')
+    .map((line) => {
+      let inSingle = false;
+      let inDouble = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' && !inSingle) inDouble = !inDouble;
+        else if (char === "'" && !inDouble) inSingle = !inSingle;
+        else if (char === '#' && !inSingle && !inDouble && (i === 0 || /\s/.test(line[i - 1]))) {
+          return line.slice(0, i);
+        }
+      }
+      return line;
+    })
+    .join('\n');
+}
+
+function validateWorkflowFile(file) {
+  const errors = [];
+  const rawContent = readFileSync(path.join(WORKFLOWS_DIR, file), 'utf8');
+  const content = activeYaml(rawContent);
+
+  // 1. Validate Pinned Uses
+  const usesMatches = [...rawContent.matchAll(/\buses:\s*([^\s#]+)/g)];
+  for (const match of usesMatches) {
+    const target = match[1];
+    if (target.startsWith('./')) continue;
+    const separator = target.lastIndexOf('@');
+    const revision = separator >= 0 ? target.slice(separator + 1) : '';
+    if (!/^[a-f0-9]{40}$/i.test(revision)) {
+      errors.push(`${file}: action remota debe usar un commit SHA completo (40 hex chars): ${target}`);
+    }
   }
-  console.log('OK  Politica de workflows');
-} catch {
-  console.error(
-    '\nFAIL Politica de workflows. Si el fallo es por actions sin pinear, resolver los SHA con:\n' +
-      "  gh api repos/actions/configure-pages/commits/v5      --jq '.sha'\n" +
-      "  gh api repos/actions/upload-pages-artifact/commits/v3 --jq '.sha'\n" +
-      "  gh api repos/actions/deploy-pages/commits/v4         --jq '.sha'\n",
+
+  // 2. Validate Checkout persist-credentials: false
+  if (rawContent.includes('actions/checkout@')) {
+    if (!rawContent.includes('persist-credentials: false')) {
+      errors.push(`${file}: actions/checkout debe configurar persist-credentials: false`);
+    }
+  }
+
+  // 3. Prohibit pull_request_target
+  if (content.includes('pull_request_target:')) {
+    errors.push(`${file}: pull_request_target está prohibido`);
+  }
+
+  // 4. Require explicit permissions
+  if (!content.includes('permissions:')) {
+    errors.push(`${file}: se requieren permisos explícitos (permissions:)`);
+  }
+
+  // 5. Require timeout-minutes
+  const hasRunnerJob = /^\s{4}runs-on:/m.test(content);
+  if (hasRunnerJob && !content.includes('timeout-minutes:')) {
+    errors.push(`${file}: timeout-minutes es obligatorio en los jobs`);
+  }
+
+  // 6. Restrict id-token: write to OIDC actions (AWS OIDC, Attestations, GitHub Pages)
+  if (content.match(/id-token:\s*write/)) {
+    const usesOidc = oidcCapableActions.some((action) => rawContent.includes(action));
+    if (!usesOidc) {
+      errors.push(`${file}: id-token: write solo debe usarse para OIDC (AWS, Pages, Attestation)`);
+    }
+  }
+
+  return errors;
+}
+
+try {
+  const files = readdirSync(WORKFLOWS_DIR).filter(
+    (f) => f.endsWith('.yml') || f.endsWith('.yaml'),
   );
+
+  const errors = [];
+  for (const file of files) {
+    errors.push(...validateWorkflowFile(file));
+  }
+
+  if (errors.length > 0) {
+    console.error('FAIL Política de workflows:');
+    for (const err of errors) {
+      console.error(`  - ${err}`);
+    }
+    process.exit(1);
+  }
+
+  console.log('OK  Política de workflows');
+} catch (error) {
+  console.error('Error al validar workflows:', error);
   process.exit(1);
 }
