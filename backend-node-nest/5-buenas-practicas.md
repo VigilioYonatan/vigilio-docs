@@ -36,19 +36,19 @@ Ubicaciones recomendadas:
 - `shared/application/schemas/` para schemas reutilizables: `querySchema`, `createPaginatorSchema`, `timestampSchema`
 - `application/schemas/` para schemas Zod base del modulo y derivados realmente reutilizables
 - `application/dtos/` para contratos Zod de request y response derivados por endpoint
-- clases `createZodDto` de Nest/Swagger dentro del mismo `*.request.dto.ts` o `*.response.dto.ts`
+- clases `createZodDto` de Nest/Swagger en el archivo hermano `*.request.doc.ts` o `*.response.doc.ts`
 - `shared/infrastructure/http/pipes/` para `ZodPipe` y `ZodQueryPipe`
 - `shared/infrastructure/persistence/drizzle/custom-types/` para tipos Drizzle reutilizables como `numericStringCustom` y `numericNumberCustom`
 - `shared/infrastructure/config/environment.schema.ts` para variables de entorno validadas con Zod
 
 Convencion recomendada:
 
-- por accion/caso de uso usar maximo 2 archivos DTO: `*.request.dto.ts` y `*.response.dto.ts`.
+- por accion/caso de uso usar maximo 2 contratos públicos: `*.request.dto.ts` y `*.response.dto.ts`; los `.doc.ts` son adaptadores opcionales, no contratos nuevos.
 - `renovacion-index.request.dto.ts` contiene query params y params de `index`.
 - `renovacion-store.request.dto.ts` contiene body, query y params de `store`.
 - `renovacion-update.request.dto.ts` contiene body, query y params de `update`.
-- `renovacion-store.response.dto.ts` contiene response exitoso, errores esperados y class DTOs de Swagger si hacen falta.
-- no crear `*.query.dto.ts`, `*.params.dto.ts`, `*.response.class.dto.ts` separados por defecto.
+- `renovacion-store.response.dto.ts` contiene response exitoso, errores esperados y tipos inferidos.
+- no crear `*.query.dto.ts` o `*.params.dto.ts`; crear `.doc.ts` solo cuando NestJS/OpenAPI necesita la clase.
 - todos los DTOs viven dentro de la carpeta de la feature para mantener alta cohesion; no van en carpetas globales por comodidad.
 
 Convencion de metodos:
@@ -58,13 +58,13 @@ Convencion de metodos:
 - si una feature tiene CRUD con `store`, su `index` debe usar paginacion.
 - si una feature solo es catalogo pequeno sin CRUD, puede tener `index` sin paginacion.
 - services y controllers retornan `ResponseDto`, por ejemplo `RenovacionIndexResponseDto` o `RenovacionStoreResponseDto`.
-- `ResponseClassDto` existe solo como adaptador para `@ZodResponse` y Swagger; si existe, vive dentro del mismo `*.response.dto.ts`.
+- `ResponseDocDto` existe solo como adaptador para `@ZodResponse` y Swagger; vive en `*.response.doc.ts` y nunca se exporta al frontend.
 
 Uso:
 
 - `schema.ts` define campos base como `id`, `nombre`, `estado`, fechas y reglas comunes
 - los campos de objetos, DTOs, schemas y tablas usan `snake_case`: `nro_poliza`, `tipo_renovacion`, `broker_id`
-- no usar `camelCase` en contratos de datos: evitar `nroPoliza`, `tipoEndoso`, `idBroker`
+- no usar `camelCase` en contratos de datos: evitar `nroPoliza`, `productType`, `idBroker`
 - las FK siempre terminan en `_id`: `broker_id`, `poliza_id`, `cliente_id`
 - los enums de datos van en minusculas: `inclusion`, `exclusion`, `pendiente`
 - si hay paginacion, reutilizar `querySchema` con `cursor`, `offset`, `limit`, `search`, `sort_by`, `sort_dir`
@@ -191,7 +191,7 @@ Por que:
 - Drizzle `pgTable(...)` es mapping de persistencia, no comportamiento de negocio.
 - renombrarlo a `product.entity.ts` puede confundir a devs y mezclar dominio con infraestructura.
 
-Si el equipo quiere nombres mas explicitos para Drizzle, la alternativa sana seria `product.table.ts`, no `product.entity.ts`. Pero mantener `schema.ts` por feature es consistente con `user`, `product` y `endoso`.
+Si el equipo quiere nombres mas explicitos para Drizzle, la alternativa sana seria `product.table.ts`, no `product.entity.ts`. Pero mantener `schema.ts` por feature es consistente con `user`, `product` y `product`.
 
 ---
 
@@ -293,7 +293,7 @@ Preferir:
 
 ```ts
 const handlers = {
-  endosoRegistrado: endosoRegistradoHandler,
+  productRegistrado: productRegistradoHandler,
   validarTrama: validarTramaHandler,
 };
 ```
@@ -404,7 +404,7 @@ Buenas practicas:
 Formato recomendado de rama:
 
 ```text
-feat/ABC-123/crear-endoso
+feat/ABC-123/crear-product
 fix/ABC-456/corregir-openapi
 hotfix/ABC-789/reintento-sqs
 ```
@@ -418,14 +418,14 @@ Regex recomendada:
 Titulo de PR recomendado:
 
 ```text
-[ABC-123] - feat: Crear endoso
+[ABC-123] - feat: Crear product
 [ABC-456] - fix: Corregir contrato OpenAPI
 ```
 
 Commit recomendado:
 
 ```text
-[ABC-123] - feat: crear endoso
+[ABC-123] - feat: crear product
 [ABC-456] - fix: corregir contrato openapi
 ```
 

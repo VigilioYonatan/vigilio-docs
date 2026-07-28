@@ -121,7 +121,7 @@ Reglas:
 - `@/` apunta a `src`.
 - `@tests/` apunta a `tests`.
 - evitar rutas tipo `../../../../` porque son fragiles cuando se mueve una carpeta.
-- imports locales simples como `./schema` o `./endoso.repository` siguen estando bien.
+- imports locales simples como `./schema` o `./product.repository` siguen estando bien.
 
 ```typescript
 // vitest.config.ts
@@ -210,29 +210,29 @@ Regla:
 ## 5. Unit test de application service
 
 ```typescript
-// Ejemplo referencial: tests/unit/endoso/endoso.application-service.test.ts
+// Ejemplo referencial: tests/unit/product/product.application-service.test.ts
 import { describe, expect, it, vi } from 'vitest';
-import { EndosoApplicationService } from '@/endoso/application/service/endoso.application-service';
-import { createEndosoStoreRequest } from '@tests/factories/endoso.factory';
+import { ProductApplicationService } from '@/product/application/service/product.application-service';
+import { createProductStoreRequest } from '@tests/factories/product.factory';
 
-describe('EndosoApplicationService', () => {
-  it('crea un endoso usando el repository', async () => {
+describe('ProductApplicationService', () => {
+  it('crea un product usando el repository', async () => {
     const repository = {
       index: vi.fn(),
       store: vi.fn().mockResolvedValue({
         id: 1,
         nro_poliza: '123456',
-        tipo_endoso: 'inclusion',
+        product_type: 'inclusion',
       }),
     };
-    const service = new EndosoApplicationService(repository);
+    const service = new ProductApplicationService(repository);
 
-    const body = createEndosoStoreRequest();
+    const body = createProductStoreRequest();
     const response = await service.store(body);
 
     expect(repository.store).toHaveBeenCalledWith(body);
     expect(response.success).toBe(true);
-    expect(response.endoso.id).toBe(1);
+    expect(response.product.id).toBe(1);
   });
 });
 ```
@@ -242,24 +242,24 @@ describe('EndosoApplicationService', () => {
 ## 6. Unit test de DTO Zod
 
 ```typescript
-// Ejemplo referencial: tests/unit/endoso/endoso-store.request.dto.test.ts
+// Ejemplo referencial: tests/unit/product/product-store.request.dto.test.ts
 import { describe, expect, it } from 'vitest';
-import { endosoStoreRequestDto } from '@/endoso/application/dtos/endoso-store.request.dto';
-import { createEndosoStoreRequest } from '@tests/factories/endoso.factory';
+import { productStoreRequestDto } from '@/product/application/dtos/product-store.request.dto';
+import { createProductStoreRequest } from '@tests/factories/product.factory';
 
-describe('endosoStoreRequestDto', () => {
+describe('productStoreRequestDto', () => {
   it('acepta un request valido', () => {
-    const body = createEndosoStoreRequest();
+    const body = createProductStoreRequest();
 
-    const result = endosoStoreRequestDto.safeParse(body);
+    const result = productStoreRequestDto.safeParse(body);
 
     expect(result.success).toBe(true);
   });
 
   it('rechaza una poliza vacia', () => {
-    const body = createEndosoStoreRequest({ nro_poliza: '' });
+    const body = createProductStoreRequest({ nro_poliza: '' });
 
-    const result = endosoStoreRequestDto.safeParse(body);
+    const result = productStoreRequestDto.safeParse(body);
 
     expect(result.success).toBe(false);
   });
@@ -271,15 +271,15 @@ describe('endosoStoreRequestDto', () => {
 ## 7. Factories deterministicas
 
 ```typescript
-// Ejemplo referencial: tests/factories/endoso.factory.ts
-import type { EndosoStoreRequestDto } from '@/endoso/application/dtos/endoso-store.request.dto';
+// Ejemplo referencial: tests/factories/product.factory.ts
+import type { ProductStoreRequestDto } from '@/product/application/dtos/product-store.request.dto';
 
-export function createEndosoStoreRequest(
-  overrides: Partial<EndosoStoreRequestDto> = {},
-): EndosoStoreRequestDto {
+export function createProductStoreRequest(
+  overrides: Partial<ProductStoreRequestDto> = {},
+): ProductStoreRequestDto {
   return {
     nro_poliza: '123456',
-    tipo_endoso: 'inclusion',
+    product_type: 'inclusion',
     fecha_inicio: '2026-06-08',
     broker_id: 10,
     ...overrides,
@@ -302,7 +302,7 @@ Para integration tests locales y CI:
 // tests/helpers/setup-integration.ts
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import * as schema from '@/endoso/infrastructure/persistence/drizzle/schema';
+import * as schema from '@/product/infrastructure/persistence/drizzle/schema';
 
 let pool: Pool | undefined;
 
@@ -332,22 +332,22 @@ export async function teardownTestDb() {
 ```
 
 ```typescript
-// Ejemplo referencial: tests/integration/repositories/endoso.repository.integration.test.ts
+// Ejemplo referencial: tests/integration/repositories/product.repository.integration.test.ts
 import { beforeEach, describe, expect, it } from 'vitest';
 import { setupTestDb, truncateTables } from '@tests/helpers/setup-integration';
-import { createEndosoStoreRequest } from '@tests/factories/endoso.factory';
-import { EndosoRepository } from '@/endoso/infrastructure/persistence/drizzle/endoso.repository';
+import { createProductStoreRequest } from '@tests/factories/product.factory';
+import { ProductRepository } from '@/product/infrastructure/persistence/drizzle/product.repository';
 
-describe('EndosoRepository', () => {
+describe('ProductRepository', () => {
   beforeEach(async () => {
-    await truncateTables(['endoso']);
+    await truncateTables(['product']);
   });
 
-  it('persiste un endoso en PostgreSQL real', async () => {
+  it('persiste un product en PostgreSQL real', async () => {
     const db = await setupTestDb();
-    const repository = new EndosoRepository(db);
+    const repository = new ProductRepository(db);
 
-    const row = await repository.store(createEndosoStoreRequest());
+    const row = await repository.store(createProductStoreRequest());
 
     expect(row.id).toBeDefined();
     expect(row.nro_poliza).toBe('123456');
@@ -529,27 +529,27 @@ export default defineConfig({
 ```
 
 ```typescript
-// Ejemplo referencial: tests/e2e/endoso/endoso.api.spec.ts
+// Ejemplo referencial: tests/e2e/product/product.api.spec.ts
 import { expect, test } from '@playwright/test';
-import { endosoStoreRequestDto } from '@/endoso/application/dtos/endoso-store.request.dto';
-import { endosoStoreResponseDto } from '@/endoso/application/dtos/endoso-store.response.dto';
+import { productStoreRequestDto } from '@/product/application/dtos/product-store.request.dto';
+import { productStoreResponseDto } from '@/product/application/dtos/product-store.response.dto';
 
-test('registra un endoso completo', async ({ request }) => {
-  const body = endosoStoreRequestDto.parse({
+test('registra un product completo', async ({ request }) => {
+  const body = productStoreRequestDto.parse({
     nro_poliza: '123456',
-    tipo_endoso: 'inclusion',
+    product_type: 'inclusion',
     fecha_inicio: '2026-06-08',
     broker_id: 10,
   });
 
-  const response = await request.post('/endosos', { data: body });
+  const response = await request.post('/products', { data: body });
   expect(response.status()).toBe(201);
 
   const json = await response.json();
-  const parsed = endosoStoreResponseDto.parse(json);
+  const parsed = productStoreResponseDto.parse(json);
 
   expect(parsed.success).toBe(true);
-  expect(parsed.endoso.nro_poliza).toBe(body.nro_poliza);
+  expect(parsed.product.nro_poliza).toBe(body.nro_poliza);
 });
 ```
 
@@ -818,7 +818,7 @@ import { isValidBranchName } from '@/shared/tooling/validate-branch-name';
 
 describe('isValidBranchName', () => {
   it('acepta feat con jira y descripcion', () => {
-    expect(isValidBranchName('feat/ABC-123/crear-endoso')).toBe(true);
+    expect(isValidBranchName('feat/ABC-123/crear-product')).toBe(true);
   });
 
   it('acepta fix con jira y descripcion', () => {
@@ -826,11 +826,11 @@ describe('isValidBranchName', () => {
   });
 
   it('rechaza ramas sin ticket', () => {
-    expect(isValidBranchName('feat/crear-endoso')).toBe(false);
+    expect(isValidBranchName('feat/crear-product')).toBe(false);
   });
 
   it('rechaza descripcion con espacios', () => {
-    expect(isValidBranchName('feat/ABC-123/crear endoso')).toBe(false);
+    expect(isValidBranchName('feat/ABC-123/crear product')).toBe(false);
   });
 });
 ```

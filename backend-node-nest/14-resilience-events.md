@@ -60,7 +60,7 @@ Para comandos HTTP criticos:
 
 Aplica a:
 
-- creacion de endoso
+- creacion de product
 - pagos
 - importaciones
 - solicitudes que disparan workers
@@ -90,7 +90,7 @@ Formato recomendado:
 ```json
 {
   "event_id": "evt_123",
-  "event_type": "endoso.created",
+  "event_type": "product.created",
   "event_version": 1,
   "occurred_at": "2026-06-08T00:00:00.000Z",
   "tenant_id": "rimac",

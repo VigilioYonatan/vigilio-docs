@@ -15,7 +15,7 @@ No agregues S3, Bedrock ni APIs externas a liveness. Readiness representa solo d
 | --- | --- | --- |
 | Usuarios | `admin` | `admin` |
 | Productos | cualquier usuario autenticado | `admin`, `operador` |
-| Endosos | publico | `admin`, `operador` |
+| Products | publico | `admin`, `operador` |
 | Upload e IA | cualquier usuario autenticado | aplica al endpoint |
 
 `JwtAuthGuard` autentica primero y `RolesGuard` autoriza despues. Declara reglas nuevas con `@Roles(...)`; una ruta publica siempre usa `@Public()` explicitamente.

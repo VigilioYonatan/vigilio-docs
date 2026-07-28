@@ -93,7 +93,7 @@ Reglas:
 
 Los schemas base describen el contrato canonico de la feature y viven en `application/schemas/*.schema.ts`. Ese archivo no debe llenarse con DTOs de `store`, `update`, `index` o filtros especificos de endpoints.
 
-Los DTOs de request pueden derivar desde el schema base con `pick`, `omit`, `partial` o `extend` dentro del propio `*.request.dto.ts`, porque esa validacion pertenece al endpoint. Los schemas reutilizables de verdad, como `userPublicSchema` o `endosoSummarySchema`, si pueden vivir en `application/schemas`.
+Los DTOs de request pueden derivar desde el schema base con `pick`, `omit`, `partial` o `extend` dentro del propio `*.request.dto.ts`, porque esa validacion pertenece al endpoint. Los schemas reutilizables de verdad, como `userPublicSchema` o `productSummarySchema`, si pueden vivir en `application/schemas`.
 
 Prohibido en `application/schemas/example.schema.ts`: exportar constantes con sufijo `RequestDto`, `ResponseDto`, `QueryDto`, `ParamsDto` o class DTOs. Ese archivo no representa endpoints; representa el modelo Zod base o schemas reutilizables.
 
@@ -113,7 +113,6 @@ export type ExampleSchema = z.infer<typeof exampleSchema>;
 Correcto en `application/dtos/example-store.request.dto.ts`:
 
 ```typescript
-import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 import { exampleSchema } from '../schemas/example.schema';
 
@@ -123,7 +122,15 @@ export const exampleStoreRequestDto = exampleSchema.pick({
 
 export type ExampleStoreRequestDto = z.infer<typeof exampleStoreRequestDto>;
 
-export class ExampleStoreRequestClassDto extends createZodDto(exampleStoreRequestDto) {}
+```
+
+Adaptador NestJS/OpenAPI en `application/dtos/example-store.request.doc.ts`:
+
+```typescript
+import { createZodDto } from 'nestjs-zod';
+import { exampleStoreRequestDto } from './example-store.request.dto';
+
+export class ExampleStoreRequestDocDto extends createZodDto(exampleStoreRequestDto) {}
 ```
 
 Cuando un schema base permite `nullable`, pero el endpoint o formulario necesita el campo requerido, usar `.unwrap()`:
@@ -148,19 +155,25 @@ Reglas:
 - `*.schema.ts` no exporta `ExampleStoreRequestDto`, `ExampleIndexQueryDto`, `ExampleStoreResponseDto` ni class DTOs.
 - `pick`, `omit`, `partial` y `extend` de request viven en `*.request.dto.ts`.
 - `pick`, `omit`, `partial` y `extend` de response viven en `*.response.dto.ts`.
+- Para tipos auxiliares derivados usar `Pick<SourceType, Keys>`, `Omit`, `Partial`, `Readonly` o
+  intersecciones; no repetir manualmente campos que ya existen en `SourceType`.
+- Si el tipo derivado representa datos externos, inferirlo desde un schema Zod derivado; `Pick<>` y
+  `Omit<>` solo actúan en compilación y no validan runtime.
 - los request DTOs no deben rellenar defaults de persistencia con `.default(...)` si la DB/Drizzle ya tiene `default(...)` o el campo es nullable.
 - usar `.default(...)` en request DTO solo cuando el default es regla explicita del contrato HTTP y no una conveniencia de persistencia.
 - en `store/create`, evitar `.optional()` para campos de negocio; si el cliente debe expresar ausencia de valor, usar `nullable` y exigir `null`.
 - si un campo tiene default en Drizzle/PostgreSQL, no incluirlo en el `store.request.dto.ts`; la DB aplica el default.
 - `optional` solo representa omision real del campo en el contrato HTTP; reservarlo para query params, filtros o `partial()` de `update/PATCH`.
 - no hacer `pick`, `omit`, `Pick<>` u `Omit<>` en services, repositories ni controllers.
-- crear nombres de schema reutilizables solo cuando cruzan varios DTOs o casos: `UserPublicSchema`, `EndosoSummarySchema`.
+- Esa prohibición evita componer contratos dentro de capas de negocio: definir la proyección en
+  schemas/DTOs o en un tipo de borde y pasar al service un contrato nombrado.
+- crear nombres de schema reutilizables solo cuando cruzan varios DTOs o casos: `UserPublicSchema`, `ProductSummarySchema`.
 - `extend` se permite solo cuando el campo no existe en el schema base o cuando se fuerza un caso explicito como `.unwrap()`.
 - no usar `.merge()` en Zod v4; preferir `.extend(OtherSchema.shape)` o `z.object({ ...A.shape, ...B.shape })`.
 - query, params y body viven juntos en `*.request.dto.ts`.
 - los response DTOs deben ser fieles al resultado real del service.
-- crear maximo 2 archivos por accion/caso de uso en `application/dtos/`: `example-store.request.dto.ts` y `example-store.response.dto.ts`.
-- si se necesita clase Swagger, crearla dentro del mismo `*.request.dto.ts` o `*.response.dto.ts` usando `createZodDto`.
+- crear maximo 2 contratos públicos por accion/caso de uso: `example-store.request.dto.ts` y `example-store.response.dto.ts`.
+- si se necesita clase Swagger, crear el adaptador hermano `*.request.doc.ts` o `*.response.doc.ts` usando `createZodDto`.
 - los metodos canonicos son `index`, `show`, `store`, `update` y `destroy`; evitar `findAll`, `getOne`, `create`, `listar` o `registrar` en controllers/services.
 - controllers y services retornan `ExampleIndexResponseDto`, `ExampleShowResponseDto`, `ExampleStoreResponseDto`, `ExampleUpdateResponseDto` o `ExampleDestroyResponseDto`.
 
@@ -191,9 +204,9 @@ export const querySchema = z.object({
 
 ## 6. Request DTO y response DTO son los 2 archivos canonicos
 
-`application/dtos/*.request.dto.ts` define todo lo que entra al endpoint: body, query, params y class DTOs de request si hacen falta.
+`application/dtos/*.request.dto.ts` define todo lo que entra al endpoint: body, query, params y tipos inferidos, sin imports NestJS.
 
-`application/dtos/*.response.dto.ts` define todo lo que sale del endpoint: response exitoso, errores esperados, errores de validacion y class DTOs de response si hacen falta.
+`application/dtos/*.response.dto.ts` define todo lo que sale del endpoint: response exitoso, errores esperados, errores de validacion y tipos inferidos, sin imports NestJS.
 
 ```typescript
 // src/example/application/dtos/example-index.response.dto.ts
@@ -210,7 +223,6 @@ export type ExampleIndexResponseDto = z.infer<typeof exampleIndexResponseDto>;
 
 ```typescript
 // src/example/application/dtos/example-show.response.dto.ts
-import { createZodDto } from 'nestjs-zod';
 import { z } from '@/shared/infrastructure/config/zod-i18n.config';
 import { exampleSchema } from '../schemas/example.schema';
 
@@ -221,7 +233,14 @@ export const exampleShowResponseDto = z.object({
 
 export type ExampleShowResponseDto = z.infer<typeof exampleShowResponseDto>;
 
-export class ExampleShowResponseClassDto extends createZodDto(exampleShowResponseDto) {}
+```
+
+```typescript
+// src/example/application/dtos/example-show.response.doc.ts
+import { createZodDto } from 'nestjs-zod';
+import { exampleShowResponseDto } from './example-show.response.dto';
+
+export class ExampleShowResponseDocDto extends createZodDto(exampleShowResponseDto) {}
 ```
 
 ```typescript
@@ -233,9 +252,9 @@ show(@Req() req: Request, @Param('id') id: string): Promise<ExampleShowResponseD
 Regla:
 
 - `ResponseDto` es el contrato que retorna service/controller.
-- `ResponseClassDto` es adaptador para `@ZodResponse` y Swagger/Scalar.
-- `ResponseClassDto` no vive en un archivo separado por defecto; vive dentro del mismo `*.response.dto.ts`.
-- por accion/caso de uso no crear mas de `*.request.dto.ts` y `*.response.dto.ts` salvo excepcion documentada.
+- `ResponseDocDto` es adaptador para `@ZodResponse` y Swagger/Scalar.
+- `ResponseDocDto` vive en `*.response.doc.ts` y no se exporta en el paquete público.
+- por accion/caso de uso no crear mas contratos públicos que `*.request.dto.ts` y `*.response.dto.ts`; los `.doc.ts` son adaptadores opcionales.
 
 ---
 

@@ -122,7 +122,7 @@ Ejemplos actuales:
 
 - `UserSeeder` crea usuarios locales idempotentes.
 - `ProductSeeder` crea productos demo idempotentes.
-- `EndosoSeeder` crea un endoso demo idempotente.
+- `ProductSeeder` crea un product demo idempotente.
 
 ## Production
 

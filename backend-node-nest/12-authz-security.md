@@ -23,7 +23,7 @@ Ejemplo:
 ```text
 role=operador
 tenant_id=rimac
-permissions=endoso:create,endoso:read
+permissions=product:create,product:read
 constraints=broker_id in user.broker_ids
 ```
 
@@ -35,8 +35,8 @@ Cada controller debe tener una matriz como esta:
 
 | Endpoint | Auth | Permiso | Restriccion |
 |---|---|---|---|
-| `POST /endosos` | privada | `endoso:create` | `broker_id` permitido |
-| `GET /endosos` | privada | `endoso:read` | filtra por `tenant_id` |
+| `POST /products` | privada | `product:create` | `broker_id` permitido |
+| `GET /products` | privada | `product:read` | filtra por `tenant_id` |
 | `GET /health` | publica | ninguno | sin datos sensibles |
 | `GET /reference` | protegida | `docs:read` | solo lower envs o VPN |
 
@@ -113,7 +113,7 @@ Auditar:
 
 - login
 - cambio de permisos
-- cambios de estado de endoso
+- cambios de estado de product
 - exportaciones
 - accesos administrativos
 - operaciones fallidas por autorizacion

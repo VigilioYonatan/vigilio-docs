@@ -61,7 +61,7 @@ Ubicacion recomendada dentro del proyecto cuando exista un flujo modelado:
 
 ```text
 docs/threat-model/
-|-- endoso-create.example.md
+|-- product-create.example.md
 |-- auth-login.md
 |-- upload-document.md
 `-- worker-procesar-movimiento.md
@@ -86,7 +86,7 @@ Analizar:
 Threat model obligatorio para:
 
 - login
-- una operacion de negocio critica, por ejemplo la creacion de un endoso
+- una operacion de negocio critica, por ejemplo la creacion de un product
 - carga/descarga de documentos
 - exportaciones
 - workers que cambian estado

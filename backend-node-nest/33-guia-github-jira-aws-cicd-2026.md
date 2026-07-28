@@ -245,19 +245,19 @@ revert
 Ejemplos validos:
 
 ```text
-feat/ABC-123/crear-endoso
-[ABC-123] - feat: Crear endoso
-[ABC-123] - feat: crear endoso
+feat/ABC-123/crear-product
+[ABC-123] - feat: Crear product
+[ABC-123] - feat: crear product
 ```
 
 Ejemplos invalidos:
 
 ```text
-feature/crear-endoso
-feat/crear-endoso
-[ABC-123] - Crear endoso
-feat: crear endoso
-[ABC-456] - feat: crear endoso en rama feat/ABC-123/crear-endoso
+feature/crear-product
+feat/crear-product
+[ABC-123] - Crear product
+feat: crear product
+[ABC-456] - feat: crear product en rama feat/ABC-123/crear-product
 ```
 
 Comandos compartidos que lo hacen cumplir:
@@ -525,7 +525,7 @@ Responsabilidades:
 ```bash
 git checkout main # base de trabajo normal
 git pull
-git checkout -b feat/ABC-123/crear-endoso
+git checkout -b feat/ABC-123/crear-product
 ```
 
 2. Desarrollar y probar local:
@@ -541,19 +541,19 @@ pnpm test:coverage # ejecuta unit tests con coverage local
 
 ```bash
 git add .
-git commit -m "[ABC-123] - feat: crear endoso"
+git commit -m "[ABC-123] - feat: crear product"
 ```
 
 4. Push:
 
 ```bash
-git push -u origin feat/ABC-123/crear-endoso
+git push -u origin feat/ABC-123/crear-product
 ```
 
 5. Crear PR hacia `main`:
 
 ```text
-[ABC-123] - feat: Crear endoso
+[ABC-123] - feat: Crear product
 ```
 
 6. Esperar CI verde.
@@ -1223,29 +1223,29 @@ CI/CD:
 Error: PR title sin tipo.
 
 ```text
-Mal:  [ABC-123] - Crear endoso
-Bien: [ABC-123] - feat: Crear endoso
+Mal:  [ABC-123] - Crear product
+Bien: [ABC-123] - feat: Crear product
 ```
 
 Error: commit sin ticket.
 
 ```text
-Mal:  feat: crear endoso
-Bien: [ABC-123] - feat: crear endoso
+Mal:  feat: crear product
+Bien: [ABC-123] - feat: crear product
 ```
 
 Error: ticket distinto entre rama y PR.
 
 ```text
-Rama: feat/ABC-123/crear-endoso
-PR:   [ABC-456] - feat: Crear endoso
+Rama: feat/ABC-123/crear-product
+PR:   [ABC-456] - feat: Crear product
 ```
 
 Debe ser:
 
 ```text
-Rama: feat/ABC-123/crear-endoso
-PR:   [ABC-123] - feat: Crear endoso
+Rama: feat/ABC-123/crear-product
+PR:   [ABC-123] - feat: Crear product
 ```
 
 Error: deploy production sin approval.

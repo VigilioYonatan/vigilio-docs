@@ -11,7 +11,9 @@ Este directorio contiene la documentacion de arquitectura del `bus-impl` actuali
 - Biome en lugar de ESLint + Prettier.
 - pnpm + GitHub Actions + AWS CDK.
 
-Para la vision transversal de seguridad, escalamiento, testing y costos entre todos los proyectos, revisar [docs globales](../../docs/01-escalamiento-seguridad-testing-2026.md).
+Para la vision transversal de seguridad, escalamiento, testing y costos entre todos los proyectos,
+revisar los documentos globales del repositorio raiz (`docs/01-escalamiento-seguridad-testing-2026.md`),
+que no forman parte de este sitio publicado.
 
 La fuente de verdad ejecutable para versiones es
 `@vigilioyonatan/devsecops-governance/policies/platform/node-backend-2026.json`, publicada desde
@@ -27,7 +29,7 @@ Fuentes de verdad, en orden:
 
 En `bus-impl`, los modulos actuales del template son `auth`, `user`, `product`, `health`, `upload`
 y `ai-chat`.
-Los nombres `endoso`, `renovacion`, `emision`, `constancia` y `learn-aws` se conservan en algunos
+Los nombres `product`, `renovacion`, `emision`, `constancia` y `learn-aws` se conservan en algunos
 documentos como ejemplos referenciales de negocio o aprendizaje. No son modulos obligatorios ni
 implican que existan en el codigo actual.
 
@@ -66,9 +68,9 @@ implican que existan en el codigo actual.
 31. [AI Chat con Amazon Bedrock](./31-ai-chat-bedrock-ddd.md): endpoint HTTP protegido para chatbot IA sin WebSockets, con DDD pragmatico, Zod, IAM y control de costos.
 32. [Uploads S3 con presigned URLs](./32-uploads-s3-presigned.md): endpoint reusable para subir archivos directo a S3, con validacion Zod, cache, seguridad y ahorro de costos.
 33. [Guia GitHub, Jira, AWS y CI/CD 2026](./33-guia-github-jira-aws-cicd-2026.md): setup paso a paso de repositorio, roles, branch protection, Jira, OIDC, environments, deploy y rollback.
-34. [Dependabot y Repository Policy](./34-dependabot-repository-policy.md): PRs automaticos de dependencias y validacion de archivos criticos de gobierno.
+41. [Dependabot y Repository Policy](./41-dependabot-repository-policy.md): PRs automaticos de dependencias y validacion de archivos criticos de gobierno.
 34. [Gestion de configuracion hibrida](./34-gestion-configuracion-hibrida-2026.md): `.env` local, SSM, Secrets Manager y validacion Zod por stage.
-35. [Trunk-Based + Environments Protegidos 2026](./35-branching-release-flow-2026.md): flujo `feature -> main -> staging QA -> production manual`, sin Git Flow pesado.
+42. [Trunk-Based + Environments Protegidos 2026](./42-branching-release-flow-2026.md): flujo `feature -> main -> staging QA -> production manual`, sin Git Flow pesado.
 35. [Versionamiento basado en commits](./35-versionamiento-basado-en-commits-2026.md): tags, releases y trazabilidad desde commits validados.
 36. [Deuda Tecnica DevSecOps](./36-deuda-tecnica.md): deudas conscientes, decisiones aceptadas y plan para cerrar brechas enterprise.
 37. [Resumen de jobs CI/CD](./37-cicd-jobs-resumen.md): jobs actuales de `ci.yml`, gates y artefactos.

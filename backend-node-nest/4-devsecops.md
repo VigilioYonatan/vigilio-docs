@@ -423,7 +423,7 @@ Crear preview por PR cuando cambien:
 - endpoints publicos
 - contratos OpenAPI
 - autenticacion/autorizacion
-- flujos de emision, renovacion, endoso o constancia
+- flujos de emision, renovacion, product o constancia
 - infraestructura CDK critica
 
 Reglas:
@@ -495,7 +495,7 @@ Regex recomendada:
 
 Ejemplos validos:
 
-- `feat/ABC-123/crear-endoso`
+- `feat/ABC-123/crear-product`
 - `fix/ABC-456/corregir-openapi`
 - `hotfix/ABC-789/reintento-sqs`
 
@@ -601,9 +601,9 @@ Estas practicas vienen del baseline senior de referencia, pero deben activarse s
 
 ### Jira automation
 
-- La rama debe incluir ticket y tipo: `feat/ABC-123/crear-endoso`.
-- El titulo del PR debe incluir el ticket y tipo: `[ABC-123] - feat: Crear endoso`.
-- Los commits deben incluir el ticket y tipo: `[ABC-123] - feat: crear endoso`.
+- La rama debe incluir ticket y tipo: `feat/ABC-123/crear-product`.
+- El titulo del PR debe incluir el ticket y tipo: `[ABC-123] - feat: Crear product`.
+- Los commits deben incluir el ticket y tipo: `[ABC-123] - feat: crear product`.
 - Al abrir PR, mover ticket a `In Progress`.
 - Al aprobar PR, mover ticket a `Ready for QA`.
 - Al desplegar en development, comentar build y environment.

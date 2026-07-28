@@ -17,7 +17,7 @@ Regla madre:
 |---|---|---|
 | Public | health status, version publica | puede exponerse |
 | Internal | metricas tecnicas, config no sensible | solo equipo interno |
-| Confidential | polizas, endosos, brokers | acceso autenticado y auditado |
+| Confidential | contratos, catalogo interno, brokers | acceso autenticado y auditado |
 | Restricted | documentos, identidad, pagos, tokens | cifrado, minimo acceso, retencion estricta |
 
 Regla:

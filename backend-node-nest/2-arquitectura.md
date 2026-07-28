@@ -80,7 +80,8 @@ La validacion de requests ya no usa Joi. Ahora se usa Zod en dos niveles:
 
 - `application/schemas/*.schema.ts` define el schema base del modulo
 - `application/dtos/*.request.dto.ts` agrupa body, query y params derivados con `pick`, `omit`, `extend` o `partial`
-- `application/dtos/*.response.dto.ts` agrupa responses exitosos, errores esperados y class DTOs de Swagger si hacen falta
+- `application/dtos/*.response.dto.ts` agrupa responses exitosos, errores esperados y tipos inferidos sin dependencias NestJS
+- `application/dtos/*.request.doc.ts` y `*.response.doc.ts` contienen adaptadores `createZodDto` backend-only cuando Swagger los necesita
 - usado por services, commands y queries
 - expone tipos con `z.infer`
 
@@ -89,7 +90,7 @@ La validacion de requests ya no usa Joi. Ahora se usa Zod en dos niveles:
 - `createZodDto(...)` via `nestjs-zod`
 - `ZodValidationPipe` global o por ruta
 - `@nestjs/swagger` para documentar
-- vive dentro del mismo `*.request.dto.ts` o `*.response.dto.ts` cuando Nest necesita clases
+- vive en el archivo hermano `*.request.doc.ts` o `*.response.doc.ts`, nunca en el contrato público
 
 Esto unifica:
 
@@ -112,7 +113,7 @@ La recomendacion para este `bus-impl` es:
 Patron recomendado:
 
 ```text
-application/schemas Zod -> application/dtos -> createZodDto HTTP -> Controller Nest -> Swagger document -> Scalar/OpenAPI
+application/schemas Zod -> DTO público -> adaptador *.doc.ts -> Controller Nest -> Swagger document -> Scalar/OpenAPI
 ```
 
 Uso recomendado:

@@ -218,13 +218,13 @@ Se recomienda usar:
 
 - `application/schemas/` para schemas Zod base del modulo, por ejemplo `productSchema`
 - `application/dtos/` para contratos Zod de request y response derivados con `pick`, `omit`, `extend` o `partial`
-- las clases `createZodDto` viven junto al request/response DTO cuando Swagger o Scalar las necesitan
+- los `*.dto.ts` son contratos Zod puros; las clases `createZodDto` viven en archivos hermanos `*.doc.ts`
 - convencion de nombres:
   - `product-index.request.dto.ts` para query/params de `index`
   - `product-index.response.dto.ts` para response exitoso y errores de `index`
   - `product-store.request.dto.ts` para body/query/params de `store`
   - `product-store.response.dto.ts` para response exitoso y errores de `store`
-  - no crear `*.query.dto.ts`, `*.params.dto.ts` o `*.response.class.dto.ts` separados por defecto
+  - no crear `*.query.dto.ts` o `*.params.dto.ts`; crear `.doc.ts` solo si NestJS/OpenAPI necesita una clase
 - `infrastructure/persistence/drizzle/` y `drizzle-zod` para insert/select schemas de base de datos
 
 El `domain/` debe seguir libre de Nest, Zod HTTP y detalles de base de datos.
@@ -249,7 +249,8 @@ Evitar:
 La documentacion de API ya no depende de un contrato escrito a mano para la capa `impl`. Ahora el source of truth para la implementacion es:
 
 - controller Nest
-- DTO Zod (`createZodDto`) dentro de `application/dtos/*.request.dto.ts` y `application/dtos/*.response.dto.ts`
+- DTO Zod puro dentro de `application/dtos/*.request.dto.ts` y `*.response.dto.ts`
+- adaptadores `createZodDto` backend-only dentro de `application/dtos/*.request.doc.ts` y `*.response.doc.ts`
 - decoradores `@nestjs/swagger`
 
 Luego un script exporta `openapi.json` a `docs/openapi/`.
@@ -313,12 +314,13 @@ Reglas:
 
 ---
 
-## Ejemplo referencial de una feature de negocio `endoso`
+## Ejemplo referencial de una feature de negocio `product`
 
 La idea es que el flujo sea facil de leer:
 
-`endoso` se usa solo para mostrar un caso de negocio mas rico. No implica que el modulo deba existir
-en todos los proyectos ni que un CRUD simple necesite todas sus capas.
+`product` es un modulo que existe de verdad en `bus-impl`, asi que los ejemplos de abajo se pueden
+contrastar con el codigo real en vez de quedarse en una feature imaginaria. No implica que todos los
+proyectos necesiten ese modulo ni que un CRUD simple requiera todas sus capas.
 
 ```text
 schema base -> request/response DTO -> controller -> application service -> repository port -> Drizzle repository
@@ -327,212 +329,202 @@ schema base -> request/response DTO -> controller -> application service -> repo
 ### 1. Schema base
 
 ```typescript
-// src/endoso/application/schemas/endoso.schema.ts
+// src/product/application/schemas/product.schema.ts
 import { z } from 'zod';
 
-export const endosoSchema = z.object({
+export const productSchema = z.object({
   id: z.number().int().positive(),
   nro_poliza: z.string().min(1).max(30),
-  tipo_endoso: z.enum(['inclusion', 'exclusion']),
+  product_type: z.enum(['inclusion', 'exclusion']),
   fecha_inicio: z.iso.date(),
   broker_id: z.number().int().positive(),
 });
 
-export type EndosoSchema = z.infer<typeof endosoSchema>;
+export type ProductSchema = z.infer<typeof productSchema>;
 ```
 
 ### 2. DTOs de application
 
 ```typescript
-// src/endoso/application/dtos/endoso-store.request.dto.ts
+// src/product/application/dtos/product-store.request.dto.ts
 import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
-import { endosoSchema } from '@/endoso/application/schemas/endoso.schema';
+import { productSchema } from '@/product/application/schemas/product.schema';
 
-export const endosoStoreRequestDto = endosoSchema.pick({
+export const productStoreRequestDto = productSchema.pick({
   nro_poliza: true,
-  tipo_endoso: true,
+  product_type: true,
   fecha_inicio: true,
   broker_id: true,
 });
 
-export type EndosoStoreRequestDto = z.infer<typeof endosoStoreRequestDto>;
+export type ProductStoreRequestDto = z.infer<typeof productStoreRequestDto>;
 
-export class EndosoStoreRequestClassDto extends createZodDto(endosoStoreRequestDto) {}
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-update.request.dto.ts
+// src/product/application/dtos/product-update.request.dto.ts
 import { z } from 'zod';
-import { endosoStoreRequestDto } from './endoso-store.request.dto';
+import { productStoreRequestDto } from './product-store.request.dto';
 
-export const endosoUpdateRequestDto = endosoStoreRequestDto.partial();
+export const productUpdateRequestDto = productStoreRequestDto.partial();
 
-export type EndosoUpdateRequestDto = z.infer<typeof endosoUpdateRequestDto>;
+export type ProductUpdateRequestDto = z.infer<typeof productUpdateRequestDto>;
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-index.request.dto.ts
+// src/product/application/dtos/product-index.request.dto.ts
 import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
 import { querySchema } from '@/shared/application/schemas/query.schema';
-import { endosoSchema } from '@/endoso/application/schemas/endoso.schema';
+import { productSchema } from '@/product/application/schemas/product.schema';
 
-export const endosoIndexQueryDto = endosoSchema
+export const productIndexQueryDto = productSchema
   .pick({
     nro_poliza: true,
-    tipo_endoso: true,
+    product_type: true,
   })
   .partial()
   .extend(querySchema.shape);
 
-export type EndosoIndexQueryDto = z.infer<typeof endosoIndexQueryDto>;
+export type ProductIndexQueryDto = z.infer<typeof productIndexQueryDto>;
 
-export class EndosoIndexQueryClassDto extends createZodDto(endosoIndexQueryDto) {}
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-index.response.dto.ts
+// src/product/application/dtos/product-index.response.dto.ts
 import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
 import { createPaginatorSchema } from '@/shared/application/schemas/paginator.schema';
-import { endosoSchema } from '@/endoso/application/schemas/endoso.schema';
+import { productSchema } from '@/product/application/schemas/product.schema';
 
-export const endosoIndexResponseDto = createPaginatorSchema(
-  endosoSchema.pick({
+export const productIndexResponseDto = createPaginatorSchema(
+  productSchema.pick({
     id: true,
     nro_poliza: true,
-    tipo_endoso: true,
+    product_type: true,
   }),
 );
 
-export type EndosoIndexResponseDto = z.infer<typeof endosoIndexResponseDto>;
+export type ProductIndexResponseDto = z.infer<typeof productIndexResponseDto>;
 
-export class EndosoIndexResponseClassDto extends createZodDto(endosoIndexResponseDto) {}
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-show.response.dto.ts
+// src/product/application/dtos/product-show.response.dto.ts
 import { z } from 'zod';
-import { endosoSchema } from '@/endoso/application/schemas/endoso.schema';
+import { productSchema } from '@/product/application/schemas/product.schema';
 
-export const endosoShowResponseDto = z.object({
+export const productShowResponseDto = z.object({
   success: z.literal(true),
-  endoso: endosoSchema.pick({
+  product: productSchema.pick({
     id: true,
     nro_poliza: true,
-    tipo_endoso: true,
+    product_type: true,
   }),
 });
 
-export type EndosoShowResponseDto = z.infer<typeof endosoShowResponseDto>;
+export type ProductShowResponseDto = z.infer<typeof productShowResponseDto>;
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-store.response.dto.ts
+// src/product/application/dtos/product-store.response.dto.ts
 import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
-import { endosoShowResponseDto } from './endoso-show.response.dto';
+import { productShowResponseDto } from './product-show.response.dto';
 
-export const endosoStoreResponseDto = endosoShowResponseDto;
+export const productStoreResponseDto = productShowResponseDto;
 
-export type EndosoStoreResponseDto = z.infer<typeof endosoStoreResponseDto>;
+export type ProductStoreResponseDto = z.infer<typeof productStoreResponseDto>;
 
-export class EndosoStoreResponseClassDto extends createZodDto(endosoStoreResponseDto) {}
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-update.response.dto.ts
+// src/product/application/dtos/product-update.response.dto.ts
 import { z } from 'zod';
-import { endosoShowResponseDto } from './endoso-show.response.dto';
+import { productShowResponseDto } from './product-show.response.dto';
 
-export const endosoUpdateResponseDto = endosoShowResponseDto;
+export const productUpdateResponseDto = productShowResponseDto;
 
-export type EndosoUpdateResponseDto = z.infer<typeof endosoUpdateResponseDto>;
+export type ProductUpdateResponseDto = z.infer<typeof productUpdateResponseDto>;
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-destroy.response.dto.ts
+// src/product/application/dtos/product-destroy.response.dto.ts
 import { z } from 'zod';
 
-export const endosoDestroyResponseDto = z.object({
+export const productDestroyResponseDto = z.object({
   success: z.literal(true),
   message: z.string(),
 });
 
-export type EndosoDestroyResponseDto = z.infer<typeof endosoDestroyResponseDto>;
+export type ProductDestroyResponseDto = z.infer<typeof productDestroyResponseDto>;
 ```
 
-### 3. Class DTOs dentro de request/response
+### 3. Doc DTOs backend-only
 
-Si Swagger o Scalar necesitan clases, se declaran dentro del mismo archivo `*.request.dto.ts` o `*.response.dto.ts`. No se crea un `*.response.class.dto.ts` separado por defecto.
+Si Swagger o Scalar necesitan clases, se declaran en archivos hermanos `.doc.ts`. Estos adaptadores no se exportan en `src/contracts.ts` ni se publican al frontend.
 
 ```typescript
-// src/endoso/application/dtos/endoso-store.request.dto.ts
+// src/product/application/dtos/product-store.request.doc.ts
 import { createZodDto } from 'nestjs-zod';
+import { productStoreRequestDto } from './product-store.request.dto';
 
-export class EndosoStoreRequestClassDto extends createZodDto(endosoStoreRequestDto) {}
+export class ProductStoreRequestDocDto extends createZodDto(productStoreRequestDto) {}
 ```
 
 ```typescript
-// src/endoso/application/dtos/endoso-index.response.dto.ts
+// src/product/application/dtos/product-index.response.doc.ts
 import { createZodDto } from 'nestjs-zod';
+import { productIndexResponseDto } from './product-index.response.dto';
 
-export class EndosoIndexResponseClassDto extends createZodDto(endosoIndexResponseDto) {}
+export class ProductIndexResponseDocDto extends createZodDto(productIndexResponseDto) {}
 ```
 
 ### 4. Controller
 
 ```typescript
-// src/endoso/infrastructure/http/controllers/endoso.controller.ts
+// src/product/infrastructure/http/controllers/product.controller.ts
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ZodResponse } from 'nestjs-zod';
+import { ProductIndexQueryDocDto } from '@/product/application/dtos/product-index.request.doc';
 import {
-  EndosoIndexQueryClassDto,
-  endosoIndexQueryDto,
-  type EndosoIndexQueryDto,
-} from '@/endoso/application/dtos/endoso-index.request.dto';
+  productIndexQueryDto,
+  type ProductIndexQueryDto,
+} from '@/product/application/dtos/product-index.request.dto';
+import { ProductStoreRequestDocDto } from '@/product/application/dtos/product-store.request.doc';
 import {
-  EndosoStoreRequestClassDto,
-  endosoStoreRequestDto,
-  type EndosoStoreRequestDto,
-} from '@/endoso/application/dtos/endoso-store.request.dto';
-import {
-  EndosoIndexResponseClassDto,
-  type EndosoIndexResponseDto,
-} from '@/endoso/application/dtos/endoso-index.response.dto';
-import {
-  EndosoStoreResponseClassDto,
-  type EndosoStoreResponseDto,
-} from '@/endoso/application/dtos/endoso-store.response.dto';
-import { EndosoApplicationService } from '@/endoso/application/service/endoso.application-service';
+  productStoreRequestDto,
+  type ProductStoreRequestDto,
+} from '@/product/application/dtos/product-store.request.dto';
+import { ProductIndexResponseDocDto } from '@/product/application/dtos/product-index.response.doc';
+import type { ProductIndexResponseDto } from '@/product/application/dtos/product-index.response.dto';
+import { ProductStoreResponseDocDto } from '@/product/application/dtos/product-store.response.doc';
+import type { ProductStoreResponseDto } from '@/product/application/dtos/product-store.response.dto';
+import { ProductApplicationService } from '@/product/application/service/product.application-service';
 import { ZodPipe } from '@/shared/infrastructure/http/pipes/zod.pipe';
 import { ZodQueryPipe } from '@/shared/infrastructure/http/pipes/zod-query.pipe';
 
-@ApiTags('endosos')
-@Controller('endosos')
-export class EndosoController {
-  constructor(private readonly service: EndosoApplicationService) {}
+@ApiTags('products')
+@Controller('products')
+export class ProductController {
+  constructor(private readonly service: ProductApplicationService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Indexar endosos' })
-  @ApiQuery({ type: EndosoIndexQueryClassDto })
-  @ZodResponse({ status: 200, type: EndosoIndexResponseClassDto })
+  @ApiOperation({ summary: 'Indexar products' })
+  @ApiQuery({ type: ProductIndexQueryDocDto })
+  @ZodResponse({ status: 200, type: ProductIndexResponseDocDto })
   index(
-    @Query(new ZodQueryPipe(endosoIndexQueryDto)) query: EndosoIndexQueryDto,
-  ): Promise<EndosoIndexResponseDto> {
+    @Query(new ZodQueryPipe(productIndexQueryDto)) query: ProductIndexQueryDto,
+  ): Promise<ProductIndexResponseDto> {
     return this.service.index(query);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Crear endoso' })
-  @ApiBody({ type: EndosoStoreRequestClassDto })
-  @ZodResponse({ status: 201, type: EndosoStoreResponseClassDto })
+  @ApiOperation({ summary: 'Crear product' })
+  @ApiBody({ type: ProductStoreRequestDocDto })
+  @ZodResponse({ status: 201, type: ProductStoreResponseDocDto })
   store(
-    @Body(new ZodPipe(endosoStoreRequestDto)) body: EndosoStoreRequestDto,
-  ): Promise<EndosoStoreResponseDto> {
+    @Body(new ZodPipe(productStoreRequestDto)) body: ProductStoreRequestDto,
+  ): Promise<ProductStoreResponseDto> {
     return this.service.store(body);
   }
 }
@@ -541,41 +533,41 @@ export class EndosoController {
 ### 5. Application service
 
 ```typescript
-// src/endoso/application/service/endoso.application-service.ts
+// src/product/application/service/product.application-service.ts
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { EndosoIndexQueryDto } from '@/endoso/application/dtos/endoso-index.request.dto';
-import type { EndosoStoreRequestDto } from '@/endoso/application/dtos/endoso-store.request.dto';
-import type { EndosoIndexResponseDto } from '@/endoso/application/dtos/endoso-index.response.dto';
-import type { EndosoStoreResponseDto } from '@/endoso/application/dtos/endoso-store.response.dto';
-import type { IEndosoRepository } from '@/endoso/application/repositories/endoso.repository.interface';
-import { ENDOSO_REPOSITORY } from '@/endoso/application/repositories/endoso.repository.token';
+import type { ProductIndexQueryDto } from '@/product/application/dtos/product-index.request.dto';
+import type { ProductStoreRequestDto } from '@/product/application/dtos/product-store.request.dto';
+import type { ProductIndexResponseDto } from '@/product/application/dtos/product-index.response.dto';
+import type { ProductStoreResponseDto } from '@/product/application/dtos/product-store.response.dto';
+import type { IProductRepository } from '@/product/application/repositories/product.repository.interface';
+import { PRODUCT_REPOSITORY } from '@/product/application/repositories/product.repository.token';
 
 @Injectable()
-export class EndosoApplicationService {
-  private readonly logger = new Logger(EndosoApplicationService.name);
+export class ProductApplicationService {
+  private readonly logger = new Logger(ProductApplicationService.name);
 
   constructor(
-    @Inject(ENDOSO_REPOSITORY)
-    private readonly repository: IEndosoRepository,
+    @Inject(PRODUCT_REPOSITORY)
+    private readonly repository: IProductRepository,
   ) {}
 
-  async index(query: EndosoIndexQueryDto): Promise<EndosoIndexResponseDto> {
-    this.logger.log({ action: 'endoso.index', query }, 'Indexing endosos');
+  async index(query: ProductIndexQueryDto): Promise<ProductIndexResponseDto> {
+    this.logger.log({ action: 'product.index', query }, 'Indexing products');
 
     return this.repository.index(query);
   }
 
-  async store(body: EndosoStoreRequestDto): Promise<EndosoStoreResponseDto> {
-    this.logger.log({ action: 'endoso.store', broker_id: body.broker_id }, 'Storing endoso');
+  async store(body: ProductStoreRequestDto): Promise<ProductStoreResponseDto> {
+    this.logger.log({ action: 'product.store', broker_id: body.broker_id }, 'Storing product');
 
     const persisted = await this.repository.store(body);
 
     return {
       success: true,
-      endoso: {
+      product: {
         id: persisted.id,
         nro_poliza: persisted.nro_poliza,
-        tipo_endoso: persisted.tipo_endoso,
+        product_type: persisted.product_type,
       },
     };
   }
@@ -586,10 +578,10 @@ Reglas del ejemplo:
 
 - `application/dtos/` usa Zod y `z.infer` para request/response.
 - los schemas comunes (`querySchema`, `createPaginatorSchema`, `timestampSchema`) viven en `shared/application/schemas/`.
-- las clases `createZodDto` viven dentro del mismo request/response DTO.
+- las clases `createZodDto` viven en `.doc.ts` y nunca dentro del contrato público.
 - `ZodPipe` valida body y `ZodQueryPipe` valida query params.
 - el controller no arma respuestas; delega al application service.
-- los imports usan aliases absolutos como `@/endoso/...`.
+- los imports usan aliases absolutos como `@/product/...`.
 - el domain no importa Nest, Drizzle ni AWS.
 - Para CRUD simple no crear entities de dominio por obligacion; usar DTOs Zod, service y repository.
 

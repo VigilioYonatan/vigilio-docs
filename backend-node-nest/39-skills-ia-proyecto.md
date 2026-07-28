@@ -36,9 +36,15 @@ Las skills no operan solamente sobre `docs/`.
 ### `node-nest`
 
 - `node-nest-build-feature`
+- `node-nest-contracts-release`
+- `node-nest-observability`
 - `node-nest-persistence`
 - `node-nest-security-aws`
 - `node-nest-testing`
+
+`node-nest-contracts-release` y `node-nest-observability` forman parte del perfil fuente preparado
+para `@vigilioyonatan/vigilio-skills@0.4.0`. Un consumidor en `0.2.0` no debe declararlas instaladas
+hasta publicar, actualizar la dependencia exacta y ejecutar la sincronizacion.
 
 ### `openspec`
 
@@ -49,7 +55,10 @@ Las skills no operan solamente sobre `docs/`.
 - `openspec-sync-specs`
 - `openspec-archive-change`
 
-Los unicos perfiles publicados son `core`, `node-nest` y `openspec`.
+`@vigilioyonatan/vigilio-skills@0.3.1` ya publica los perfiles `core`, `node-nest`, `web-mfe` y
+`openspec`, pero todavía contiene cuatro skills Node/Nest y cinco web-mfe. La fuente `0.4.0`
+amplía esos perfiles a seis y ocho respectivamente; no confundir fuente preparada con paquete
+publicado e instalado.
 
 ## Sincronizacion
 
@@ -77,13 +86,15 @@ Ejemplos:
 
 ```text
 Usa $node-nest-build-feature para agregar un caso de uso protegido.
+Usa $node-nest-contracts-release para evolucionar DTOs, OpenAPI y paquetes sin romper consumidores.
+Usa $node-nest-observability para instrumentar logs, tracing, SLO, alertas y runbooks.
 Usa $node-nest-persistence para revisar transaccion, constraints y cache-aside.
 Usa $node-nest-testing para cubrir un bug con unit, integration y E2E por riesgo.
 Usa $node-nest-security-aws para revisar JWT, IAM, secretos y CDK.
 Usa $openspec-propose para preparar un cambio antes de implementarlo.
 ```
 
-El nombre de negocio es intercambiable. `endoso`, `renovacion`, `product` o `user` pueden aparecer
+El nombre de negocio es intercambiable. `product`, `renovacion`, `product` o `user` pueden aparecer
 en ejemplos; la skill aplica el patron al modulo real del proyecto.
 
 ## Cobertura

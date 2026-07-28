@@ -244,11 +244,11 @@ Ejemplo:
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
-export class EndosoApplicationService {
-  private readonly logger = new Logger(EndosoApplicationService.name);
+export class ProductApplicationService {
+  private readonly logger = new Logger(ProductApplicationService.name);
 
-  async store(body: EndosoStoreRequestDto) {
-    this.logger.log({ broker_id: body.broker_id }, 'storing endoso');
+  async store(body: ProductStoreRequestDto) {
+    this.logger.log({ broker_id: body.broker_id }, 'storing product');
   }
 }
 ```
@@ -290,7 +290,7 @@ Ejemplo:
 this.logger.warn(
   {
     event_name: 'ProcesarMovimiento',
-    queue: 'endoso-movimientos',
+    queue: 'product-movimientos',
     message_id,
     retry_count,
   },

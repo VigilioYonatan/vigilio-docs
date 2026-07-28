@@ -1,124 +1,131 @@
-# DTOs Request y Response - Convencion 2 Archivos
+# DTOs públicos y adaptadores de documentación
 
-Nueva regla del proyecto:
-
-```text
-Por cada accion/caso de uso debe haber maximo 2 archivos DTO:
-
-feature-action.request.dto.ts
-feature-action.response.dto.ts
-```
-
-Ejemplo:
+Convención canónica 2026:
 
 ```text
-user-store.request.dto.ts
-user-store.response.dto.ts
-user-index.request.dto.ts
-user-index.response.dto.ts
-user-show.request.dto.ts
-user-show.response.dto.ts
+feature-action.request.dto.ts   # Zod puro + tipos inferidos; público y browser-safe
+feature-action.request.doc.ts   # createZodDto; solo NestJS/OpenAPI
+feature-action.response.dto.ts  # Zod puro + tipos inferidos; público y browser-safe
+feature-action.response.doc.ts  # createZodDto; solo NestJS/OpenAPI
 ```
 
-## 1. Que vive en `*.request.dto.ts`
+Los archivos `.doc.ts` se crean solo cuando Swagger/Scalar necesita una clase. No cuentan como
+otro contrato: son adaptadores de infraestructura derivados del DTO puro.
 
-Todo lo que entra al endpoint:
+## 1. Regla de frontera
 
-- `body`.
-- `query`.
-- `params`.
-- tipos inferidos del request.
-- class DTOs de request para Swagger cuando hacen falta.
-- schemas derivados del endpoint usando el schema base de `application/schemas`.
+- `*.dto.ts` puede importar Zod, schemas y otros contratos públicos.
+- `*.dto.ts` no puede importar `nestjs-zod`, `@nestjs/*`, Node built-ins ni infraestructura.
+- `*.doc.ts` puede importar `createZodDto` y exactamente el schema del DTO hermano.
+- `src/contracts.ts` exporta DTOs/schemas/types, nunca `*.doc.ts`.
+- services y controllers retornan tipos `*Dto`; `*DocDto` solo aparece en decoradores.
 
-Ejemplo:
+La separación es obligatoria aunque exista tree shaking. `createZodDto(schema)` se ejecuta al
+evaluar el módulo y obliga al bundler a resolver NestJS; tree shaking no es una frontera confiable.
+
+## 2. Request público
+
+Body, query y params del mismo caso de uso viven en un único `*.request.dto.ts`:
 
 ```typescript
 // src/user/application/dtos/user-store.request.dto.ts
-import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
-import { userSchema } from '../schemas/user.schema';
+import type { z } from 'zod';
+import { userStoreSchema } from '../schemas/user.schema';
 
-export const userStoreBodyDto = userSchema.pick({
-  email: true,
-  full_name: true,
-  password: true,
-  role: true,
-  status: true,
-});
-
-export const userStoreQueryDto = z.object({});
-
-export const userStoreParamsDto = z.object({});
-
-export type UserStoreBodyDto = z.infer<typeof userStoreBodyDto>;
-export type UserStoreQueryDto = z.infer<typeof userStoreQueryDto>;
-export type UserStoreParamsDto = z.infer<typeof userStoreParamsDto>;
-
-export class UserStoreBodyClassDto extends createZodDto(userStoreBodyDto) {}
+export const userStoreRequestDto = userStoreSchema;
+export type UserStoreRequestDto = z.infer<typeof userStoreRequestDto>;
 ```
 
-Para `index`, el query tambien vive en request:
+Adaptador backend:
+
+```typescript
+// src/user/application/dtos/user-store.request.doc.ts
+import { createZodDto } from 'nestjs-zod';
+import { userStoreRequestDto } from './user-store.request.dto';
+
+export class UserStoreRequestDocDto extends createZodDto(userStoreRequestDto) {}
+```
+
+Para un listado:
 
 ```typescript
 // src/user/application/dtos/user-index.request.dto.ts
-import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
+import type { z } from 'zod';
 import { querySchema } from '@/shared/application/schemas/query.schema';
-import { userSchema } from '../schemas/user.schema';
+import { userIndexFilterSchema } from '../schemas/user.schema';
 
-export const userIndexQueryDto = userSchema
-  .pick({
-    role: true,
-    status: true,
-    provider: true,
-  })
-  .partial()
-  .extend(querySchema.shape);
-
-export const userIndexParamsDto = z.object({});
-
+export const userIndexQueryDto = userIndexFilterSchema.partial().extend(querySchema.shape);
 export type UserIndexQueryDto = z.infer<typeof userIndexQueryDto>;
-export type UserIndexParamsDto = z.infer<typeof userIndexParamsDto>;
-
-export class UserIndexQueryClassDto extends createZodDto(userIndexQueryDto) {}
 ```
 
-Regla:
+```typescript
+// src/user/application/dtos/user-index.request.doc.ts
+import { createZodDto } from 'nestjs-zod';
+import { userIndexQueryDto } from './user-index.request.dto';
 
-- no crear `*.query.dto.ts` separado.
-- no crear `*.params.dto.ts` separado.
-- no crear `*.body.dto.ts` separado.
-- no poner DTOs especificos de endpoint dentro de `application/schemas`.
-- `pick`, `omit`, `partial` y `extend` del request viven dentro de `*.request.dto.ts`.
-- los schemas derivados reutilizables entre varios endpoints si pueden vivir en `application/schemas`.
-- no usar `.default(...)` en request DTO para repetir defaults que ya existen en Drizzle/PostgreSQL.
-- si un campo tiene default en Drizzle/PostgreSQL, no incluirlo en el `store.request.dto.ts`.
-- si un campo acepta `NULL` y el cliente debe poder dejarlo vacio, usar `nullable` y exigir que envie `null`.
-- evitar `.optional()` en body DTOs de `store/create`; reservar omision real para query params, filtros y `partial()` de `update/PATCH`.
-- si el endpoint no usa body/query/params, se puede omitir el schema vacio.
+export class UserIndexQueryDocDto extends createZodDto(userIndexQueryDto) {}
+```
 
-## 2. Que vive en `*.response.dto.ts`
+Reglas:
 
-Todo lo que sale del endpoint:
+- no crear `*.query.dto.ts`, `*.params.dto.ts` o `*.body.dto.ts` por defecto;
+- derivar con `pick`, `omit`, `partial` y `extend` dentro del DTO del endpoint;
+- no duplicar defaults de Drizzle/PostgreSQL en el request;
+- usar `nullable()` cuando el cliente debe enviar ausencia explícita;
+- reservar `optional()` para query/filtros y PATCH;
+- no crear interfaces manuales que dupliquen `z.infer`.
 
-- response exitoso.
-- responses especiales `3xx` si el endpoint redirige o devuelve accepted/async flow documentado.
-- errores esperados del endpoint.
-- errores de validacion.
-- class DTOs de response para Swagger cuando hacen falta.
-- tipos inferidos del response.
+## 2.1 Derivación obligatoria de tipos
 
-Ejemplo:
+La fuente de verdad es el schema base y su tipo inferido. No inventar un tipo paralelo si el dato
+ya existe en la feature:
+
+```typescript
+export type UserSchema = z.infer<typeof userSchema>;
+
+export type UserIdentity = Pick<
+  UserSchema,
+  'id' | 'email' | 'full_name'
+>;
+
+export type UserWithoutAudit = Omit<
+  UserSchema,
+  'created_at' | 'updated_at'
+>;
+
+export type UserWithProduct = UserPublicSchema & {
+  product: Pick<ProductSchema, 'id' | 'nombre' | 'status'>;
+};
+```
+
+Usar `Pick<T, K>`, `Omit<T, K>`, `Partial<T>`, `Required<T>`, `Readonly<T>` e intersecciones
+(`A & { extra: X }`) para proyecciones y composiciones type-only. `interface X extends Y` también
+es válido cuando existe una relación clara; no usar herencia solo para esconder una duplicación.
+
+TypeScript desaparece en runtime. Si la forma debe validarse en requests, responses, eventos o
+datos externos, derivar primero el schema Zod y luego inferir el tipo:
+
+```typescript
+export const userWithProductSchema = userPublicSchema.extend({
+  product: productPublicSchema.pick({
+    id: true,
+    nombre: true,
+    status: true,
+  }),
+});
+
+export type UserWithProduct = z.infer<typeof userWithProductSchema>;
+```
+
+`Pick<>` u `Omit<>` solos no sustituyen `.pick()` u `.omit()` cuando se necesita validación. No
+repetir manualmente campos de `UserSchema`, `ProductSchema` ni de otro contrato. Si un tipo agrega
+formato o datos exclusivos de UI, nombrarlo `*ViewModel` y derivar sus campos de la fuente original.
+
+## 3. Response público
 
 ```typescript
 // src/user/application/dtos/user-store.response.dto.ts
 import { z } from 'zod';
-import { createZodDto } from 'nestjs-zod';
-import {
-  apiErrorResponseDto,
-  apiValidationErrorResponseDto,
-} from '@/shared/application/dtos/api-error.response';
 import { userPublicSchema } from '../schemas/user.schema';
 
 export const userStoreResponseDto = z.object({
@@ -126,88 +133,66 @@ export const userStoreResponseDto = z.object({
   user: userPublicSchema,
 });
 
-export const userStoreConflictResponseDto = apiErrorResponseDto.extend({
-  statusCode: z.literal(409),
-  message: z.literal('El email ya esta registrado'),
-});
-
-export const userStoreValidationResponseDto = apiValidationErrorResponseDto;
-export const userStoreUnexpectedResponseDto = apiErrorResponseDto.extend({
-  statusCode: z.literal(500),
-});
-
 export type UserStoreResponseDto = z.infer<typeof userStoreResponseDto>;
-export type UserStoreConflictResponseDto = z.infer<typeof userStoreConflictResponseDto>;
-
-export class UserStoreResponseClassDto extends createZodDto(userStoreResponseDto) {}
-export class UserStoreConflictResponseClassDto extends createZodDto(userStoreConflictResponseDto) {}
-export class UserStoreValidationResponseClassDto extends createZodDto(
-  userStoreValidationResponseDto,
-) {}
 ```
 
-Regla:
+```typescript
+// src/user/application/dtos/user-store.response.doc.ts
+import { createZodDto } from 'nestjs-zod';
+import { userStoreResponseDto } from './user-store.response.dto';
 
-- no crear `*.response.class.dto.ts` separado por defecto.
-- si hay class DTO para Swagger, va dentro del mismo `*.response.dto.ts`.
-- responses especiales `3xx` y errores `400`, `401`, `403`, `404`, `409`, `422`, `429`, `500` viven junto al response del caso de uso.
-- responses globales reutilizables pueden vivir en `shared/application/dtos/`.
-
-## 3. Naming
-
-Usar nombres de accion:
-
-```text
-user-index.request.dto.ts
-user-index.response.dto.ts
-user-show.request.dto.ts
-user-show.response.dto.ts
-user-store.request.dto.ts
-user-store.response.dto.ts
-user-update.request.dto.ts
-user-update.response.dto.ts
-user-destroy.request.dto.ts
-user-destroy.response.dto.ts
+export class UserStoreResponseDocDto extends createZodDto(userStoreResponseDto) {}
 ```
 
-No usar:
-
-```text
-user-index.query.dto.ts
-user-store.dto.ts
-user-show.response.ts
-user-store.response.class.dto.ts
-```
+Errores transversales reutilizables viven en `shared/application/dtos`; sus adaptadores Swagger
+también van en archivos `.doc.ts`. No dupliques el mismo error en cada feature.
 
 ## 4. Controller
 
 ```typescript
+import { UserStoreRequestDocDto } from '@/user/application/dtos/user-store.request.doc';
 import {
-  UserStoreBodyClassDto,
-  userStoreBodyDto,
-  type UserStoreBodyDto,
+  userStoreRequestDto,
+  type UserStoreRequestDto,
 } from '@/user/application/dtos/user-store.request.dto';
-import {
-  UserStoreResponseClassDto,
-  userStoreResponseDto,
-  type UserStoreResponseDto,
-} from '@/user/application/dtos/user-store.response.dto';
+import { UserStoreResponseDocDto } from '@/user/application/dtos/user-store.response.doc';
+import type { UserStoreResponseDto } from '@/user/application/dtos/user-store.response.dto';
 
 @Post()
-@ApiBody({ type: UserStoreBodyClassDto })
-@ZodResponse({ status: 201, type: UserStoreResponseClassDto })
-store(@Body(new ZodPipe(userStoreBodyDto)) body: UserStoreBodyDto): Promise<UserStoreResponseDto> {
+@ApiBody({ type: UserStoreRequestDocDto })
+@ZodResponse({ status: 201, type: UserStoreResponseDocDto })
+store(
+  @Body(new ZodPipe(userStoreRequestDto)) body: UserStoreRequestDto,
+): Promise<UserStoreResponseDto> {
   return this.service.store(body);
 }
 ```
 
-## 5. Regla senior
+## 5. Paquete compartido backend/frontend
 
-Esta convencion reduce archivos sin perder claridad:
+El backend es dueño del contrato y publica un paquete independiente, por ejemplo
+`@vigilioyonatan/bus-contracts`. El paquete contiene únicamente el barrel browser-safe compilado,
+declara `sideEffects: false` y depende solo de Zod como runtime/peer dependency.
 
-- request agrupa entrada.
-- response agrupa salida.
-- schemas base siguen en `application/schemas`.
-- pipes siguen en `shared/infrastructure/http/pipes`.
-- controllers no arman contratos; solo los consumen.
-- services retornan `ResponseDto`, nunca `ClassDto`.
+Desarrollo local:
+
+```powershell
+# bus-impl
+pnpm dev:contracts
+
+# web-mfe, una vez
+pnpm link ..\bus-impl\packages\contracts
+```
+
+CI y producción deben instalar una versión publicada exacta. No usar `link:`, `file:`,
+`workspace:*` ni `latest` fuera del desarrollo local.
+
+## 6. Definition of Done
+
+- el generador excluye `*.doc.ts`;
+- falla si un contrato público importa NestJS;
+- el paquete genera `.js` y `.d.ts` válidos;
+- un bundle de navegador no contiene `nestjs-zod`, `@nestjs/*` ni Node built-ins;
+- backend typecheck/tests/OpenAPI pasan;
+- frontend typecheck/tests/build y validación de drift pasan;
+- no queda una copia manual de los DTOs en frontend.

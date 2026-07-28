@@ -2,14 +2,14 @@
 
 Cucumber no reemplaza Vitest ni Playwright. Se usa para acceptance tests legibles por negocio cuando el flujo tiene lenguaje funcional claro.
 
-`endoso`, `emision`, `renovacion` y otros nombres de seguros se usan solo como ejemplos de un flujo
+`product`, `emision`, `renovacion` y otros nombres de seguros se usan solo como ejemplos de un flujo
 con lenguaje de negocio; no son modulos obligatorios del template.
 
 ## Cuándo usar Cucumber
 
 - Flujos de negocio con reglas compartidas entre negocio, QA y desarrollo.
 - Acceptance criteria de Jira que conviene convertir a escenarios.
-- Casos críticos donde el wording importa: endosos, emisión, pagos, anulaciones, renovaciones.
+- Casos críticos donde el wording importa: products, emisión, pagos, anulaciones, renovaciones.
 - Reglas que deben sobrevivir refactors internos.
 
 ## Cuándo no usar Cucumber
@@ -26,9 +26,9 @@ Para eso usar Vitest o Playwright.
 ```txt
 tests/
 `-- bdd/
-    `-- endoso/
-        |-- endoso-store.feature
-        `-- endoso-store.steps.ts
+    `-- product/
+        |-- product-store.feature
+        `-- product-store.steps.ts
 ```
 
 Regla: BDD tambien sigue `tests/bdd/<modulo>`. No dejar features sueltas en `tests/bdd` porque con varios bounded contexts se vuelve dificil saber que negocio rompio.
@@ -50,15 +50,15 @@ Los steps deben usar application services, DTOs Zod y ports. No deben importar c
 Bien:
 
 ```ts
-const body = endosoStoreRequestDto.parse(payload);
-const service = new EndosoApplicationService(repository);
+const body = productStoreRequestDto.parse(payload);
+const service = new ProductApplicationService(repository);
 const response = await service.store(body);
 ```
 
 Evitar:
 
 ```ts
-await request(app.getHttpServer()).post('/endosos').send(payload);
+await request(app.getHttpServer()).post('/products').send(payload);
 ```
 
 Eso es e2e HTTP, no BDD de application.
@@ -73,12 +73,12 @@ Eso es e2e HTTP, no BDD de application.
 Ejemplo:
 
 ```gherkin
-Feature: Registrar endoso
+Feature: Registrar product
 
-  Scenario: Registrar un endoso de inclusion
-    Given un request valido para registrar un endoso
-    When registro el endoso
-    Then la respuesta confirma el endoso registrado
+  Scenario: Registrar un product de inclusion
+    Given un request valido para registrar un product
+    When registro el product
+    Then la respuesta confirma el product registrado
 ```
 
 ## CI

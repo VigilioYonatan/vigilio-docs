@@ -14,13 +14,13 @@ En el `bus-impl` original habia mucho valor en el bootstrap con Nest + middlewar
 Para peticiones REST se recomienda una Lambda dedicada para HTTP.
 
 ```typescript
-// src/endoso/infrastructure/bootstrap/http.lambda.ts
+// src/product/infrastructure/bootstrap/http.lambda.ts
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import awsLambdaFastify from '@fastify/aws-lambda';
 import { Logger } from 'nestjs-pino';
 import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
-import { EndosoHttpModule } from './http.module';
+import { ProductHttpModule } from './http.module';
 import { setupSwagger } from '../../../../shared/infrastructure/docs/swagger.config';
 
 let proxy: ReturnType<typeof awsLambdaFastify>;
@@ -29,7 +29,7 @@ async function bootstrap() {
   patchNestJsSwagger();
 
   const app = await NestFactory.create<NestFastifyApplication>(
-    EndosoHttpModule,
+    ProductHttpModule,
     new FastifyAdapter(),
     { bufferLogs: true },
   );
@@ -66,17 +66,17 @@ Ventajas:
 Los eventos async no necesitan levantar un servidor HTTP.
 
 ```typescript
-// src/endoso/infrastructure/bootstrap/worker.lambda.ts
+// src/product/infrastructure/bootstrap/worker.lambda.ts
 import { NestFactory } from '@nestjs/core';
 import middy from '@middy/core';
 import { Logger } from 'nestjs-pino';
-import { EndosoWorkerModule } from './worker.module';
+import { ProductWorkerModule } from './worker.module';
 import { buildWorkerHandler } from './worker.router';
 
 let appContext: Awaited<ReturnType<typeof NestFactory.createApplicationContext>> | undefined;
 
 async function getAppContext() {
-  appContext ??= await NestFactory.createApplicationContext(EndosoWorkerModule, {
+  appContext ??= await NestFactory.createApplicationContext(ProductWorkerModule, {
     bufferLogs: true,
   });
 
@@ -102,7 +102,7 @@ export const handler = middy(baseHandler);
 En vez de `controller[action]`, se recomienda un router tipado:
 
 ```typescript
-// src/endoso/infrastructure/bootstrap/worker.router.ts
+// src/product/infrastructure/bootstrap/worker.router.ts
 import type { INestApplicationContext } from '@nestjs/common';
 import { ValidarTramaConsumer } from '../events/consumers/validar-trama.consumer';
 import { ProcesarMovimientoConsumer } from '../events/consumers/procesar-movimiento.consumer';

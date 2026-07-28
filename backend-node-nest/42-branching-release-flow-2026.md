@@ -7,7 +7,7 @@ No se usa Git Flow clasico. No hay `develop` ni `release/**` como ramas permanen
 ## Flujo oficial
 
 ```text
-feat/ABC-123/crear-endoso
+feat/ABC-123/crear-product
   -> PR hacia main
   -> CI completo: governance, lint, typecheck, unit, integration, BDD, OpenAPI, E2E, security
   -> squash/rebase merge a main

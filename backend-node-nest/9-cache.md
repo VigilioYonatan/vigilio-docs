@@ -215,8 +215,8 @@ bus-impl:{stage}:{bounded_context}:{recurso}:{version}:{hash}
 Ejemplos:
 
 ```text
-bus-impl:development:endoso:list:v1:7f3c2f
-bus-impl:production:endoso:show:v1:id:123
+bus-impl:development:product:list:v1:7f3c2f
+bus-impl:production:product:show:v1:id:123
 bus-impl:production:catalogo:broker:v2:all
 ```
 
@@ -364,18 +364,18 @@ export interface CachePort {
 ```
 
 ```typescript
-// src/endoso/application/service/endoso.application-service.ts
+// src/product/application/service/product.application-service.ts
 import type { CachePort } from '@/shared/application/cache/cache.port';
 
-export class EndosoApplicationService {
+export class ProductApplicationService {
   constructor(
     private readonly cache: CachePort,
-    private readonly repository: EndosoReadRepository,
+    private readonly repository: ProductReadRepository,
   ) {}
 
-  async index(query: EndosoIndexQueryDto): Promise<EndosoIndexResponseDto> {
-    const key = `bus-impl:production:endoso:index:v1:${query.nro_poliza ?? 'all'}:${query.offset}:${query.limit}`;
-    const cached = await this.cache.get<EndosoIndexResponseDto>(key);
+  async index(query: ProductIndexQueryDto): Promise<ProductIndexResponseDto> {
+    const key = `bus-impl:production:product:index:v1:${query.nro_poliza ?? 'all'}:${query.offset}:${query.limit}`;
+    const cached = await this.cache.get<ProductIndexResponseDto>(key);
 
     if (cached) {
       return cached;
@@ -391,18 +391,18 @@ export class EndosoApplicationService {
 ```
 
 ```typescript
-// src/endoso/application/service/endoso.application-service.ts
-export class EndosoApplicationService {
+// src/product/application/service/product.application-service.ts
+export class ProductApplicationService {
   constructor(
-    private readonly repository: EndosoRepository,
+    private readonly repository: ProductRepository,
     private readonly cache: CachePort,
   ) {}
 
-  async update(id: number, body: EndosoUpdateRequestDto): Promise<EndosoUpdateResponseDto> {
+  async update(id: number, body: ProductUpdateRequestDto): Promise<ProductUpdateResponseDto> {
     const result = await this.repository.update(id, body);
 
-    await this.cache.del(`bus-impl:production:endoso:show:v1:id:${id}`);
-    await this.cache.del(`bus-impl:production:endoso:index:v1:*`);
+    await this.cache.del(`bus-impl:production:product:show:v1:id:${id}`);
+    await this.cache.del(`bus-impl:production:product:index:v1:*`);
 
     return result;
   }
