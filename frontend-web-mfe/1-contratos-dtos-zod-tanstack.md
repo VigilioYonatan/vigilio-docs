@@ -35,18 +35,26 @@ como `Too small: expected string to have >=12 characters` se muestra como:
 `Demasiado pequeño: se esperaba que texto tuviera >=12 caracteres`.
 Los mensajes personalizados definidos explícitamente en un schema no son reemplazados por el locale.
 
-Usar el request schema como resolver y su tipo inferido como modelo del formulario. En este proyecto
-se usa `nullableZodResolver` como adapter local para convertir controles vacios del navegador en
-`null` antes de delegar al resolver oficial de Zod:
+Usar el request schema publicado como resolver y su tipo inferido como modelo del formulario. 
+
+> [!IMPORTANT]
+> **Regla Principal (Caso Estándar):** En la gran mayoría de los casos **NO SE CREARÁ** un schema local de formulario manual como `const productStoreFormSchema = z.object({ ... })`.
+> 
+> En su lugar, se importa y utiliza directamente el `requestDto` (y su schema Zod) publicado desde el paquete de contratos del proyecto (ej. `@vigilioyonatan/bus-contracts` — *nota: `@vigilioyonatan/bus-contracts` es un nombre ilustrativo/ejemplo y el paquete real variará según el proyecto*).
+> 
+> Únicamente en situaciones excepcionales donde el input UI requiera una transformación estructural compleja antes del submit, se crearía un schema local intermedio con su respectivo mapper hacia el DTO publicado.
+
+En este proyecto se usa `nullableZodResolver` como adapter local para convertir controles vacíos del navegador en `null` antes de delegar al resolver oficial de Zod:
 
 ```typescript
 import {
   productStoreRequestDto,
   type ProductStoreRequestDto,
-} from '@vigilioyonatan/bus-contracts';
+} from '@vigilioyonatan/bus-contracts'; // Nota: El paquete de contratos varía según el proyecto
 import { useForm } from 'react-hook-form';
 import { nullableZodResolver } from '@/services/forms/nullable-zod-resolver';
 
+// MAYORMENTE SERÁ ASÍ: Consumo directo del contrato DTO publicado
 const productStoreForm = useForm<ProductStoreRequestDto>({
   mode: 'onChange',
   reValidateMode: 'onChange',
@@ -56,9 +64,10 @@ const productStoreForm = useForm<ProductStoreRequestDto>({
 
 Reglas:
 
+- No crear manualmente `const xSchema = z.object({ ... })` cuando el DTO ya fue publicado en el paquete de contratos.
 - No usar response DTO como schema de formulario.
 - Respetar `nullable`, `optional`, defaults y coerciones del contrato.
-- No crear otra interface para los mismos campos.
+- No crear otra interface ni schema espejo para los mismos campos.
 - Reglas exclusivamente visuales pueden vivir en frontend; no reemplazan validacion/autorizacion backend.
 
 ### Normalizacion `""` a `null`

@@ -1,5 +1,6 @@
 * **👋 Bienvenid@s**
   * [Portada Principal](README.md)
+  * [Modelo Operativo](OPERATING-MODEL.md)
   * [Matriz de Compatibilidad](COMPATIBILITY.md)
 
 
@@ -38,15 +39,15 @@
   * [31. AI Chat con Amazon Bedrock](backend-node-nest/31-ai-chat-bedrock-ddd.md)
   * [32. Uploads S3 con Presigned URLs](backend-node-nest/32-uploads-s3-presigned.md)
   * [33. Guía GitHub, Jira & AWS 2026](backend-node-nest/33-guia-github-jira-aws-cicd-2026.md)
-  * [41. Dependabot y Repository Policy](backend-node-nest/41-dependabot-repository-policy.md)
   * [34. Gestión de Configuración Híbrida](backend-node-nest/34-gestion-configuracion-hibrida-2026.md)
-  * [42. Trunk-Based y Environments](backend-node-nest/42-branching-release-flow-2026.md)
   * [35. Versionamiento por Commits](backend-node-nest/35-versionamiento-basado-en-commits-2026.md)
   * [36. Registro de Deuda Técnica](backend-node-nest/36-deuda-tecnica.md)
   * [37. Resumen de Jobs CI/CD](backend-node-nest/37-cicd-jobs-resumen.md)
   * [38. Estrategia de Testing 2026](backend-node-nest/38-estrategia-testing-2026.md)
   * [39. Skills IA del Proyecto](backend-node-nest/39-skills-ia-proyecto.md)
   * [40. Operación de Producción](backend-node-nest/40-operacion-produccion.md)
+  * [41. Dependabot y Repository Policy](backend-node-nest/41-dependabot-repository-policy.md)
+  * [42. Trunk-Based y Environments](backend-node-nest/42-branching-release-flow-2026.md)
   * [Agent Stack: Estado Real](backend-node-nest/agent-stack-guide.md)
 
 * **🦄 Decisiones (ADR)**
@@ -82,3 +83,23 @@
   * [Índice de Threat Models](threat-model/README.md)
   * [001. Autenticación y Sesiones](threat-model/001-autenticacion-y-sesiones.md)
   * [Plantilla Threat Model](threat-model/template.md)
+
+* **Frontend Mobile MFE**
+  * [Overview Mobile 2026](frontend-mobile-mfe/README.md)
+  * [1. Contratos, Zod y TanStack](frontend-mobile-mfe/1-contratos-zod-formularios-tanstack.md)
+  * [2. Skills, OpenSpec y DevSecOps](frontend-mobile-mfe/2-skills-agentes-openspec-devsecops.md)
+  * [3. Arquitectura, Estado y Navegacion](frontend-mobile-mfe/3-arquitectura-estructura-estado-navegacion.md)
+  * [4. Entornos y Runtime Config](frontend-mobile-mfe/4-flujo-local-entornos-runtime-config.md)
+  * [5. HTTP, Auth, Deep Links y Uploads](frontend-mobile-mfe/5-http-auth-deep-links-uploads.md)
+  * [6. Golden Path Feature Mobile](frontend-mobile-mfe/6-golden-path-feature-mobile.md)
+  * [7. Testing Jest, RNTL y Maestro](frontend-mobile-mfe/7-testing-jest-rntl-maestro.md)
+  * [8. Accesibilidad, Rendimiento y Calidad](frontend-mobile-mfe/8-accesibilidad-rendimiento-calidad.md)
+  * [9. Seguridad, Hardening y Privacidad](frontend-mobile-mfe/9-seguridad-hardening-privacidad.md)
+  * [10. Observabilidad, SLI y SLO](frontend-mobile-mfe/10-observabilidad-mobile-sli-slo.md)
+  * [11. Tooling, Biome y Supply Chain](frontend-mobile-mfe/11-tooling-pnpm-biome-supply-chain.md)
+  * [12. DevSecOps, CI/CD y GitHub](frontend-mobile-mfe/12-devsecops-cicd-github.md)
+  * [13. EAS, Stores, OTA y FinOps](frontend-mobile-mfe/13-eas-stores-ota-finops.md)
+  * [14. Gobierno, Releases y Ownership](frontend-mobile-mfe/14-gobierno-releases-ownership.md)
+  * [15. Evaluacion, Roadmap y Operacion](frontend-mobile-mfe/15-evaluacion-roadmap-operacion.md)
+  * [16. Design System, NativeWind y Tokens](frontend-mobile-mfe/16-design-system-nativewind-tokens.md)
+  * [17. Scaffold de Aplicacion y Feature](frontend-mobile-mfe/17-scaffold-app-feature.md)

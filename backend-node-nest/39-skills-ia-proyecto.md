@@ -36,15 +36,13 @@ Las skills no operan solamente sobre `docs/`.
 ### `node-nest`
 
 - `node-nest-build-feature`
-- `node-nest-contracts-release`
-- `node-nest-observability`
 - `node-nest-persistence`
 - `node-nest-security-aws`
 - `node-nest-testing`
 
-`node-nest-contracts-release` y `node-nest-observability` forman parte del perfil fuente preparado
-para `@vigilioyonatan/vigilio-skills@0.4.0`. Un consumidor en `0.2.0` no debe declararlas instaladas
-hasta publicar, actualizar la dependencia exacta y ejecutar la sincronizacion.
+Contratos/OpenAPI se cubren con `node-nest-build-feature` + `node-nest-testing`. Observabilidad,
+Pino, CloudWatch, SLO y runbooks se cubren con `node-nest-security-aws` + `node-nest-testing`.
+No se documentan skills separadas que no existan en el perfil fuente validado.
 
 ### `openspec`
 
@@ -55,10 +53,10 @@ hasta publicar, actualizar la dependencia exacta y ejecutar la sincronizacion.
 - `openspec-sync-specs`
 - `openspec-archive-change`
 
-`@vigilioyonatan/vigilio-skills@0.3.1` ya publica los perfiles `core`, `node-nest`, `web-mfe` y
-`openspec`, pero todavía contiene cuatro skills Node/Nest y cinco web-mfe. La fuente `0.4.0`
-amplía esos perfiles a seis y ocho respectivamente; no confundir fuente preparada con paquete
-publicado e instalado.
+`@vigilioyonatan/vigilio-skills@0.3.1` publica los perfiles `core`, `node-nest`, `web-mfe` y
+`openspec`; el consumidor frontend validado usa cinco skills web-mfe y el backend validado usa las
+cuatro skills Node/Nest del snapshot. Si una release futura agrega skills, primero se actualiza la
+fuente, luego el paquete y finalmente los consumidores mediante `skills:sync`.
 
 ## Sincronizacion
 
@@ -86,8 +84,8 @@ Ejemplos:
 
 ```text
 Usa $node-nest-build-feature para agregar un caso de uso protegido.
-Usa $node-nest-contracts-release para evolucionar DTOs, OpenAPI y paquetes sin romper consumidores.
-Usa $node-nest-observability para instrumentar logs, tracing, SLO, alertas y runbooks.
+Usa $node-nest-build-feature + $node-nest-testing para evolucionar DTOs y OpenAPI sin romper consumidores.
+Usa $node-nest-security-aws + $node-nest-testing para instrumentar logs, CloudWatch, SLO, alertas y runbooks.
 Usa $node-nest-persistence para revisar transaccion, constraints y cache-aside.
 Usa $node-nest-testing para cubrir un bug con unit, integration y E2E por riesgo.
 Usa $node-nest-security-aws para revisar JWT, IAM, secretos y CDK.
