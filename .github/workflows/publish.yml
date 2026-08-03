@@ -140,7 +140,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
       - name: Auto-tag Senior Release in GitHub
-        uses: mathieudutour/github-tag-action@fcfd061f216a69a844962e245a49800e238f830d # v6.2
+        uses: mathieudutour/github-tag-action@a22cf08638b34d5badda920f9daf6e72c477b07b # v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: "v"
