@@ -10,7 +10,7 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 |---|---|
 | Fecha de validación | `2026-07-28` |
 | Plataforma ejecutable | `VigilioYonatan/vigilio-platform-actions` |
-| Commit inmutable | `cc0b2e178648d35e0d694d2f7a0151ed2d32ea71` |
+| Commit inmutable | `b16d086e7af79b1d37a1257527d7388993d5abb7` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -48,7 +48,7 @@ proyectos no deben degradar una dependencia únicamente para hacer coincidir nú
 
 | Perfil | Skills |
 |---|---|
-| `core` | `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `token-context-compression` |
+| `core` | `coderabbit-compliance`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `token-context-compression` |
 | `node-nest` | `node-nest-build-feature`, `node-nest-persistence`, `node-nest-security-aws`, `node-nest-testing` |
 | `openspec` | `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-propose`, `openspec-sync-specs`, `openspec-update-change` |
 
