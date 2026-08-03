@@ -68,7 +68,7 @@
   "consumers": [
     {
       "id": "bus-impl",
-      "repository": "VigilioYonatan/bus-impl",
+      "repository": "VigilioYonatan/vigilio-bus-impl",
       "checkout_path": "bus-impl",
       "ref": "864da70374b936decfd69ae40117f6a8384be0f8",
       "dependencies": {
@@ -80,7 +80,7 @@
     },
     {
       "id": "web-mfe",
-      "repository": "VigilioYonatan/web-mfe",
+      "repository": "VigilioYonatan/vigilio-web-mfe",
       "checkout_path": "web-mfe",
       "ref": "f2f15e0c9f77103be44f8ff3edb696c511c74139",
       "dependencies": {
