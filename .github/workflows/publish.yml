@@ -33,7 +33,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Checkout platform for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/vigilio-platform-actions
@@ -42,7 +41,6 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Checkout bus-impl consumer for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/bus-impl
@@ -51,7 +49,6 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Checkout web-mfe consumer for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/web-mfe
@@ -65,7 +62,6 @@ jobs:
       - name: Validate internal links and sidebar coverage
         run: node scripts/validate-docs.mjs
       - name: Validate cross-repository compatibility
-        if: secrets.PLATFORM_READ_TOKEN != ''
         run: node scripts/validate-compatibility.mjs --workspace .compat
 
   governance:
