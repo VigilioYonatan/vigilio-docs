@@ -83,11 +83,7 @@
       "repository": "VigilioYonatan/vigilio-web-mfe",
       "checkout_path": "web-mfe",
       "ref": "f2f15e0c9f77103be44f8ff3edb696c511c74139",
-      "dependencies": {
-        "@vigilioyonatan/devsecops-evidence": "0.2.0",
-        "@vigilioyonatan/devsecops-governance": "0.2.0",
-        "@vigilioyonatan/vigilio-skills": "0.3.1"
-      }
+      "dependencies": {}
     }
   ]
 }

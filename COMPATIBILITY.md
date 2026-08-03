@@ -38,7 +38,7 @@ plataforma. Esto se registra explícitamente; no se oculta ni se presenta como u
 | Consumidor | Evidencia fijada | Paquetes verificados |
 |---|---|---|
 | `bus-impl` | `864da70374b936decfd69ae40117f6a8384be0f8` | governance/evidence/skills `0.2.0`; node tooling `0.3.0` |
-| `web-mfe` | `f2f15e0c9f77103be44f8ff3edb696c511c74139` | governance/evidence `0.2.0`; skills `0.3.1` |
+| `web-mfe` | `f2f15e0c9f77103be44f8ff3edb696c511c74139` | N/A (sin dependencias directas de plataforma) |
 
 La diferencia entre source packages y paquetes ya consumidos es una brecha de trazabilidad de
 release que debe reconciliarse en `vigilio-platform-actions` antes de la próxima publicación. Los
