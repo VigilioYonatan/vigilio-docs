@@ -79,12 +79,7 @@
   * [16. Design System, UI y Tokens](frontend-web-mfe/16-design-system-ui-tokens.md)
   * [17. Scaffold de Aplicación y Feature](frontend-web-mfe/17-scaffold-app-feature.md)
 
-* **🔒 Modelos de Amenazas (Threat Model)**
-  * [Índice de Threat Models](threat-model/README.md)
-  * [001. Autenticación y Sesiones](threat-model/001-autenticacion-y-sesiones.md)
-  * [Plantilla Threat Model](threat-model/template.md)
-
-* **Frontend Mobile MFE**
+* **📱 Frontend Mobile MFE**
   * [Overview Mobile 2026](frontend-mobile-mfe/README.md)
   * [1. Contratos, Zod y TanStack](frontend-mobile-mfe/1-contratos-zod-formularios-tanstack.md)
   * [2. Skills, OpenSpec y DevSecOps](frontend-mobile-mfe/2-skills-agentes-openspec-devsecops.md)
@@ -103,3 +98,8 @@
   * [15. Evaluacion, Roadmap y Operacion](frontend-mobile-mfe/15-evaluacion-roadmap-operacion.md)
   * [16. Design System, NativeWind y Tokens](frontend-mobile-mfe/16-design-system-nativewind-tokens.md)
   * [17. Scaffold de Aplicacion y Feature](frontend-mobile-mfe/17-scaffold-app-feature.md)
+
+* **🔒 Modelos de Amenazas (Threat Model)**
+  * [Índice de Threat Models](threat-model/README.md)
+  * [001. Autenticación y Sesiones](threat-model/001-autenticacion-y-sesiones.md)
+  * [Plantilla Threat Model](threat-model/template.md)

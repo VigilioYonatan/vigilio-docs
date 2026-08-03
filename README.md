@@ -2,13 +2,13 @@
 
 Documentacion de arquitectura centralizada para proyectos Vigilio.
 
-```text
-backend-node-nest/     -> practicas y ejemplos para backends Node/Nest
-frontend-web-mfe/      -> contratos, skills y practicas para frontend web MFE
-frontend-mobile-mfe/   -> 17 capítulos de arquitectura, delivery y operación React Native/Expo
-adr/                   -> templates de Architecture Decision Records
-threat-model/          -> templates de threat modeling
-```
+### 📚 Secciones de Arquitectura
+
+- 🚧 **[Backend Node / NestJS](backend-node-nest/README.md)**: Prácticas, DDD, CDK, FinOps y DevSecOps.
+- 💻 **[Frontend Web MFE](frontend-web-mfe/README.md)**: Preact, Vite, Preact Signals, BFF y TanStack Query.
+- 📱 **[Frontend Mobile MFE](frontend-mobile-mfe/README.md)**: React Native, Expo, Preact Signals y EAS Build (17 capítulos).
+- 🦄 **[Decisiones de Arquitectura (ADR)](adr/README.md)**: Registros de arquitectura (ADRs) y patrones de diseño.
+- 🔒 **[Modelos de Amenaza (Threat Model)](threat-model/README.md)**: Análisis de riesgos y mitigaciones de seguridad.
 
 Consulta también:
 

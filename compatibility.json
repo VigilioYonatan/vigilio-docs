@@ -43,6 +43,7 @@
     ],
     "skill_profiles": {
       "core": [
+        "coderabbit-compliance",
         "diagnosing-bugs",
         "grill-me",
         "improve-codebase-architecture",
