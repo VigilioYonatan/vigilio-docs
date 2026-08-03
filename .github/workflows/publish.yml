@@ -32,40 +32,34 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           persist-credentials: false
-      - name: Checkout platform for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
+      - name: Checkout platform and consumers for compatibility gate
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/vigilio-platform-actions
           ref: cc0b2e178648d35e0d694d2f7a0151ed2d32ea71
           path: .compat/vigilio-platform-actions
           persist-credentials: false
-          token: ${{ secrets.PLATFORM_READ_TOKEN }}
-      - name: Checkout bus-impl consumer for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+          token: ${{ secrets.PLATFORM_READ_TOKEN || github.token }}
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/bus-impl
           ref: 864da70374b936decfd69ae40117f6a8384be0f8
           path: .compat/bus-impl
           persist-credentials: false
-          token: ${{ secrets.PLATFORM_READ_TOKEN }}
-      - name: Checkout web-mfe consumer for compatibility gate
-        if: secrets.PLATFORM_READ_TOKEN != ''
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+          token: ${{ secrets.PLATFORM_READ_TOKEN || github.token }}
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/web-mfe
           ref: f2f15e0c9f77103be44f8ff3edb696c511c74139
           path: .compat/web-mfe
           persist-credentials: false
-          token: ${{ secrets.PLATFORM_READ_TOKEN }}
+          token: ${{ secrets.PLATFORM_READ_TOKEN || github.token }}
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Validate internal links and sidebar coverage
         run: node scripts/validate-docs.mjs
       - name: Validate cross-repository compatibility
-        if: secrets.PLATFORM_READ_TOKEN != ''
         run: node scripts/validate-compatibility.mjs --workspace .compat
 
   governance:
