@@ -47,6 +47,13 @@ function validateWorkflowFile(file) {
   const rawContent = readFileSync(path.join(WORKFLOWS_DIR, file), 'utf8');
   const content = activeYaml(rawContent);
 
+  for (const [index, line] of rawContent.split('\n').entries()) {
+    const match = /^(\s+)(?:uses|run|with|env|if|name):/.exec(line);
+    if (match && match[1].length % 2 !== 0) {
+      errors.push(`${file}:${index + 1}: indentacion YAML impar en una clave de workflow`);
+    }
+  }
+
   // 1. Validate Pinned Uses
   const usesMatches = [...rawContent.matchAll(/\buses:\s*([^\s#]+)/g)];
   for (const match of usesMatches) {

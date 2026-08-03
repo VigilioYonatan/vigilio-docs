@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "validated_on": "2026-07-28",
+  "platform_actions": {
+    "repository": "VigilioYonatan/vigilio-platform-actions",
+    "checkout_path": "vigilio-platform-actions",
+    "ref": "b16d086e7af79b1d37a1257527d7388993d5abb7",
+    "packages": [
+      {
+        "path": "package.json",
+        "name": "@vigilioyonatan/platform-actions",
+        "version": "0.1.0"
+      },
+      {
+        "path": "packages/devsecops-evidence/package.json",
+        "name": "@vigilioyonatan/devsecops-evidence",
+        "version": "0.2.0"
+      },
+      {
+        "path": "packages/devsecops-governance/package.json",
+        "name": "@vigilioyonatan/devsecops-governance",
+        "version": "0.2.0"
+      },
+      {
+        "path": "packages/node-nest-tooling/package.json",
+        "name": "@vigilioyonatan/node-nest-tooling",
+        "version": "0.2.0"
+      },
+      {
+        "path": "packages/vigilio-skills/package.json",
+        "name": "@vigilioyonatan/vigilio-skills",
+        "version": "0.2.0"
+      }
+    ],
+    "required_files": [
+      "actions/jira-devops/action.yml",
+      "actions/jira-devops/dist/index.js",
+      ".github/workflows/shared-backend-node-nest-ci.yml",
+      ".github/workflows/shared-backend-node-nest-deploy-cdk.yml",
+      ".github/workflows/shared-web-mfe-preact-ci.yml",
+      ".github/workflows/shared-web-mfe-deploy-s3-cloudfront.yml",
+      "skill-profiles.json"
+    ],
+    "skill_profiles": {
+      "core": [
+        "coderabbit-compliance",
+        "diagnosing-bugs",
+        "grill-me",
+        "improve-codebase-architecture",
+        "token-context-compression"
+      ],
+      "node-nest": [
+        "node-nest-build-feature",
+        "node-nest-persistence",
+        "node-nest-security-aws",
+        "node-nest-testing"
+      ],
+      "openspec": [
+        "openspec-apply-change",
+        "openspec-archive-change",
+        "openspec-explore",
+        "openspec-propose",
+        "openspec-sync-specs",
+        "openspec-update-change"
+      ]
+    }
+  },
+  "consumers": [
+    {
+      "id": "bus-impl",
+      "repository": "VigilioYonatan/vigilio-bus-impl",
+      "checkout_path": "bus-impl",
+      "ref": "864da70374b936decfd69ae40117f6a8384be0f8",
+      "dependencies": {
+        "@vigilioyonatan/devsecops-evidence": "0.2.0",
+        "@vigilioyonatan/devsecops-governance": "0.2.0",
+        "@vigilioyonatan/node-nest-tooling": "0.3.0",
+        "@vigilioyonatan/vigilio-skills": "0.2.0"
+      }
+    },
+    {
+      "id": "web-mfe",
+      "repository": "VigilioYonatan/vigilio-web-mfe",
+      "checkout_path": "web-mfe",
+      "ref": "f2f15e0c9f77103be44f8ff3edb696c511c74139",
+      "dependencies": {}
+    }
+  ]
+}

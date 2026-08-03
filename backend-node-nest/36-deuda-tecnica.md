@@ -103,31 +103,24 @@ La presencia de una policy o workflow no demuestra que el control externo este a
 
 ## 8. Release coordinada de paquetes
 
-Estado: fuente validada; publicacion pendiente.
+Estado: versionado publicado y trazabilidad pendiente de reconciliación.
 
-Resuelto el 2026-07-23:
+El snapshot actual de la fuente declara `platform-actions@0.1.0` y los cuatro paquetes en `0.2.0`.
+Los consumidores verificados ya usan versiones posteriores en algunos paquetes (`node-nest-tooling`
+`0.3.0` en `bus-impl` y `vigilio-skills` `0.3.1` en `web-mfe`). Esto es válido como compatibilidad
+de consumo, pero la fuente y la procedencia publicada deben reconciliarse antes de la siguiente
+release.
 
-- los cuatro paquetes fuente quedaron versionados en `0.1.0` mediante Changesets;
-- lint, typecheck, 55 tests, build, governance y smoke de cuatro tarballs pasaron;
-- Husky, `packageManager`, workflows y policy central usan pnpm `11.7.0`;
-- los manifests de `.opencode/skills` y `.agents/skills` identifican `vigilio-skills` `0.1.0` y
-  verifican 21 archivos gestionados en cada destino.
-
-Pendiente externo:
-
-1. fusionar el Release PR de `vigilio-platform-actions` y publicar `0.1.0` en GitHub Packages;
-2. autenticar local o CI con `read:packages`;
-3. ejecutar `pnpm install` en `bus-impl` para incorporar los cuatro paquetes al lockfile;
-4. ejecutar en el consumidor `pnpm skills:check`, `pnpm test:devsecops`, lint, typecheck y tests;
-5. no migrar otros proyectos hasta que la version publicada sea verificable.
+El gate `scripts/validate-compatibility.mjs` registra ambas capas y evita inventar una única versión
+que no corresponda al código real. No degradar consumidores para ocultar el drift.
 
 ## 9. Nueva release de reusable workflows
 
-Estado: pendiente de release inmutable.
+Estado: snapshot inmutable consumido; tag histórico no representa la revisión actual.
 
-El worktree central ya contiene una revision de CI/deploy con pnpm `11.7.0`, acciones fijadas a SHA,
-evidencia, Jira, DAST y gates ampliados. La release `v1` todavia contiene defaults `11.5.2` y no
-representa esa revision.
+Los consumidores pueden fijar el SHA completo de una revisión aunque el tag anterior no se mueva.
+La próxima release debe actualizar el tag, los package versions, `compatibility.json` y los
+consumidores de forma coordinada.
 
 `bus-impl` conserva por ahora `ci.yml` y `secure-deploy-cdk.yml` locales. Solo se migran al reusable
 central despues de:

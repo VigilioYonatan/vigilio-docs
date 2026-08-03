@@ -32,11 +32,37 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           persist-credentials: false
+      - name: Checkout platform for compatibility gate
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: VigilioYonatan/vigilio-platform-actions
+          ref: b16d086e7af79b1d37a1257527d7388993d5abb7
+          path: .compat/vigilio-platform-actions
+          persist-credentials: false
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
+      - name: Checkout bus-impl consumer for compatibility gate
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: VigilioYonatan/vigilio-bus-impl
+          ref: 864da70374b936decfd69ae40117f6a8384be0f8
+          path: .compat/bus-impl
+          persist-credentials: false
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
+      - name: Checkout web-mfe consumer for compatibility gate
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: VigilioYonatan/vigilio-web-mfe
+          ref: f2f15e0c9f77103be44f8ff3edb696c511c74139
+          path: .compat/web-mfe
+          persist-credentials: false
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Validate internal links and sidebar coverage
         run: node scripts/validate-docs.mjs
+      - name: Validate cross-repository compatibility
+        run: node scripts/validate-compatibility.mjs --workspace .compat
 
   governance:
     name: Governance
@@ -58,6 +84,19 @@ jobs:
         run: node scripts/validate-workflows.mjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Move Jira issue to Code Review
+        if: github.event_name == 'pull_request'
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@cc0b2e178648d35e0d694d2f7a0151ed2d32ea71 # source snapshot
+        with:
+          mode: transition
+          issue-keys: ${{ github.head_ref }} ${{ github.event.pull_request.title }}
+          transition-name: "Code Review"
+          required: false
+          comment: "Pull Request de documentación abierto: ${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
 
   build:
     name: Build site
@@ -70,6 +109,9 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           persist-credentials: false
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Build
@@ -85,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: read
+      contents: write
       pages: write
       id-token: write
     environment:
@@ -95,3 +137,22 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Auto-tag Senior Release in GitHub
+        uses: mathieudutour/github-tag-action@fcfd061f216a69a844962e245a49800e238f830d # v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: "v"
+          default_bump: patch
+          release_branches: main
+      - name: Notify Jira on docs published
+        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@b16d086e7af79b1d37a1257527d7388993d5abb7 # source snapshot
+        with:
+          mode: transition
+          issue-keys: ${{ github.event.head_commit.message }}
+          transition-name: "Done"
+          required: false
+          comment: "📖 Documentación publicada en GitHub Pages: https://vigiliyonatan.github.io/vigilio-docs/"
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}

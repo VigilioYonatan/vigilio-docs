@@ -19,13 +19,15 @@ const OUT = path.join(ROOT, '_site');
 const EXCLUDED_DIRECTORIES = new Set([
   '.git',
   '.github',
+  '.compat',
   '_site',
   'node_modules',
   'scripts',
 ]);
 
-/** Archivos sueltos de la raiz que sí forman parte del sitio. */
-const ROOT_FILES = ['index.html', 'README.md', '_sidebar.md'];
+/** Archivos no Markdown de la raiz que forman parte del sitio. */
+const ROOT_ASSETS = ['index.html', '_sidebar.md', 'compatibility.json'];
+const EXCLUDED_ROOT_DOCS = new Set(['AGENTS.md']);
 
 async function docDirectories() {
   const entries = await readdir(ROOT, { withFileTypes: true });
@@ -34,6 +36,16 @@ async function docDirectories() {
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .filter((name) => !EXCLUDED_DIRECTORIES.has(name))
+    .sort();
+}
+
+async function rootDocumentationFiles() {
+  const entries = await readdir(ROOT, { withFileTypes: true });
+
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .filter((name) => name.endsWith('.md') && !EXCLUDED_ROOT_DOCS.has(name))
     .sort();
 }
 
@@ -51,7 +63,7 @@ async function main() {
     await cp(path.join(ROOT, directory), path.join(OUT, directory), { recursive: true });
   }
 
-  for (const file of ROOT_FILES) {
+  for (const file of [...ROOT_ASSETS, ...(await rootDocumentationFiles())]) {
     await cp(path.join(ROOT, file), path.join(OUT, file));
   }
 

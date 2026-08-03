@@ -24,13 +24,12 @@ No editar copias sincronizadas. `.vigilio-manifest.json` registra hashes y `skil
 | `web-mfe-testing` | Vitest, Testing Library, MSW, Playwright, a11y y visual |
 | `web-mfe-quality` | accesibilidad, SEO, Web Vitals, bundle y observabilidad |
 | `web-mfe-security-delivery` | browser security, CI/CD, supply chain y AWS |
-| `web-mfe-scaffold-app-feature` | scaffold de apps/features, APIs, hooks, nombres y tests adyacentes |
-| `web-mfe-observability` | RUM, errores, Web Vitals, correlation, SLO, alertas y runbooks |
-| `web-mfe-design-system` | tokens, `libs/ui`, componentes accesibles y promoción desde features |
+| Capacidades documentadas | scaffold, RUM y design system se aplican mediante las cinco skills publicadas; no son skills independientes en el snapshot actual |
 
-Las tres skills nuevas de scaffold, observabilidad y design system forman parte del perfil fuente
-preparado para `@vigilioyonatan/vigilio-skills@0.4.0`. Un consumidor en `0.3.1` mantiene las cinco
-skills publicadas hasta instalar la nueva versión exacta y ejecutar `skills:sync`.
+El consumidor validado usa `@vigilioyonatan/vigilio-skills@0.3.1` con cinco skills frontend. Las
+capacidades de scaffold, observabilidad y design system están especificadas en los documentos
+`17`, `10` y `16`, pero no deben declararse como skills instaladas hasta que aparezcan en una
+fuente y release verificables.
 
 ```bash
 pnpm skills:sync
