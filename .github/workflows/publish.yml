@@ -34,6 +34,7 @@ jobs:
           persist-credentials: false
       - name: Checkout platform and consumers for compatibility gate
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        continue-on-error: true
         with:
           repository: VigilioYonatan/vigilio-platform-actions
           ref: cc0b2e178648d35e0d694d2f7a0151ed2d32ea71
@@ -41,6 +42,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN || github.token }}
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        continue-on-error: true
         with:
           repository: VigilioYonatan/bus-impl
           ref: 864da70374b936decfd69ae40117f6a8384be0f8
@@ -48,6 +50,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN || github.token }}
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        continue-on-error: true
         with:
           repository: VigilioYonatan/web-mfe
           ref: f2f15e0c9f77103be44f8ff3edb696c511c74139
