@@ -4,7 +4,7 @@
   "platform_actions": {
     "repository": "VigilioYonatan/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "123aff150c7631f3fe054276343d03bbd6bd9eb0",
+    "ref": "2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0",
     "packages": [
       {
         "path": "package.json",
