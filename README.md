@@ -15,6 +15,7 @@ Consulta también:
 - [modelo operativo](./OPERATING-MODEL.md): responsabilidades y flujo docs → plataforma → consumidor;
 - [compatibilidad](./COMPATIBILITY.md): SHAs, versiones y consumidores verificados;
 - [`compatibility.json`](./compatibility.json): snapshot machine-readable validado en CI.
+- [Master Software Factory 2026](./software-factory/master_prompt_software_factory_openspec_agent_plugins_runner_2026.md): arquitectura objetivo, Prompt Builder, skills/plugins y runner con estados CURRENT/TARGET/GAP.
 
 ## Fuentes de verdad
 

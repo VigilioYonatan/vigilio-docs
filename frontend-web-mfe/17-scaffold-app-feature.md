@@ -31,12 +31,12 @@ Antes de crear archivos confirmar:
 - aplicación, ruta y layout owner;
 - feature backend: `users`, `products`, `orders`, `invoices`;
 - operaciones: `index`, `show`, `store`, `update`, `destroy` u otras;
-- request/response DTOs publicados en `@vigilioyonatan/bus-contracts`;
+- perfil contractual seleccionado y request/response DTOs publicados en su package exacto;
 - permisos y estados UX;
 - query params, invalidación y navegación;
 - riesgos de accesibilidad, seguridad, rendimiento y testing.
 
-Si falta contrato HTTP, detener el scaffold de integración y coordinarlo con `bus-impl`; no inventar DTOs locales.
+Si falta contrato HTTP, detener el scaffold de integración y coordinarlo con el backend owner del perfil. Para `web-mfe-v2`, el único owner válido es `bus-impl-v2` y el package es `@vigilioyonatan/bus-v2-contracts`; no inventar DTOs locales ni reutilizar el contrato del otro perfil.
 
 ## Árbol mínimo completo
 

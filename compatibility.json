@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "validated_on": "2026-07-28",
+  "validated_on": "2026-08-20",
   "platform_actions": {
     "repository": "VigilioYonatan/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "b16d086e7af79b1d37a1257527d7388993d5abb7",
+    "ref": "123aff150c7631f3fe054276343d03bbd6bd9eb0",
     "packages": [
       {
         "path": "package.json",
@@ -19,17 +19,17 @@
       {
         "path": "packages/devsecops-governance/package.json",
         "name": "@vigilioyonatan/devsecops-governance",
-        "version": "0.2.0"
+        "version": "0.4.0"
       },
       {
         "path": "packages/node-nest-tooling/package.json",
         "name": "@vigilioyonatan/node-nest-tooling",
-        "version": "0.2.0"
+        "version": "0.2.1"
       },
       {
         "path": "packages/vigilio-skills/package.json",
         "name": "@vigilioyonatan/vigilio-skills",
-        "version": "0.2.0"
+        "version": "0.4.0"
       }
     ],
     "required_files": [
@@ -43,6 +43,8 @@
     ],
     "skill_profiles": {
       "core": [
+        "shared-technologies",
+        "commit-ai-change",
         "coderabbit-compliance",
         "diagnosing-bugs",
         "grill-me",
@@ -50,6 +52,7 @@
         "token-context-compression"
       ],
       "node-nest": [
+        "node-nest-technologies",
         "node-nest-build-feature",
         "node-nest-persistence",
         "node-nest-security-aws",

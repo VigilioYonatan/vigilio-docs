@@ -2,6 +2,7 @@
   * [Portada Principal](README.md)
   * [Modelo Operativo](OPERATING-MODEL.md)
   * [Matriz de Compatibilidad](COMPATIBILITY.md)
+  * [Master Software Factory 2026](software-factory/master_prompt_software_factory_openspec_agent_plugins_runner_2026.md)
 
 
 * **🚧 Backend Node / NestJS**
@@ -49,6 +50,9 @@
   * [41. Dependabot y Repository Policy](backend-node-nest/41-dependabot-repository-policy.md)
   * [42. Trunk-Based y Environments](backend-node-nest/42-branching-release-flow-2026.md)
   * [Agent Stack: Estado Real](backend-node-nest/agent-stack-guide.md)
+  * [Tecnologias compartidas version-aware 2026](backend-node-nest/shared-technologies-skill-2026.md)
+  * [Tecnologias backend version-aware 2026](backend-node-nest/43-backend-technologies-skill-2026.md)
+  * [Referencia numerada de tecnologias backend](backend-node-nest/43-backend-technologies-skill-2026.md)
 
 * **🦄 Decisiones (ADR)**
   * [Índice de Registros ADR](adr/README.md)
@@ -57,6 +61,8 @@
   * [0003. Rate limiting en PostgreSQL](adr/0003-rate-limiting-en-postgresql.md)
   * [0004. Tooling como paquetes versionados](adr/0004-tooling-como-paquetes-versionados.md)
   * [0005. Cabeceras de seguridad sin dependencias](adr/0005-sin-dependencias-para-cabeceras-de-seguridad.md)
+  * [0006. Registro anterior de lineas web](adr/0006-lineas-contractuales-web-legacy-y-k8s-v2.md)
+  * [0007. web-mfe-v2 sobre Kubernetes](adr/0007-web-mfe-v2-kubernetes-materializado.md)
   * [Plantilla ADR](adr/0000-template.md)
 
 * **Frontend Web MFE**
@@ -78,6 +84,7 @@
   * [15. Evaluación y Operación](frontend-web-mfe/15-evaluacion-roadmap-operacion.md)
   * [16. Design System, UI y Tokens](frontend-web-mfe/16-design-system-ui-tokens.md)
   * [17. Scaffold de Aplicación y Feature](frontend-web-mfe/17-scaffold-app-feature.md)
+  * [18. Tecnologias frontend version-aware 2026](frontend-web-mfe/18-frontend-technologies-skill-2026.md)
 
 * **📱 Frontend Mobile MFE**
   * [Overview Mobile 2026](frontend-mobile-mfe/README.md)

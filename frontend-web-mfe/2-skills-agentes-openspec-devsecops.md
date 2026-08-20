@@ -19,14 +19,17 @@ No editar copias sincronizadas. `.vigilio-manifest.json` registra hashes y `skil
 
 | Skill | Responsabilidad |
 |---|---|
+| `web-mfe-technologies` | APIs por versión, ownership tecnológico, `lightweight-charts`, OGL y delivery por perfil |
 | `web-mfe-build-feature` | features, componentes, rutas, hooks y ownership de estado |
 | `web-mfe-contracts` | DTOs, Zod, forms, queries, mutations y tables |
 | `web-mfe-testing` | Vitest, Testing Library, MSW, Playwright, a11y y visual |
 | `web-mfe-quality` | accesibilidad, SEO, Web Vitals, bundle y observabilidad |
-| `web-mfe-security-delivery` | browser security, CI/CD, supply chain y AWS |
-| Capacidades documentadas | scaffold, RUM y design system se aplican mediante las cinco skills publicadas; no son skills independientes en el snapshot actual |
+| `web-mfe-security-delivery` | browser security, CI/CD, supply chain y delivery AWS/Kubernetes según perfil |
+| Capacidades documentadas | scaffold, RUM y design system se aplican mediante las seis skills publicadas; no son skills independientes en el snapshot actual |
 
-El consumidor validado usa `@vigilioyonatan/vigilio-skills@0.3.1` con cinco skills frontend. Las
+El perfil `web-mfe` de la fuente actual distribuye seis skills frontend. La versión efectiva del
+paquete debe comprobarse en el manifest y lockfile de cada consumidor; no se infiere desde este
+documento. Las
 capacidades de scaffold, observabilidad y design system están especificadas en los documentos
 `17`, `10` y `16`, pero no deben declararse como skills instaladas hasta que aparezcan en una
 fuente y release verificables.
@@ -65,18 +68,18 @@ bundle budget
 SAST + secret scan
 dependency review/audit
 SBOM
-CDK synth
+IaC/manifests/image validation según perfil
 E2E/smoke segun riesgo
 ```
 
-## Delivery AWS
+## Delivery por perfil
 
-- S3 privado con Block Public Access.
-- CloudFront con Origin Access Control.
+- `current-web`: preservar la entrega ejecutable comprobada en su repositorio; usar S3/CloudFront/CDK solo cuando exista esa evidencia.
+- `k8s-v2`: imagen OCI inmutable, ECR, Helm/Argo Rollouts, Argo CD, EKS y foundations Terraform/OpenTofu desde `/docker`, `/deploy` e `/infra`.
 - Actions fijadas por SHA y permisos minimos.
 - OIDC hacia AWS; no access keys persistentes.
 - Artefacto inmutable promovido por ambientes.
-- Cache largo para assets hasheados; cache corto para HTML/runtime config.
+- Cache largo para assets hasheados; cache corto para HTML/runtime config en CDN, proxy o ingress correspondiente.
 - Smoke post-deploy y rollback a artefacto anterior.
 
 ## Observabilidad
