@@ -84,9 +84,20 @@ jobs:
         run: node scripts/validate-workflows.mjs
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # GitHub cannot resolve a private cross-repository action through `uses:`.
+      # Checkout pins the same reviewed source and executes it locally instead.
+      - name: Checkout local Jira action
+        if: github.event_name == 'pull_request' && vars.JIRA_AUTOMATION_ENABLED == 'true'
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: VigilioYonatan/vigilio-platform-actions
+          ref: 1ddd085a5409033b29bc2f8eca5a1dda926cdb40
+          path: .platform-actions
+          persist-credentials: false
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Move Jira issue to Code Review
-        if: github.event_name == 'pull_request'
-        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0 # source snapshot
+        if: github.event_name == 'pull_request' && vars.JIRA_AUTOMATION_ENABLED == 'true'
+        uses: ./.platform-actions/actions/jira-devops
         with:
           mode: transition
           issue-keys: ${{ github.head_ref }} ${{ github.event.pull_request.title }}
@@ -146,8 +157,18 @@ jobs:
           tag_prefix: "v"
           default_bump: patch
           release_branches: main
+      - name: Checkout local Jira action
+        if: vars.JIRA_AUTOMATION_ENABLED == 'true'
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          repository: VigilioYonatan/vigilio-platform-actions
+          ref: 1ddd085a5409033b29bc2f8eca5a1dda926cdb40
+          path: .platform-actions
+          persist-credentials: false
+          token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Notify Jira on docs published
-        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0 # source snapshot
+        if: vars.JIRA_AUTOMATION_ENABLED == 'true'
+        uses: ./.platform-actions/actions/jira-devops
         with:
           mode: transition
           issue-keys: ${{ github.event.head_commit.message }}
