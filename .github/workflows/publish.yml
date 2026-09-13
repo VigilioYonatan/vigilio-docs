@@ -28,14 +28,14 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
-    env:
-      PLATFORM_READ_TOKEN: ${{ secrets.PLATFORM_READ_TOKEN }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           persist-credentials: false
       - name: Checkout platform for compatibility gate
-        if: env.PLATFORM_READ_TOKEN != ''
+        # The repository variable proves this private-repository gate was intentionally enabled.
+        # A non-empty secret alone does not prove the token has cross-repository access.
+        if: vars.PLATFORM_COMPATIBILITY_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/vigilio-platform-actions
@@ -44,7 +44,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Checkout bus-impl consumer for compatibility gate
-        if: env.PLATFORM_READ_TOKEN != ''
+        if: vars.PLATFORM_COMPATIBILITY_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/vigilio-bus-impl
@@ -53,7 +53,7 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.PLATFORM_READ_TOKEN }}
       - name: Checkout web-mfe consumer for compatibility gate
-        if: env.PLATFORM_READ_TOKEN != ''
+        if: vars.PLATFORM_COMPATIBILITY_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           repository: VigilioYonatan/vigilio-web-mfe
@@ -67,11 +67,11 @@ jobs:
       - name: Validate internal links and sidebar coverage
         run: node scripts/validate-docs.mjs
       - name: Validate cross-repository compatibility
-        if: env.PLATFORM_READ_TOKEN != ''
+        if: vars.PLATFORM_COMPATIBILITY_ENABLED == 'true'
         run: node scripts/validate-compatibility.mjs --workspace .compat
       - name: Report unavailable compatibility credential
-        if: env.PLATFORM_READ_TOKEN == ''
-        run: echo "::warning title=Compatibility gate skipped::PLATFORM_READ_TOKEN is not configured; CI validated local documentation only."
+        if: vars.PLATFORM_COMPATIBILITY_ENABLED != 'true'
+        run: echo "::warning title=Compatibility gate skipped::Set PLATFORM_COMPATIBILITY_ENABLED=true only after PLATFORM_READ_TOKEN receives cross-repository read access."
 
   governance:
     name: Governance
