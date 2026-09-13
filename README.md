@@ -9,6 +9,7 @@ Documentacion de arquitectura centralizada para proyectos Vigilio.
 - 📱 **[Frontend Mobile MFE](frontend-mobile-mfe/README.md)**: React Native, Expo, Preact Signals y EAS Build (17 capítulos).
 - 🦄 **[Decisiones de Arquitectura (ADR)](adr/README.md)**: Registros de arquitectura (ADRs) y patrones de diseño.
 - 🔒 **[Modelos de Amenaza (Threat Model)](threat-model/README.md)**: Análisis de riesgos y mitigaciones de seguridad.
+- ⚙️ **[Plataforma Runtime](platform-runtime/README.md)**: Observabilidad, EKS/GitOps, trazabilidad y eficiencia de contexto.
 
 Consulta también:
 

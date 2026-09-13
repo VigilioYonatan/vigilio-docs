@@ -61,6 +61,7 @@ vigilio-docs
 16. [Design system, UI y tokens](./16-design-system-ui-tokens.md).
 17. [Scaffold de aplicación y feature](./17-scaffold-app-feature.md).
 18. [Tecnologías frontend 2026 y APIs por versión](./18-frontend-technologies-skill-2026.md).
+19. [Tiempo real con WebSocket, Socket.IO y SSE](./19-realtime-websocket-sse.md).
 
 ## Owners
 

@@ -53,6 +53,8 @@
   * [Tecnologias compartidas version-aware 2026](backend-node-nest/shared-technologies-skill-2026.md)
   * [Tecnologias backend version-aware 2026](backend-node-nest/43-backend-technologies-skill-2026.md)
   * [Referencia numerada de tecnologias backend](backend-node-nest/43-backend-technologies-skill-2026.md)
+  * [44. WebSocket, Socket.IO y SSE](backend-node-nest/44-realtime-websocket-sse.md)
+  * [45. Workers, Outbox, SNS, SQS y DLQ](backend-node-nest/45-workers-outbox-sqs.md)
 
 * **🦄 Decisiones (ADR)**
   * [Índice de Registros ADR](adr/README.md)
@@ -85,6 +87,14 @@
   * [16. Design System, UI y Tokens](frontend-web-mfe/16-design-system-ui-tokens.md)
   * [17. Scaffold de Aplicación y Feature](frontend-web-mfe/17-scaffold-app-feature.md)
   * [18. Tecnologias frontend version-aware 2026](frontend-web-mfe/18-frontend-technologies-skill-2026.md)
+  * [19. WebSocket, Socket.IO y SSE](frontend-web-mfe/19-realtime-websocket-sse.md)
+
+* **⚙️ Plataforma Runtime**
+  * [Overview](platform-runtime/README.md)
+  * [1. Contrato de Observabilidad](platform-runtime/1-observability-contract.md)
+  * [2. Operación EKS y GitOps](platform-runtime/2-eks-gitops-operations.md)
+  * [3. Trazabilidad de Capacidades](platform-runtime/3-capability-traceability.md)
+  * [4. Eficiencia de Contexto para IA](platform-runtime/4-ai-context-efficiency.md)
 
 * **📱 Frontend Mobile MFE**
   * [Overview Mobile 2026](frontend-mobile-mfe/README.md)
