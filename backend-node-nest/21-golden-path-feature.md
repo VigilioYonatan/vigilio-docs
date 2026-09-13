@@ -15,6 +15,8 @@ Para CRUD simple no crear `domain/entities`. La entity de dominio solo existe si
 ```text
 src/product/
 |-- application/
+|   |-- constants/
+|   |   `-- product-limits.constant.ts
 |   |-- schemas/
 |   |   `-- product.schema.ts
 |   |-- dtos/
@@ -27,8 +29,10 @@ src/product/
 |   |-- repositories/
 |   |   |-- product.repository.interface.ts
 |   |   `-- product.repository.token.ts
-|   `-- service/
-|       `-- product.application-service.ts
+|   |-- service/
+|   |   `-- product.application-service.ts
+|   `-- types/
+|       `-- product-filter.type.ts
 `-- infrastructure/
     |-- http/
     |   |-- controllers/
@@ -49,6 +53,28 @@ src/product/
 - Services y controllers retornan `ResponseDto`, no filas crudas de Drizzle.
 - Drizzle vive solo en `infrastructure/persistence/drizzle`.
 - El repository port vive en `application/repositories`.
+- Los tipos propios viven en `types/` dentro de su feature y capa.
+- Las constantes propias viven en `constants/` dentro de su feature y capa.
+- Controllers y services no declaran tipos o constantes arriba de la clase.
+- Los tipos Zod inferidos permanecen junto al schema propietario.
+
+Bien:
+
+```ts
+// application/types/product-filter.type.ts
+export type ProductFilter = { status?: ProductStatus };
+
+// application/constants/product-limits.constant.ts
+export const PRODUCT_PAGE_LIMIT = 100;
+```
+
+Mal:
+
+```ts
+type ProductFilter = { status?: string };
+const LIMIT = 100;
+export class ProductController {}
+```
 
 ## Cuando si usar `domain/`
 

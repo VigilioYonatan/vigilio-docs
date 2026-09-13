@@ -1,10 +1,15 @@
 # Contratos DTO, Zod, React Hook Form Y TanStack
 
-Fuentes ejecutables: `bus-impl/packages/contracts`, `@vigilioyonatan/bus-contracts` y los gates `governance:contracts`/OpenAPI del consumidor.
+Fuentes ejecutables: package de contratos del backend owner y gates `governance:contracts`/OpenAPI del consumidor.
+
+| Perfil | Fuente backend | Package | Consumer |
+|---|---|---|---|
+| `current-web` | `bus-impl/packages/contracts` | `@vigilioyonatan/bus-contracts` | `web-mfe` |
+| `k8s-v2` | `bus-impl-v2/packages/contracts` | `@vigilioyonatan/bus-v2-contracts` | `web-mfe-v2` |
 
 ## Objetivo
 
-Consumir en frontend los contratos HTTP definidos por `bus-impl` sin copiar DTOs y manteniendo validacion runtime en el navegador.
+Consumir en frontend los contratos HTTP definidos por el backend owner del perfil sin copiar DTOs y manteniendo validacion runtime en el navegador.
 
 ```text
 *.request.dto.ts
@@ -17,7 +22,7 @@ Consumir en frontend los contratos HTTP definidos por `bus-impl` sin copiar DTOs
   -> solo NestJS/OpenAPI; prohibido en frontend
 ```
 
-El paquete publico es `@vigilioyonatan/bus-contracts`. Debe contener solo Zod, tipos inferidos y modulos browser-safe.
+El package exacto se resuelve por la tabla anterior. Debe contener solo Zod, tipos inferidos y modulos browser-safe. Cruzar package/owner/consumer produce `CONTRACT_OWNER_MISMATCH`.
 
 ## React Hook Form
 
@@ -40,7 +45,7 @@ Usar el request schema publicado como resolver y su tipo inferido como modelo de
 > [!IMPORTANT]
 > **Regla Principal (Caso Estándar):** En la gran mayoría de los casos **NO SE CREARÁ** un schema local de formulario manual como `const productStoreFormSchema = z.object({ ... })`.
 > 
-> En su lugar, se importa y utiliza directamente el `requestDto` (y su schema Zod) publicado desde el paquete de contratos del proyecto (ej. `@vigilioyonatan/bus-contracts` — *nota: `@vigilioyonatan/bus-contracts` es un nombre ilustrativo/ejemplo y el paquete real variará según el proyecto*).
+> En su lugar, se importa y utiliza directamente el `requestDto` (y su schema Zod) publicado desde el package de la fila contractual seleccionada.
 > 
 > Únicamente en situaciones excepcionales donde el input UI requiera una transformación estructural compleja antes del submit, se crearía un schema local intermedio con su respectivo mapper hacia el DTO publicado.
 
@@ -50,7 +55,7 @@ En este proyecto se usa `nullableZodResolver` como adapter local para convertir 
 import {
   productStoreRequestDto,
   type ProductStoreRequestDto,
-} from '@vigilioyonatan/bus-contracts'; // Nota: El paquete de contratos varía según el proyecto
+} from '@vigilioyonatan/bus-v2-contracts'; // Perfil k8s-v2; current-web usa bus-contracts
 import { useForm } from 'react-hook-form';
 import { nullableZodResolver } from '@/services/forms/nullable-zod-resolver';
 
@@ -100,14 +105,14 @@ aislada en el boundary tipado del adapter.
 
 ## Derivación de tipos sin duplicación
 
-Los tipos HTTP vienen de `@vigilioyonatan/bus-contracts`. No volver a escribir un DTO, schema,
+Los tipos HTTP vienen del package contractual resuelto. No volver a escribir un DTO, schema,
 enum o interface con los mismos campos. Cuando la UI necesita una proyección, derivarla:
 
 ```typescript
 import type {
   UserPublicSchema,
   UserStoreRequestDto,
-} from '@vigilioyonatan/bus-contracts';
+} from '@vigilioyonatan/bus-v2-contracts'; // Perfil k8s-v2; current-web usa bus-contracts
 
 type UserRow = Pick<
   UserPublicSchema,
@@ -128,7 +133,7 @@ ViewModels y composiciones type-only. `interface X extends Y` también es válid
 relación clara; no usar herencia para esconder campos repetidos.
 
 Si la UI recibe datos externos nuevos, `Pick<>` u `Omit<>` no validan runtime. La respuesta debe
-seguir teniendo un `response.dto.ts`/schema Zod en `bus-impl`, y el frontend debe importar ese
+seguir teniendo un `response.dto.ts`/schema Zod en el backend owner del perfil, y el frontend debe importar ese
 schema publicado. Cuando la UI solo necesita formatear presentación, consumir el campo contractual
 directamente:
 

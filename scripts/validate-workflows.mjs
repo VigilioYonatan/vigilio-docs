@@ -55,7 +55,8 @@ function validateWorkflowFile(file) {
   }
 
   // 1. Validate Pinned Uses
-  const usesMatches = [...rawContent.matchAll(/\buses:\s*([^\s#]+)/g)];
+  // Ignore comments. A prose mention of `uses:` is not an action declaration.
+  const usesMatches = [...content.matchAll(/\buses:\s*([^\s#]+)/g)];
   for (const match of usesMatches) {
     const target = match[1];
     if (target.startsWith('./')) continue;

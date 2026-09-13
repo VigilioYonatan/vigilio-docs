@@ -30,3 +30,5 @@ y se actualiza el estado del viejo. El historial es el valor.
 | [0003](./0003-rate-limiting-en-postgresql.md) | Rate limiting de autenticacion respaldado en PostgreSQL | Aceptado |
 | [0004](./0004-tooling-como-paquetes-versionados.md) | Tooling de plataforma como paquetes versionados | Aceptado |
 | [0005](./0005-sin-dependencias-para-cabeceras-de-seguridad.md) | Cabeceras de seguridad sin dependencias externas | Aceptado |
+| [0006](./0006-lineas-contractuales-web-legacy-y-k8s-v2.md) | Registro anterior de lineas web | Reemplazado |
+| [0007](./0007-web-mfe-v2-kubernetes-materializado.md) | web-mfe-v2 materializado sobre Kubernetes | Aceptado |

@@ -78,6 +78,8 @@ implican que existan en el codigo actual.
 39. [Skills IA del proyecto](./39-skills-ia-proyecto.md): skills especializados para features, persistencia/cache, testing y seguridad/AWS.
 40. [Operacion de produccion](./40-operacion-produccion.md): health/readiness, RBAC, migraciones, restore drill, carga, alertas y gate de release.
 41. [Agent stack](./agent-stack-guide.md): estado de OpenCode/OmO y diferencia frente a las skills activas.
+44. [Tiempo real con WebSocket, Socket.IO y SSE](./44-realtime-websocket-sse.md): selección, contratos, seguridad, escalamiento y pruebas.
+45. [Workers, outbox, SNS, SQS y DLQ](./45-workers-outbox-sqs.md): entrega, idempotencia, replay, métricas y operación.
 
 ## Contratos generados
 

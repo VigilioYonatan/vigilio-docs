@@ -8,9 +8,9 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 
 | Campo | Valor |
 |---|---|
-| Fecha de validación | `2026-07-28` |
+| Fecha de validación | `2026-08-20` |
 | Plataforma ejecutable | `VigilioYonatan/vigilio-platform-actions` |
-| Commit inmutable | `b16d086e7af79b1d37a1257527d7388993d5abb7` |
+| Commit inmutable | `2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -26,9 +26,9 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 |---|---:|
 | `@vigilioyonatan/platform-actions` | `0.1.0` |
 | `@vigilioyonatan/devsecops-evidence` | `0.2.0` |
-| `@vigilioyonatan/devsecops-governance` | `0.2.0` |
-| `@vigilioyonatan/node-nest-tooling` | `0.2.0` |
-| `@vigilioyonatan/vigilio-skills` | `0.2.0` |
+| `@vigilioyonatan/devsecops-governance` | `0.4.0` |
+| `@vigilioyonatan/node-nest-tooling` | `0.2.1` |
+| `@vigilioyonatan/vigilio-skills` | `0.4.0` |
 
 ## Baseline Verificado En Consumidores
 
@@ -48,8 +48,8 @@ proyectos no deben degradar una dependencia únicamente para hacer coincidir nú
 
 | Perfil | Skills |
 |---|---|
-| `core` | `coderabbit-compliance`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `token-context-compression` |
-| `node-nest` | `node-nest-build-feature`, `node-nest-persistence`, `node-nest-security-aws`, `node-nest-testing` |
+| `core` | `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `token-context-compression` |
+| `node-nest` | `node-nest-technologies`, `node-nest-build-feature`, `node-nest-persistence`, `node-nest-security-aws`, `node-nest-testing` |
 | `openspec` | `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-propose`, `openspec-sync-specs`, `openspec-update-change` |
 
 El paquete `vigilio-skills@0.3.1` utilizado por `web-mfe` también contiene el perfil publicado

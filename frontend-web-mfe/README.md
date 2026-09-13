@@ -1,11 +1,16 @@
 # Documentación Arquitectónica Frontend Web MFE 2026
 
-Estándar central para frontends Preact/React compatibles con `web-mfe`, contratos compartidos desde `bus-impl` y automatización versionada en `vigilio-platform-actions`.
+Estándar central para dos pares Preact/React aislados y activos: `web-mfe` con `bus-impl`, y `web-mfe-v2` con `bus-impl-v2`. La automatización compartida vive en `vigilio-platform-actions`.
+
+| Perfil | Backend | Contrato | Frontend | Estado |
+|---|---|---|---|---|
+| `current-web` | `bus-impl` | `@vigilioyonatan/bus-contracts` | `web-mfe` | Pareja activa; preservar |
+| `k8s-v2` | `bus-impl-v2` | `@vigilioyonatan/bus-v2-contracts` | `web-mfe-v2` | Pareja Kubernetes materializada |
 
 ## Fuentes de verdad
 
 1. Código, tests, workflows e infraestructura del repositorio consumidor.
-2. Contratos publicados por `bus-impl` en `@vigilioyonatan/bus-contracts`.
+2. Contrato publicado por el backend owner del perfil exacto.
 3. Policies, tooling, workflows y skills de `vigilio-platform-actions`.
 4. OpenSpec, ADR y threat models vigentes.
 5. Esta documentación como explicación arquitectónica.
@@ -18,6 +23,12 @@ Si una guía contradice el comportamiento ejecutable, verificar la causa y aline
 bus-impl
   -> @vigilioyonatan/bus-contracts
     -> ApiClient/services de web-mfe
+      -> TanStack Query / React Hook Form
+        -> features / componentes / TanStack Table
+
+bus-impl-v2 (EKS)
+  -> @vigilioyonatan/bus-v2-contracts
+    -> ApiClient/services de web-mfe-v2
       -> TanStack Query / React Hook Form
         -> features / componentes / TanStack Table
 
@@ -49,14 +60,16 @@ vigilio-docs
 15. [Evaluación, roadmap y operación](./15-evaluacion-roadmap-operacion.md).
 16. [Design system, UI y tokens](./16-design-system-ui-tokens.md).
 17. [Scaffold de aplicación y feature](./17-scaffold-app-feature.md).
+18. [Tecnologías frontend 2026 y APIs por versión](./18-frontend-technologies-skill-2026.md).
+19. [Tiempo real con WebSocket, Socket.IO y SSE](./19-realtime-websocket-sse.md).
 
 ## Owners
 
 | Responsabilidad | Fuente canónica |
 |---|---|
-| Schemas y tipos HTTP | `bus-impl` |
-| Contrato distribuible | `@vigilioyonatan/bus-contracts` |
-| UI y evidencia ejecutable | `web-mfe` |
+| Schemas y tipos HTTP | Backend owner del perfil (`bus-impl` o `bus-impl-v2`) |
+| Contrato distribuible | Package exacto del perfil |
+| UI y evidencia ejecutable | Consumer del perfil (`web-mfe` o `web-mfe-v2`) |
 | Skills y tooling | `vigilio-platform-actions` |
 | Práctica arquitectónica | `vigilio-docs/frontend-web-mfe` |
 
