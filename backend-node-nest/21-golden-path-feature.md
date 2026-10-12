@@ -46,7 +46,11 @@ src/product/
 
 ## Convenciones obligatorias
 
-- Controllers y services usan `index`, `show`, `store`, `update`, `destroy`.
+- CRUD generico puede usar `index`, `show`, `store`, `update`, `destroy` cuando esa sea la convencion
+  ejecutable del modulo vecino.
+- Casos de uso con contrato propio usan nombres semanticos y estables, por ejemplo `crearEndoso`,
+  `consultarEndoso` o `anularEndoso`; el controller, application service y `operationId` conservan
+  trazabilidad. No renombrar un contrato publico a `store` solo por uniformidad visual.
 - Request DTO: `product-store.request.dto.ts`, `product-update.request.dto.ts`, `product-index.request.dto.ts`.
 - Response DTO: `product-index.response.dto.ts`, `product-store.response.dto.ts`.
 - Doc DTO Swagger: vive en el archivo hermano `*.request.doc.ts` o `*.response.doc.ts` cuando hace falta.
@@ -57,6 +61,7 @@ src/product/
 - Las constantes propias viven en `constants/` dentro de su feature y capa.
 - Controllers y services no declaran tipos o constantes arriba de la clase.
 - Los tipos Zod inferidos permanecen junto al schema propietario.
+- Evitar barrels globales `types/index.ts` y `constants/index.ts`; importar desde el owner concreto.
 
 Bien:
 

@@ -107,7 +107,7 @@ La recomendacion para este `bus-impl` es:
 - `@nestjs/swagger` como generador OpenAPI
 - `nestjs-zod` para conectar DTOs Zod con Nest
 - `@scalar/nestjs-api-reference` como UI moderna sobre el mismo spec
-- `patchNestJsSwagger()` en bootstrap
+- `cleanupOpenApiDoc(...)` despues de `SwaggerModule.createDocument(...)`
 - export de `openapi.json` y `openapi.yaml` como artefactos de CI
 
 Patron recomendado:
@@ -205,8 +205,8 @@ SQS/SNS/EventBridge/Step Functions -----> Lambda Worker -----> Application/Domai
 
 - `NestFactory.create(...)`
 - adapter Fastify
-- `patchNestJsSwagger()`
 - `SwaggerModule.createDocument(...)`
+- `cleanupOpenApiDoc(...)`
 - `apiReference(...)` de Scalar en `/reference`
 
 ### Worker bootstrap

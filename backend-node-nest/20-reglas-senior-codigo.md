@@ -1,5 +1,9 @@
 # Reglas Senior de Codigo - `bus-impl` 2026
 
+La baseline transversal de legibilidad, hardcode, excepciones y comentarios vive en
+[Calidad y comentarios para revision](../software-factory/code-review-quality.md). Este documento
+conserva las decisiones especificas de Node/Nest, Zod y Drizzle.
+
 Estas reglas son obligatorias para mantener el `bus-impl` limpio, testeable y seguro. Si una regla se rompe, debe existir una excepcion documentada en ADR o en el PR.
 
 ---

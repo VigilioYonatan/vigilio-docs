@@ -1,5 +1,9 @@
 # Estrategia de testing 2026
 
+La seleccion transversal de escenarios por riesgo vive en
+[Estrategia backend de pruebas por riesgo](../software-factory/backend-testing-strategy.md). Este
+documento conserva suites, gates, thresholds y evidencia especificos de Node/Nest.
+
 ## Estado implementado
 
 - Unit: application services y DTOs de auth, users, products, AI, uploads y health.

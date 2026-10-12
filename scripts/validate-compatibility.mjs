@@ -140,7 +140,8 @@ async function validateDocs(manifestData) {
   }
 
   const jiraReference = `VigilioYonatan/vigilio-platform-actions/actions/jira-devops@${platform.ref}`;
-  if (!workflow.includes(jiraReference)) {
+  const localJiraReference = 'uses: ./.platform-actions/actions/jira-devops';
+  if (!workflow.includes(jiraReference) && !workflow.includes(localJiraReference)) {
     fail('publish.yml no consume jira-devops desde el SHA declarado');
   }
 

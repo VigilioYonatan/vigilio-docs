@@ -18,9 +18,10 @@ y retirar solamente archivos previamente gestionados por el paquete.
 Cuando una skill trabaja sobre un proyecto:
 
 1. lee codigo, tests, CDK, configuracion y workflows ejecutables;
-2. aplica policies y tooling central de `vigilio-platform-actions`;
-3. usa ADRs y `vigilio-docs` para contexto y decisiones;
-4. si hay contradiccion, reporta y alinea la documentacion con la implementacion verificada.
+2. aplica policies, actions, CLIs y tooling ejecutable de `vigilio-platform-actions`;
+3. lee las practicas, decisiones y ejemplos canonicos de `vigilio-docs` enlazados por la skill;
+4. usa la skill como adaptador de seleccion, secuencia y gates, no como copia de esas practicas;
+5. si hay contradiccion, reporta y alinea la documentacion con la implementacion verificada.
 
 Las skills no operan solamente sobre `docs/`.
 
@@ -28,21 +29,33 @@ Las skills no operan solamente sobre `docs/`.
 
 ### `core`
 
+- `shared-technologies`
+- `commit-ai-change`
+- `coderabbit-compliance`
+- `codebase-context-efficiency`
 - `diagnosing-bugs`
 - `grill-me`
 - `improve-codebase-architecture`
+- `architecture-traceability`
+- `review-code-change`
 - `token-context-compression`
 
 ### `node-nest`
 
+- `backend-engineering-quality`
+- `node-nest-technologies`
 - `node-nest-build-feature`
+- `node-nest-realtime`
+- `node-nest-async-workers`
 - `node-nest-persistence`
 - `node-nest-security-aws`
+- `platform-observability-sre`
 - `node-nest-testing`
 
-Contratos/OpenAPI se cubren con `node-nest-build-feature` + `node-nest-testing`. Observabilidad,
-Pino, CloudWatch, SLO y runbooks se cubren con `node-nest-security-aws` + `node-nest-testing`.
-No se documentan skills separadas que no existan en el perfil fuente validado.
+`backend-engineering-quality` enlaza las guias transversales de contratos, testing por riesgo y SQL;
+las skills Node/Nest resuelven implementacion, librerias y comandos concretos. Observabilidad, Pino,
+CloudWatch, SLO y runbooks se cubren con `platform-observability-sre`, `node-nest-security-aws` y
+`node-nest-testing`. No se documentan skills que no existan en el perfil fuente validado.
 
 ### `openspec`
 
@@ -53,10 +66,9 @@ No se documentan skills separadas que no existan en el perfil fuente validado.
 - `openspec-sync-specs`
 - `openspec-archive-change`
 
-`@vigilioyonatan/vigilio-skills@0.3.1` publica los perfiles `core`, `node-nest`, `web-mfe` y
-`openspec`; el consumidor frontend validado usa cinco skills web-mfe y el backend validado usa las
-cuatro skills Node/Nest del snapshot. Si una release futura agrega skills, primero se actualiza la
-fuente, luego el paquete y finalmente los consumidores mediante `skills:sync`.
+El perfil fuente actual se obtiene de `skill-profiles.json` en `vigilio-platform-actions`; no duplicar
+en este documento una version de paquete o cantidad de skills que pueda quedar obsoleta. Cada release
+actualiza primero la fuente, luego el paquete y finalmente los consumidores mediante `skills:sync`.
 
 ## Sincronizacion
 
@@ -108,8 +120,10 @@ en ejemplos; la skill aplica el patron al modulo real del proyecto.
 
 ## Mantenimiento
 
-- cambiar primero codigo/tests o ADR;
-- actualizar la skill central una sola vez;
+- cambiar primero codigo/tests o ADR cuando cambia comportamiento o arquitectura;
+- actualizar `vigilio-docs` una sola vez cuando cambia una practica o ejemplo reutilizable;
+- actualizar la skill solo si cambia routing, secuencia, limites operativos o gates;
+- enlazar la fuente canonica y evitar copiar su contenido dentro de la skill;
 - publicar una version nueva de `@vigilioyonatan/vigilio-skills`;
 - actualizar la version exacta en consumidores;
 - ejecutar `pnpm skills:sync` y `pnpm skills:check`;

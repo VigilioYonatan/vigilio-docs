@@ -469,11 +469,87 @@ Nota:
 
 - `ZodPipe` valida body y `ZodQueryPipe` valida query params
 - el backend recomendado es `private-by-default`; `@Public()` abre solo las rutas que deben quedar sin auth
-- `patchNestJsSwagger()` permite que Swagger entienda los DTOs Zod
+- `cleanupOpenApiDoc(...)` normaliza el documento generado para los DTOs Zod
 - los DTOs reutilizan el schema base con `pick`, `omit`, `extend` o `partial`
 - `@Query()` queda validado por el query schema dentro de `*.request.dto.ts` y por `ZodQueryPipe`
 - `application/dtos/*.response.dto.ts` define los `ResponseDto` que retornan services/controllers
 - los `ResponseDocDto` viven en `*.response.doc.ts` y adaptan los schemas públicos para `@ZodResponse(...)`, Swagger y Scalar
+
+---
+
+## 5.1 Caso de uso RRLL con decoradores NestJS y Zod
+
+Este ejemplo implementa en code-first la convencion RRLL definida en
+[Contratos API y limites backend](../software-factory/backend-api-contracts.md#perfil-corporativo-rrll).
+Si `bus-dsg`, `ch-dsg` u otro contrato externo es el owner, el YAML conserva autoridad y el OpenAPI
+exportado por NestJS debe validarse contra el.
+
+El nombre sigue el caso de uso. `crearEndoso` es correcto para este contrato; `store` se reserva para
+features CRUD que adopten expresamente esa convencion generica.
+
+```typescript
+@ApiTags('Endosos RRLL')
+@Controller('endosos')
+export class EndosoController {
+  constructor(private readonly service: EndosoApplicationService) {}
+
+  @Post()
+  @ApiOperation({
+    summary: 'Registrar Endoso RRLL',
+    operationId: 'crearEndoso',
+    description: [
+      '📦 Proceso: Registrar Endoso',
+      '',
+      '🔧 Funcionalidad: Servicio que permite registrar endosos RRLL.',
+    ].join('\n'),
+  })
+  @ApiHeader({
+    name: 'TraceId',
+    required: true,
+    description: 'Identificador de trazabilidad de la solicitud.',
+  })
+  @ApiSecurity('sigv4')
+  @ApiBody({ type: RegistrarEndosoRequestDocDto })
+  @ApiValidationErrorResponse()
+  @ApiUnexpectedErrorResponse()
+  @ZodResponse({
+    status: 200,
+    description: 'Endoso registrado correctamente.',
+    type: RegistrarEndosoResponseDocDto,
+  })
+  crearEndoso(
+    @Body(new ZodPipe(registrarEndosoRequestDto)) body: RegistrarEndosoRequestDto,
+  ): Promise<RegistrarEndosoResponseDto> {
+    return this.service.crearEndoso(body);
+  }
+}
+```
+
+Los adaptadores de documentacion reutilizan el mismo schema runtime:
+
+```typescript
+export class RegistrarEndosoRequestDocDto extends createZodDto(registrarEndosoRequestDto) {}
+export class RegistrarEndosoResponseDocDto extends createZodDto(registrarEndosoResponseDto) {}
+```
+
+Casos de uso y texto documental:
+
+| Caso | `summary` | `📦 Proceso` | `🔧 Funcionalidad` |
+| --- | --- | --- | --- |
+| comando con body | accion breve | actividad de negocio | resultado observable |
+| consulta | verbo y recurso consultado | consulta ejecutada | informacion devuelta y proposito |
+| actualizacion | cambio permitido | actualizacion aplicada | efecto y limites relevantes |
+| anulacion | accion exacta del dominio | anulacion real | resultado, restricciones y reversibilidad |
+
+Reglas:
+
+- usar `@ApiBearerAuth()` si el proyecto usa bearer; `@ApiSecurity('sigv4')` solo cuando el scheme esta
+  registrado en `DocumentBuilder` y el runtime lo aplica;
+- preferir decoradores compartidos para `TraceId` y errores cuando existan;
+- declarar params, query, multipart, status y errores que el endpoint implemente realmente;
+- code-first genera normalmente `#/components/schemas/...`; si se exigen `$ref` relativos a archivos,
+  mantener contract-first;
+- ejecutar lint, export/bundle y diff del OpenAPI.
 
 ---
 
@@ -663,6 +739,7 @@ ConfigModule.forRoot({
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 
 export function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -672,7 +749,8 @@ export function setupSwagger(app: INestApplication) {
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const rawDocument = SwaggerModule.createDocument(app, config);
+  const document = cleanupOpenApiDoc(rawDocument);
   SwaggerModule.setup('docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
@@ -754,13 +832,11 @@ export class AppLoggerModule {}
 // src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { Logger } from 'nestjs-pino';
-import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { AppModule } from './app.module';
 import { setupSwagger } from './shared/infrastructure/docs/swagger.config';
 
 async function bootstrap() {
-  patchNestJsSwagger();
-
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.useLogger(app.get(Logger));
   app.useGlobalPipes(new ZodValidationPipe());
@@ -788,12 +864,10 @@ Nota sobre branding:
 import { NestFactory } from '@nestjs/core';
 import { writeFile } from 'node:fs/promises';
 import { AppModule } from '../src/app.module';
-import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { setupSwagger } from '../src/shared/infrastructure/docs/swagger.config';
 
 async function exportOpenApi() {
-  patchNestJsSwagger();
-
   const app = await NestFactory.create(AppModule, { logger: false });
   app.useGlobalPipes(new ZodValidationPipe());
 

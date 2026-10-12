@@ -107,9 +107,12 @@ Scalar tampoco define el dominio. Solo renderiza ese contrato con una UI mejor.
 Por eso:
 
 - `@ApiOperation`, `@ApiBody`, `@ApiResponse` viven en controllers
-- `patchNestJsSwagger()` vive en bootstrap
+- `cleanupOpenApiDoc(...)` procesa el documento creado por `SwaggerModule.createDocument(...)`
 - los DTOs `createZodDto(...)` de infraestructura adaptan los contratos Zod de `application/dtos/`
 - Scalar debe consumir el mismo documento OpenAPI, no un contrato paralelo
+
+El ejemplo ejecutable, incluido el perfil RRLL, vive en
+[6. Ejemplos de codigo](./6-ejemplos-codigo.md#51-caso-de-uso-rrll-con-decoradores-nestjs-y-zod).
 
 ---
 
