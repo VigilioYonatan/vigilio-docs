@@ -4,6 +4,12 @@
   * [Matriz de Compatibilidad](COMPATIBILITY.md)
   * [Master Software Factory 2026](software-factory/master_prompt_software_factory_openspec_agent_plugins_runner_2026.md)
 
+* **🏭 Calidad compartida de Software Factory**
+  * [Contratos API y límites backend](software-factory/backend-api-contracts.md)
+  * [Testing backend por riesgo](software-factory/backend-testing-strategy.md)
+  * [Datos y SQL backend](software-factory/backend-data-sql.md)
+  * [Calidad y comentarios de revisión](software-factory/code-review-quality.md)
+
 
 * **🚧 Backend Node / NestJS**
   * [Overview de Arquitectura](backend-node-nest/README.md)

@@ -19,15 +19,13 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import awsLambdaFastify from '@fastify/aws-lambda';
 import { Logger } from 'nestjs-pino';
-import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { ProductHttpModule } from './http.module';
 import { setupSwagger } from '../../../../shared/infrastructure/docs/swagger.config';
 
 let proxy: ReturnType<typeof awsLambdaFastify>;
 
 async function bootstrap() {
-  patchNestJsSwagger();
-
   const app = await NestFactory.create<NestFastifyApplication>(
     ProductHttpModule,
     new FastifyAdapter(),
@@ -169,6 +167,9 @@ Separar dos capas:
 ## 6. OpenAPI y bootstrap
 
 La generacion de OpenAPI debe vivir en el bootstrap HTTP o en un script dedicado de export.
+
+`setupSwagger(app)` debe crear el documento con `SwaggerModule.createDocument(...)` y procesarlo con
+`cleanupOpenApiDoc(...)` antes de servir Swagger/Scalar o exportar el artefacto.
 
 Regla recomendada:
 

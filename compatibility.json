@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "validated_on": "2026-08-20",
+  "validated_on": "2026-10-11",
   "platform_actions": {
-    "repository": "VigilioYonatan/vigilio-platform-actions",
+    "repository": "Vigilio-Services/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0",
+    "ref": "ce703f099442e4c113ff76922a6c4895de899d7c",
     "packages": [
       {
         "path": "package.json",
@@ -14,22 +14,27 @@
       {
         "path": "packages/devsecops-evidence/package.json",
         "name": "@vigilioyonatan/devsecops-evidence",
-        "version": "0.2.0"
+        "version": "0.3.0"
       },
       {
         "path": "packages/devsecops-governance/package.json",
         "name": "@vigilioyonatan/devsecops-governance",
-        "version": "0.4.0"
+        "version": "0.5.0"
       },
       {
         "path": "packages/node-nest-tooling/package.json",
         "name": "@vigilioyonatan/node-nest-tooling",
-        "version": "0.2.1"
+        "version": "0.3.0"
+      },
+      {
+        "path": "packages/prompt-builder/package.json",
+        "name": "@vigilioyonatan/prompt-builder",
+        "version": "0.6.2"
       },
       {
         "path": "packages/vigilio-skills/package.json",
         "name": "@vigilioyonatan/vigilio-skills",
-        "version": "0.4.0"
+        "version": "0.6.2"
       }
     ],
     "required_files": [
@@ -46,16 +51,23 @@
         "shared-technologies",
         "commit-ai-change",
         "coderabbit-compliance",
+        "codebase-context-efficiency",
         "diagnosing-bugs",
         "grill-me",
         "improve-codebase-architecture",
+        "architecture-traceability",
+        "review-code-change",
         "token-context-compression"
       ],
       "node-nest": [
+        "backend-engineering-quality",
         "node-nest-technologies",
         "node-nest-build-feature",
+        "node-nest-realtime",
+        "node-nest-async-workers",
         "node-nest-persistence",
         "node-nest-security-aws",
+        "platform-observability-sre",
         "node-nest-testing"
       ],
       "openspec": [
