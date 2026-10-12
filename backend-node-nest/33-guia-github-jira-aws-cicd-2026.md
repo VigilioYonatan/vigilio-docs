@@ -1302,7 +1302,7 @@ Este control evita que alguien elimine archivos criticos de gobierno del repo si
 
 ## 26. Automatizacion Jira DevOps 2026
 
-El proyecto usa `VigilioYonatan/vigilio-platform-actions/actions/jira-devops` fijada a SHA completo para centralizar la integracion Jira sin duplicar scripts por repositorio.
+El proyecto usa `Vigilio-Services/vigilio-platform-actions/actions/jira-devops` fijada a SHA completo para centralizar la integracion Jira sin duplicar scripts por repositorio.
 
 Practicas implementadas:
 

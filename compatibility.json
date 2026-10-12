@@ -2,7 +2,7 @@
   "schema_version": 1,
   "validated_on": "2026-10-11",
   "platform_actions": {
-    "repository": "VigilioYonatan/vigilio-platform-actions",
+    "repository": "Vigilio-Services/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
     "ref": "ce703f099442e4c113ff76922a6c4895de899d7c",
     "packages": [

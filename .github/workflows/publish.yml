@@ -38,7 +38,7 @@ jobs:
         if: vars.PLATFORM_COMPATIBILITY_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          repository: VigilioYonatan/vigilio-platform-actions
+          repository: Vigilio-Services/vigilio-platform-actions
           ref: ce703f099442e4c113ff76922a6c4895de899d7c
           path: .compat/vigilio-platform-actions
           persist-credentials: false
@@ -99,7 +99,7 @@ jobs:
         if: github.event_name == 'pull_request' && vars.JIRA_AUTOMATION_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          repository: VigilioYonatan/vigilio-platform-actions
+          repository: Vigilio-Services/vigilio-platform-actions
           ref: ce703f099442e4c113ff76922a6c4895de899d7c
           path: .platform-actions
           persist-credentials: false
@@ -170,7 +170,7 @@ jobs:
         if: vars.JIRA_AUTOMATION_ENABLED == 'true'
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          repository: VigilioYonatan/vigilio-platform-actions
+          repository: Vigilio-Services/vigilio-platform-actions
           ref: ce703f099442e4c113ff76922a6c4895de899d7c
           path: .platform-actions
           persist-credentials: false

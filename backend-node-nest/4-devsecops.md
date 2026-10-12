@@ -1098,7 +1098,7 @@ jobs:
           --branch-name "${{ github.head_ref }}"
       - name: Move Jira issue to Code Review
         if: github.event_name == 'pull_request'
-        uses: VigilioYonatan/vigilio-platform-actions/actions/jira-devops@<SHA_COMPLETO>
+        uses: Vigilio-Services/vigilio-platform-actions/actions/jira-devops@<SHA_COMPLETO>
         with:
           mode: transition
           issue-keys: ${{ github.head_ref }} ${{ github.event.pull_request.title }}
