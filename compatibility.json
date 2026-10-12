@@ -4,7 +4,7 @@
   "platform_actions": {
     "repository": "VigilioYonatan/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "5f791edc67e2103b4d7cf84960a23a3d6c673af6",
+    "ref": "ce703f099442e4c113ff76922a6c4895de899d7c",
     "packages": [
       {
         "path": "package.json",
@@ -27,9 +27,14 @@
         "version": "0.3.0"
       },
       {
+        "path": "packages/prompt-builder/package.json",
+        "name": "@vigilioyonatan/prompt-builder",
+        "version": "0.6.2"
+      },
+      {
         "path": "packages/vigilio-skills/package.json",
         "name": "@vigilioyonatan/vigilio-skills",
-        "version": "0.6.0"
+        "version": "0.6.2"
       }
     ],
     "required_files": [

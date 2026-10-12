@@ -46,11 +46,9 @@ src/product/
 
 ## Convenciones obligatorias
 
-- CRUD generico puede usar `index`, `show`, `store`, `update`, `destroy` cuando esa sea la convencion
-  ejecutable del modulo vecino.
-- Casos de uso con contrato propio usan nombres semanticos y estables, por ejemplo `crearEndoso`,
-  `consultarEndoso` o `anularEndoso`; el controller, application service y `operationId` conservan
-  trazabilidad. No renombrar un contrato publico a `store` solo por uniformidad visual.
+- Controllers, application services y repositories usan `index`, `show`, `store`, `update`, `destroy`.
+- `operationId` conserva la misma convencion. El `summary`, `📦 Proceso` y `🔧 Funcionalidad`
+  documentan la semantica de negocio sin renombrar los metodos tecnicos.
 - Request DTO: `product-store.request.dto.ts`, `product-update.request.dto.ts`, `product-index.request.dto.ts`.
 - Response DTO: `product-index.response.dto.ts`, `product-store.response.dto.ts`.
 - Doc DTO Swagger: vive en el archivo hermano `*.request.doc.ts` o `*.response.doc.ts` cuando hace falta.

@@ -11,7 +11,7 @@ Antes de cambiar un endpoint, construir una matriz breve con evidencia real:
 | Superficie | Debe coincidir con |
 | --- | --- |
 | metodo y path publicos | router/controller y OpenAPI exportado |
-| `operationId` | caso de uso/handler propietario cuando el ecosistema lo use |
+| `operationId` | convencion estable del handler propietario cuando el ecosistema lo use |
 | path/query/header/body | parser, schema runtime, DTO y controller |
 | required, optional y nullable | contrato runtime y tipos efectivos |
 | response y errores | contrato de salida, errores publicos y status observables |
@@ -31,7 +31,7 @@ operacion publica aprobada sin versionado y migracion coordinada.
 
 ## OpenAPI ejecutable
 
-- Mantener `operationId` camelCase, unico, estable y alineado con el caso de uso.
+- Mantener `operationId` camelCase, unico, estable y alineado con la convencion ejecutable del owner.
 - Documentar tipos, formatos, constraints, required/nullability, ejemplos sanitizados, auth y errores
   que el runtime realmente expone.
 - Reutilizar components solo cuando la semantica sea igual. No editar bundles generados como fuente.
@@ -50,7 +50,7 @@ post:
   tags:
     - Endosos RRLL
   summary: Registrar Endoso RRLL
-  operationId: crearEndoso
+  operationId: store
   description: |
     📦 Proceso: Registrar Endoso
 
@@ -71,8 +71,8 @@ post:
 ```
 
 `📦 Proceso` identifica el caso de uso de negocio. `🔧 Funcionalidad` explica el resultado observable,
-no la implementacion tecnica. No copiar el texto de registro en consultas, actualizaciones o
-anulaciones.
+no la implementacion tecnica. El texto funcional no cambia la convencion tecnica: en el backend
+Node/Nest, controller, service, repository y `operationId` usan `index/show/store/update/destroy`.
 
 Los atributos reutilizables documentan significado, ejemplo y restricciones:
 
