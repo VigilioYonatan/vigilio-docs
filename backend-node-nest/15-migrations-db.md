@@ -2,6 +2,10 @@
 
 Este documento define como migrar base de datos sin romper produccion.
 
+La baseline transversal de SQL, cambios de datos y documentacion IC vive en
+[Calidad backend de datos y SQL](../software-factory/backend-data-sql.md). Este documento conserva la
+especializacion PostgreSQL/Drizzle.
+
 Regla madre:
 
 - en produccion, rollback de aplicacion debe ser posible sin rollback manual de datos

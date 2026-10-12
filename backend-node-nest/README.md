@@ -21,11 +21,13 @@ La fuente de verdad ejecutable para versiones es
 `vigilio-governance validate-platform-baseline`; este repositorio explica las decisiones, pero no
 reemplaza la politica central.
 
-Fuentes de verdad, en orden:
+Fuentes de verdad por responsabilidad:
 
-1. codigo, tests y configuracion ejecutable del proyecto consumidor;
-2. policies, CLIs, actions, reusable workflows y skills de `vigilio-platform-actions`;
-3. ADRs y documentos de `vigilio-docs`.
+1. codigo, tests y configuracion ejecutable prueban el comportamiento del consumidor;
+2. policies, CLIs, actions y reusable workflows de `vigilio-platform-actions` gobiernan controles
+   ejecutables y versiones;
+3. ADRs y `vigilio-docs` gobiernan decisiones, practicas y ejemplos reutilizables;
+4. las skills de `vigilio-platform-actions` enlazan esas fuentes y ordenan el trabajo sin duplicarlas.
 
 En `bus-impl`, los modulos actuales del template son `auth`, `user`, `product`, `health`, `upload`
 y `ai-chat`.

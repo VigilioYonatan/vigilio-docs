@@ -2,9 +2,16 @@
 
 ## Fuentes De Verdad
 
-1. Codigo, tests, workflows, policies e infraestructura ejecutable del consumidor.
-2. Actions, CLIs, reusable workflows, policies y skills de `vigilio-platform-actions`.
-3. ADRs, threat models y documentacion de este repositorio.
+La autoridad se separa por responsabilidad para evitar ciclos y duplicacion:
+
+1. Codigo, tests, configuracion, workflows e infraestructura ejecutable del consumidor prueban el
+   comportamiento implementado.
+2. Policies, actions, CLIs y reusable workflows de `vigilio-platform-actions` gobiernan controles
+   ejecutables, versiones y automatizacion.
+3. ADRs, threat models y `vigilio-docs` son la fuente canonica de decisiones, practicas y ejemplos
+   reutilizables.
+4. Las skills de `vigilio-platform-actions` son adaptadores operativos: enlazan estas fuentes, resuelven
+   el stack y ordenan el trabajo; no mantienen una segunda copia manual de las practicas.
 
 Si una afirmacion documental contradice una fuente ejecutable, corregir la documentacion y registrar
 la brecha. Nunca marcar un control externo como activo solo porque existe YAML o una guia.

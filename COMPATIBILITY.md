@@ -8,9 +8,9 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 
 | Campo | Valor |
 |---|---|
-| Fecha de validación | `2026-08-20` |
+| Fecha de validación | `2026-10-11` |
 | Plataforma ejecutable | `VigilioYonatan/vigilio-platform-actions` |
-| Commit inmutable | `2c9e23379ddcb1d7a1bf43edfa699a78a9ee5dc0` |
+| Commit inmutable | `5f791edc67e2103b4d7cf84960a23a3d6c673af6` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -25,10 +25,10 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 | Paquete | Versión fuente |
 |---|---:|
 | `@vigilioyonatan/platform-actions` | `0.1.0` |
-| `@vigilioyonatan/devsecops-evidence` | `0.2.0` |
-| `@vigilioyonatan/devsecops-governance` | `0.4.0` |
-| `@vigilioyonatan/node-nest-tooling` | `0.2.1` |
-| `@vigilioyonatan/vigilio-skills` | `0.4.0` |
+| `@vigilioyonatan/devsecops-evidence` | `0.3.0` |
+| `@vigilioyonatan/devsecops-governance` | `0.5.0` |
+| `@vigilioyonatan/node-nest-tooling` | `0.3.0` |
+| `@vigilioyonatan/vigilio-skills` | `0.6.0` |
 
 ## Baseline Verificado En Consumidores
 
@@ -48,17 +48,21 @@ proyectos no deben degradar una dependencia únicamente para hacer coincidir nú
 
 | Perfil | Skills |
 |---|---|
-| `core` | `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `token-context-compression` |
-| `node-nest` | `node-nest-technologies`, `node-nest-build-feature`, `node-nest-persistence`, `node-nest-security-aws`, `node-nest-testing` |
+| `core` | `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `codebase-context-efficiency`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `architecture-traceability`, `review-code-change`, `token-context-compression` |
+| `node-nest` | `backend-engineering-quality`, `node-nest-technologies`, `node-nest-build-feature`, `node-nest-realtime`, `node-nest-async-workers`, `node-nest-persistence`, `node-nest-security-aws`, `platform-observability-sre`, `node-nest-testing` |
 | `openspec` | `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-propose`, `openspec-sync-specs`, `openspec-update-change` |
 
-El paquete `vigilio-skills@0.3.1` utilizado por `web-mfe` también contiene el perfil publicado
-`web-mfe` con cinco skills. No declarar skills adicionales como instaladas hasta que aparezcan en una
-fuente/release verificable y el consumidor ejecute `skills:sync` y `skills:check`.
+Los perfiles publicados adicionales se resuelven desde `skill-profiles.json`. No declarar una skill
+como instalada en un consumidor hasta que este use una release compatible y ejecute `skills:sync` y
+`skills:check`.
 
 ## Documentos Canónicos
 
 - [Backend Golden Path](./backend-node-nest/21-golden-path-feature.md)
+- [Contratos API backend](./software-factory/backend-api-contracts.md)
+- [Testing backend por riesgo](./software-factory/backend-testing-strategy.md)
+- [Datos y SQL backend](./software-factory/backend-data-sql.md)
+- [Calidad y comentarios de revisión](./software-factory/code-review-quality.md)
 - [Frontend Golden Path](./frontend-web-mfe/6-golden-path-feature-componentes-hooks.md)
 - [Estrategia de testing backend](./backend-node-nest/38-estrategia-testing-2026.md)
 - [Modelo operativo](./OPERATING-MODEL.md)
