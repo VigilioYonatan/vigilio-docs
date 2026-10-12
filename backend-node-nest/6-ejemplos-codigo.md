@@ -484,8 +484,8 @@ Este ejemplo implementa en code-first la convencion RRLL definida en
 Si `bus-dsg`, `ch-dsg` u otro contrato externo es el owner, el YAML conserva autoridad y el OpenAPI
 exportado por NestJS debe validarse contra el.
 
-El nombre sigue el caso de uso. `crearEndoso` es correcto para este contrato; `store` se reserva para
-features CRUD que adopten expresamente esa convencion generica.
+El proceso de negocio es `Registrar Endoso`, pero la implementacion conserva la convencion tecnica del
+stack: `store` en `operationId`, controller, application service y repository.
 
 ```typescript
 @ApiTags('Endosos RRLL')
@@ -496,7 +496,7 @@ export class EndosoController {
   @Post()
   @ApiOperation({
     summary: 'Registrar Endoso RRLL',
-    operationId: 'crearEndoso',
+    operationId: 'store',
     description: [
       '📦 Proceso: Registrar Endoso',
       '',
@@ -517,10 +517,10 @@ export class EndosoController {
     description: 'Endoso registrado correctamente.',
     type: RegistrarEndosoResponseDocDto,
   })
-  crearEndoso(
+  store(
     @Body(new ZodPipe(registrarEndosoRequestDto)) body: RegistrarEndosoRequestDto,
   ): Promise<RegistrarEndosoResponseDto> {
-    return this.service.crearEndoso(body);
+    return this.service.store(body);
   }
 }
 ```

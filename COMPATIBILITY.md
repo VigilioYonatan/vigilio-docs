@@ -10,7 +10,7 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 |---|---|
 | Fecha de validación | `2026-10-11` |
 | Plataforma ejecutable | `VigilioYonatan/vigilio-platform-actions` |
-| Commit inmutable | `5f791edc67e2103b4d7cf84960a23a3d6c673af6` |
+| Commit inmutable | `ce703f099442e4c113ff76922a6c4895de899d7c` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -28,7 +28,8 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 | `@vigilioyonatan/devsecops-evidence` | `0.3.0` |
 | `@vigilioyonatan/devsecops-governance` | `0.5.0` |
 | `@vigilioyonatan/node-nest-tooling` | `0.3.0` |
-| `@vigilioyonatan/vigilio-skills` | `0.6.0` |
+| `@vigilioyonatan/prompt-builder` | `0.6.2` |
+| `@vigilioyonatan/vigilio-skills` | `0.6.2` |
 
 ## Baseline Verificado En Consumidores
 
