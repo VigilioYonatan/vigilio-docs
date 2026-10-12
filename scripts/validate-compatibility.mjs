@@ -139,7 +139,7 @@ async function validateDocs(manifestData) {
     fail('COMPATIBILITY.md no refleja el SHA de platform-actions');
   }
 
-  const jiraReference = `VigilioYonatan/vigilio-platform-actions/actions/jira-devops@${platform.ref}`;
+  const jiraReference = `Vigilio-Services/vigilio-platform-actions/actions/jira-devops@${platform.ref}`;
   const localJiraReference = 'uses: ./.platform-actions/actions/jira-devops';
   if (!workflow.includes(jiraReference) && !workflow.includes(localJiraReference)) {
     fail('publish.yml no consume jira-devops desde el SHA declarado');
