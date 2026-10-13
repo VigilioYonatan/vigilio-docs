@@ -8,9 +8,9 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 
 | Campo | Valor |
 |---|---|
-| Fecha de validación | `2026-10-11` |
+| Fecha de validación | `2026-10-12` |
 | Plataforma ejecutable | `Vigilio-Services/vigilio-platform-actions` |
-| Commit inmutable | `ce703f099442e4c113ff76922a6c4895de899d7c` |
+| Commit inmutable | `dd079500832c8b9cadefcd6dff90223aa7922ed3` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -24,12 +24,12 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 
 | Paquete | Versión fuente |
 |---|---:|
-| `@vigilioyonatan/platform-actions` | `0.1.0` |
-| `@vigilioyonatan/devsecops-evidence` | `0.3.0` |
-| `@vigilioyonatan/devsecops-governance` | `0.5.0` |
-| `@vigilioyonatan/node-nest-tooling` | `0.3.0` |
-| `@vigilioyonatan/prompt-builder` | `0.6.2` |
-| `@vigilioyonatan/vigilio-skills` | `0.6.2` |
+| `@vigilio-services/platform-actions` | `0.1.0` |
+| `@vigilio-services/devsecops-evidence` | `0.3.1` |
+| `@vigilio-services/devsecops-governance` | `0.5.3` |
+| `@vigilio-services/node-nest-tooling` | `0.3.2` |
+| `@vigilio-services/prompt-builder` | `0.6.3` |
+| `@vigilio-services/vigilio-skills` | `0.7.0` |
 
 ## Baseline Verificado En Consumidores
 
@@ -49,8 +49,8 @@ proyectos no deben degradar una dependencia únicamente para hacer coincidir nú
 
 | Perfil | Skills |
 |---|---|
-| `core` | `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `codebase-context-efficiency`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `architecture-traceability`, `review-code-change`, `token-context-compression` |
-| `node-nest` | `backend-engineering-quality`, `node-nest-technologies`, `node-nest-build-feature`, `node-nest-realtime`, `node-nest-async-workers`, `node-nest-persistence`, `node-nest-security-aws`, `platform-observability-sre`, `node-nest-testing` |
+| `core` | `skill-create-docs`, `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `codebase-context-efficiency`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `architecture-traceability`, `review-code-change`, `token-context-compression` |
+| `node-nest` | `node-nest-technologies`, `node-nest-build-feature`, `node-nest-realtime`, `node-nest-async-workers`, `node-nest-persistence`, `node-nest-security-aws`, `platform-observability-sre`, `node-nest-testing` |
 | `openspec` | `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-propose`, `openspec-sync-specs`, `openspec-update-change` |
 
 Los perfiles publicados adicionales se resuelven desde `skill-profiles.json`. No declarar una skill
