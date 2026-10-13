@@ -1,40 +1,40 @@
 {
   "schema_version": 1,
-  "validated_on": "2026-10-11",
+  "validated_on": "2026-10-12",
   "platform_actions": {
     "repository": "Vigilio-Services/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "ce703f099442e4c113ff76922a6c4895de899d7c",
+    "ref": "dd079500832c8b9cadefcd6dff90223aa7922ed3",
     "packages": [
       {
         "path": "package.json",
-        "name": "@vigilioyonatan/platform-actions",
+        "name": "@vigilio-services/platform-actions",
         "version": "0.1.0"
       },
       {
         "path": "packages/devsecops-evidence/package.json",
-        "name": "@vigilioyonatan/devsecops-evidence",
-        "version": "0.3.0"
+        "name": "@vigilio-services/devsecops-evidence",
+        "version": "0.3.1"
       },
       {
         "path": "packages/devsecops-governance/package.json",
-        "name": "@vigilioyonatan/devsecops-governance",
-        "version": "0.5.0"
+        "name": "@vigilio-services/devsecops-governance",
+        "version": "0.5.3"
       },
       {
         "path": "packages/node-nest-tooling/package.json",
-        "name": "@vigilioyonatan/node-nest-tooling",
-        "version": "0.3.0"
+        "name": "@vigilio-services/node-nest-tooling",
+        "version": "0.3.2"
       },
       {
         "path": "packages/prompt-builder/package.json",
-        "name": "@vigilioyonatan/prompt-builder",
-        "version": "0.6.2"
+        "name": "@vigilio-services/prompt-builder",
+        "version": "0.6.3"
       },
       {
         "path": "packages/vigilio-skills/package.json",
-        "name": "@vigilioyonatan/vigilio-skills",
-        "version": "0.6.2"
+        "name": "@vigilio-services/vigilio-skills",
+        "version": "0.7.0"
       }
     ],
     "required_files": [
@@ -48,6 +48,7 @@
     ],
     "skill_profiles": {
       "core": [
+        "skill-create-docs",
         "shared-technologies",
         "commit-ai-change",
         "coderabbit-compliance",
@@ -60,7 +61,6 @@
         "token-context-compression"
       ],
       "node-nest": [
-        "backend-engineering-quality",
         "node-nest-technologies",
         "node-nest-build-feature",
         "node-nest-realtime",
