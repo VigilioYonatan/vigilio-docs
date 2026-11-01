@@ -10,7 +10,7 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 |---|---|
 | Fecha de validación | `2026-10-12` |
 | Plataforma ejecutable | `Vigilio-Services/vigilio-platform-actions` |
-| Commit inmutable | `308c1f0164d87260f2e8ac5bdb561403a7def320` |
+| Commit inmutable | `faeb1c6637b780523bf9659af76bdf748e338940` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
