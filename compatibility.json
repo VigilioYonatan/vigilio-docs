@@ -4,7 +4,7 @@
   "platform_actions": {
     "repository": "Vigilio-Services/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "877351c3e9ee7e933879ce301e5010e1822d3f3f",
+    "ref": "fa12813afac9d646175c2293ff1c3d022d0a4e4f",
     "packages": [
       {
         "path": "package.json",
