@@ -9,7 +9,7 @@ Este proyecto usa controles versionados para evitar que la seguridad del reposit
 - dependencias npm/pnpm.
 - GitHub Actions.
 
-Para paquetes privados `@vigilio-services/*` o `@vigilioyonatan/*`, crear el secret:
+Para paquetes privados `@<organization>/*`, crear el secret:
 
 ```text
 DEPENDABOT_GITHUB_PACKAGES_TOKEN

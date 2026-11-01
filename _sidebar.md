@@ -71,6 +71,8 @@
   * [Blueprints de producto sin plantillas genéricas](standards/experience/product-originality-and-platform-blueprints.md)
 
 * **♻️ Normas reutilizables, tecnologías y plataforma**
+  * [Contrato operativo común de plataforma](standards/platform/common-operational-contract.md)
+  * [Contexto dinámico de plataforma](standards/platform/platform-context.md)
   * [DRY pragmático: código y conocimiento](foundations/architecture/dry.md)
   * [clean architecture](foundations/architecture/clean-architecture.md)
   * [cqrs](foundations/architecture/cqrs.md)

@@ -16,7 +16,7 @@ Imagen OCI generada (@sha256:abcd...)
        ├──> Generación de SBOM (Syft)
        └──> Escaneo de vulnerabilidades (Grype / Trivy)
        │
-       ▼  (Promoción GitOps: PR automático en deploy-v2)
+       ▼  (Promoción GitOps: PR automático en deploy/)
   staging/values.yaml (actualiza digest @sha256:abcd...)
        │
        ▼  (Gates superados + Aprobación manual SRE)
@@ -27,7 +27,7 @@ Imagen OCI generada (@sha256:abcd...)
 
 1. **Construcción y Digest SHA-256:** El pipeline de la app genera la imagen y la referencia por su `sha256` inmutable, nunca por tags mutables como `v1.0.0` o `latest`.
 2. **Registro de Artefactos:** La imagen se almacena en el registro corporativo (ECR / Harbor) con inmutabilidad de tags activada.
-3. **Commit de Promoción:** Una herramienta de automatización (como Renovate, ArgoCD Image Updater o un bot CI de plataforma) crea un commit o Pull Request en el repositorio GitOps (`deploy-v2`) actualizando el archivo `values.yaml` del entorno correspondiente.
+3. **Commit de Promoción:** Una herramienta de automatización (como Renovate, Argo CD Image Updater o un bot CI de plataforma) crea un commit o Pull Request en el repositorio GitOps (`deploy/`) actualizando el archivo `values.yaml` del entorno correspondiente.
 4. **Despliegue Reconciliado:** El motor GitOps (ArgoCD o Flux) detecta el nuevo commit y aplica los cambios en el clúster.
 
 ## ✅ Correcto / ❌ Incorrecto

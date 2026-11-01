@@ -13,7 +13,7 @@ platform-actions/
 ├── .github/workflows/
 │   ├── reusable-lint-test.yml     # Plantilla canónica de linters y pruebas
 │   ├── reusable-container-build.yml# Plantilla de build OCI, SBOM y firma Cosign
-│   └── reusable-gitops-promote.yml# Plantilla de promoción declarativa hacia deploy-v2
+│   └── reusable-gitops-promote.yml# Plantilla de promoción declarativa hacia deploy/
 ```
 
 ## Consumo Declarativo Desde Repositorios De Aplicación
@@ -44,7 +44,7 @@ jobs:
 2. **Gate 2 - Seguridad de Código y Dependencias:** Escaneo SAST (Semgrep/CodeQL) y análisis de vulnerabilidades en dependencias (Snyk/Trivy).
 3. **Gate 3 - Construcción Inmutable:** Creación de imagen OCI multi-arquitectura con buildx y digest SHA-256 inmutable.
 4. **Gate 4 - Cadena de Suministro:** Generación de SBOM con Syft y firma criptográfica con Cosign (Keyless con GitHub OIDC).
-5. **Gate 5 - Promoción GitOps:** Creación de Pull Request o commit directo sobre el repositorio `deploy-v2`.
+5. **Gate 5 - Promoción GitOps:** Creación de Pull Request o commit gobernado sobre el repositorio `deploy/`.
 
 ## ✅ Correcto / ❌ Incorrecto
 

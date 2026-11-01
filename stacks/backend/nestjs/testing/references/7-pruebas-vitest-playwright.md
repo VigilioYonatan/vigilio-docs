@@ -613,9 +613,9 @@ jobs:
       postgres:
         image: postgres:17-alpine
         env:
-          POSTGRES_DB: bus_impl_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ${{ vars.TEST_DATABASE_NAME }}
+          POSTGRES_USER: ${{ vars.TEST_DATABASE_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -639,8 +639,8 @@ jobs:
       - run: pnpm test:integration:ci
         env:
           E2E_AUTO_START_POSTGRES: 'false'
-          E2E_DATABASE_ADMIN_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
-          E2E_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/bus_impl_e2e
+          E2E_DATABASE_ADMIN_URL: ${{ secrets.E2E_DATABASE_ADMIN_URL }}
+          E2E_DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
       - run: pnpm openapi:export
       - run: pnpm openapi:diff
 ```
@@ -690,7 +690,7 @@ allowBuilds:
 Reglas:
 
 - el `.npmrc` del repo no contiene secretos hardcodeados.
-- si se usan paquetes privados `@vigilio-services/*` o `@vigilioyonatan/*`, GitHub Actions debe
+- si se usan paquetes privados `@<organization>/*`, GitHub Actions debe
   tener `packages: read`.
 - tokens privados van en `~/.npmrc`, variable de entorno o secreto de CI.
 - el `.npmrc` versionado declara scopes y registry, pero no contiene la linea `_authToken`.

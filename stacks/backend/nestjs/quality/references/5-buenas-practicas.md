@@ -509,7 +509,7 @@ Y en install:
     GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
 ```
 
-Resultado: paquetes privados `@vigilio-services/*` y `@vigilioyonatan/*` no se instalan sin token
+Resultado: paquetes privados `@<organization>/*` no se instalan sin token
 con permiso.
 
 Si hay registry corporativo con CA privada:

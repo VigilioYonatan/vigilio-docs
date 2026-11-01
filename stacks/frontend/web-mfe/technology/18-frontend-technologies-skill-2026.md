@@ -50,7 +50,7 @@ The agent MUST NOT:
 - silently downgrade syntax to an older major;
 - mix two majors of the same library in one implementation;
 - import an internal package merely because it exists in `node_modules`;
-- invent APIs for private `@vigilioyonatan/*` packages;
+- invent APIs for private `@<organization>/*` packages;
 - use React Router APIs in Wouter code;
 - use React Query v3/v4 call signatures in TanStack Query v5;
 - use Tailwind v3 bootstrap/configuration as the default for Tailwind v4;

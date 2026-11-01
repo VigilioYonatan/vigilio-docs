@@ -4,10 +4,10 @@ Establece las especificaciones de arquitectura declarativa, sincronización auto
 
 ## Arquitectura Del Repositorio GitOps
 
-El repositorio de despliegues (`deploy-v2` / `practicing-3`) estructura los manifiestos separando los servicios de plataforma compartidos de las aplicaciones de negocio:
+El repositorio de despliegues (`deploy/`) estructura los manifiestos separando los servicios de plataforma compartidos de las aplicaciones de negocio. La misma convención puede aplicarse bajo namespaces de organización como `vigilio-services/deploy`, `rimac-secures/deploy` o `win/deploy`; esos nombres son ejemplos, no dependencias de la arquitectura.
 
 ```text
-gitops-root/
+deploy/
 ├── charts/                     # Charts internos de Helm versionados
 ├── platform/                   # Componentes base del clúster
 │   ├── ingress/                # Ingress-NGINX / Cilium Ingress

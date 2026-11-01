@@ -40,7 +40,7 @@ The agent MUST:
 7. Keep TypeScript typechecking independent from transpilers, Vite, `tsx`, Biome, and test runners.
 8. Treat OpenAPI, Zod schemas, generated contract artifacts, and lockfiles as executable evidence.
 9. Fail closed when repository evidence and documentation disagree.
-10. Never invent APIs for private `@vigilioyonatan/*` packages.
+10. Never invent APIs for private `@<organization>/*` packages.
 
 The agent MUST NOT:
 
@@ -1076,7 +1076,7 @@ Do not encode product/business approval rules into commit message linting.
 
 ---
 
-# 19. Private `@vigilioyonatan/*` packages
+# 19. Private `@<organization>/*` packages
 
 Examples previously supplied by the project include packages for contracts, DevSecOps evidence/governance, skills, and MFE tooling.
 

@@ -12,11 +12,13 @@ El laboratorio local (`prod-local`) permite a cualquier ingeniero probar el ecos
 ```text
 Estación de Trabajo Local (Docker Desktop / Podman / WSL2)
 ├── Cluster Kubernetes Local (Kind / k3d)
-│   ├── Microservicios (bus-impl, web-mfe)
+│   ├── Backend de dominio (ecommerce-bus-impl, facturacion-bus-impl)
+│   ├── BFF por canal (ecommerce-web-bff, facturacion-web-bff)
+│   ├── Microfrontends (ecommerce-web-mfe, facturacion-web-mfe)
 │   ├── Servicios de Datos (CloudNativePG / Valkey)
 │   ├── Ingress Controller (NGINX / Cilium)
 │   └── Observabilidad (OpenTelemetry Collector + VictoriaMetrics)
-└── Perfil de Seguridad Avanzado (prod-local-privileged)
+└── Perfil de Seguridad Runtime (<runtime-security-profile>)
     └── Kernel eBPF + Tetragon Enforcement (en Linux o WSL2)
 ```
 
@@ -26,10 +28,20 @@ Estación de Trabajo Local (Docker Desktop / Podman / WSL2)
    - No requiere privilegios de root ni acceso directo al kernel.
    - Ejecuta contenedores de aplicación, base de datos local y stack de observabilidad simulado sobre Docker Desktop, Podman o WSL2.
    - Ideal para desarrollo ágil, depuración de lógica de negocio y pruebas unitarias/integradas.
-2. **Modo Privilegiado (`prod-local-privileged`):**
+2. **Modo de seguridad runtime (`<runtime-security-profile>`):**
    - Requiere acceso al kernel de Linux (en estaciones Linux nativas o WSL2 con Docker Desktop configurado para acceso al subsistema eBPF).
    - Habilita el subsistema eBPF y el despliegue del demonio Tetragon.
    - Permite verificar localmente el comportamiento ante intrusiones, inyección de fallos y bloqueo activo de llamadas de sistema antes del despliegue en clústeres reales.
+
+`<runtime-security-profile>` es un rol configurable, no una ruta que deba copiarse literalmente. Puede resolverse como `labs/runtime-security`, `prod-local-security` u otra convención validada por el consumidor.
+
+## Roles De Aplicación Dentro Del Laboratorio
+
+- **Backend de dominio:** implementa reglas de negocio y conserva la autoridad sobre sus datos. `ecommerce-bus-impl` y `facturacion-bus-impl` son ejemplos; para proyectos nuevos se prefieren nombres explícitos como `ecommerce-api` o `facturacion-service`.
+- **BFF (Backend for Frontend):** adapta contratos, agrega respuestas y aplica necesidades específicas de un canal. `ecommerce-web-bff` sirve al frontend web; un canal mobile podría utilizar `ecommerce-mobile-bff`.
+- **MFE (Microfrontend):** frontend modular con ownership, build y despliegue independientes. `ecommerce-web-mfe` y `facturacion-web-mfe` pueden componerse dentro de un shell web sin compartir su lógica interna.
+
+El BFF no sustituye al backend de dominio y el MFE no debe acceder directamente a bases de datos. El flujo recomendado es `MFE -> BFF -> APIs de dominio`; cuando no existe una necesidad real de adaptación por canal, el MFE puede consumir una API pública gobernada sin introducir un BFF innecesario.
 
 ## Modos De Conectividad Del Laboratorio
 

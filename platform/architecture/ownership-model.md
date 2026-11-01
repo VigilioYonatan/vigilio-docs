@@ -6,11 +6,11 @@ Establece las responsabilidades, asignación de propiedad de código y controles
 
 | Dominio | Propietario Principal | Responsabilidades |
 |---|---|---|
-| `infra-v2/`, `infra/` | Equipo de Cloud & Infraestructura | Módulos Terraform, VPC, IAM, EKS, políticas de drift y seguridad cloud. |
-| `deploy-v2/`, `gitops/` | Equipo de SRE & Platform | Charts Helm, Kustomize, ArgoCD sync, ingress, service mesh y autoscaling. |
-| `docker-v2/`, `images/` | Equipo DevSecOps | Endurecimiento de imágenes, escaneo Trivy/Grype, firma Cosign y SBOM. |
+| `infra/` | Equipo de Cloud & Infraestructura | Módulos Terraform, red, identidad, cómputo, datos, políticas de drift y seguridad. |
+| `deploy/` | Equipo de SRE & Platform | Charts Helm, Kustomize, Argo CD, ingress, service mesh y autoscaling. |
+| `docker/` | Equipo DevSecOps | Endurecimiento de imágenes, escaneo Trivy/Grype, firma Cosign y SBOM. |
 | `apps/*` | Equipos de Desarrollo de Producto | Lógica de negocio, controladores, DTOs, tests unitarios y observabilidad app. |
-| `prod-local` | Platform Engineering | Simulación fiel en local con Kind, semillas de datos y perfiles de testing. |
+| `prod-local` | Platform Engineering | Simulación production-like con Kind, datos sintéticos y perfiles de testing. |
 
 ## Reglas De CODEOWNERS
 
@@ -18,19 +18,21 @@ Cada repositorio debe contar con un archivo `.github/CODEOWNERS` o `.gitlab/CODE
 
 ```text
 # Gobernanza global
-*                       @vigilio-platform/reviewers
+*                       @<organization>/platform-reviewers
 
 # Infraestructura sensible
-/infra/                 @vigilio-platform/cloud-engineers
-/environments/prod/     @vigilio-platform/infra-leads @vigilio-platform/security
+/infra/                 @<organization>/cloud-engineers
+/environments/prod/     @<organization>/infra-leads @<organization>/security
 
 # Políticas de seguridad y runtime
-/policies/              @vigilio-platform/devsecops
-/supply-chain/          @vigilio-platform/devsecops
+/policies/              @<organization>/devsecops
+/supply-chain/          @<organization>/devsecops
 
 # Manifiestos de producción
-/gitops/overlays/prod/  @vigilio-platform/sre-leads
+/deploy/overlays/prod/  @<organization>/sre-leads
 ```
+
+`<organization>` debe resolverse con el namespace real de la empresa, por ejemplo `vigilio-services`, `rimac-secures` o `win`; nunca debe copiarse literalmente como nombre de equipo.
 
 ## ✅ Correcto / ❌ Incorrecto
 
