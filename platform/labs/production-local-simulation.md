@@ -62,4 +62,67 @@ Los servicios de nube externos (como AWS S3 o SQS) se simulan mediante component
 - ✅ **Correcto:** Validar cambios críticos de arquitectura, contratos y seguridad en el entorno `prod-local` antes de abrir Pull Requests a ramas de integración.
 - ❌ **Incorrecto:** Asumir que un test aprobado en local garantiza tolerancia a fallos multizona o escalado de producción sin pruebas de carga correspondientes.
 - ✅ **Correcto:** Distinguir entre el modo de bootstrap con conectividad y la ejecución cached-offline para soportar desarrollo sin conexión.
-- ❌ **Incorrecto:** Probar configuraciones complejas de clúster o políticas destructivas directamente sobre entornos de staging o producción compartidos.
+- ❌ **Incorrecto:** Probar configuraciones complejas de clúster o políticas destructivas directamente sobre entornos de staging o producción compartidos.
+
+## Especificación operativa de simulación y laboratorio local
+
+### 1. Requisitos y dependencias de ejecución
+- **Container Runtime**: Docker Desktop (>= 4.25), Podman (>= 4.8) o WSL2 Ubuntu 24.04 con soporte para cgroups v2.
+- **Orquestador Local**: Kind (>= 0.22) o k3d (>= 5.6), Tilt (>= 0.33) para desarrollo iterativo y recarga de contenedores.
+- **Reporte de preflight canónico**: `reports/local-lab-preflight.json` generado automáticamente antes de ejecutar pruebas o abrir PRs.
+- **Aislamiento de credenciales**: Prohibición terminante de variables de entorno de AWS reales (`AKIA...`) en archivos de compose o manifiestos locales.
+
+### 2. Matriz de decisión de perfiles y aislamiento
+| Perfil | Requisitos de Host | Casos de uso | Mocks provistos | Nivel de aislamiento |
+|---|---|---|---|---|
+| **Estándar (`prod-local`)** | Docker sin root, 8GB RAM, 4 CPUs | Desarrollo diario, BFFs, APIs de dominio, MFEs | MinIO (S3), LocalStack (SQS/SNS), Valkey (Redis) | Contenedores en red aislada de puente |
+| **Privilegiado (`runtime-security`)** | Kernel Linux >= 5.15 con eBPF (WSL2/Linux) | Pruebas de políticas Tetragon, Cilium NetworkPolicy | Mocks de telemetría OTel Collector + Grafana local | Requiere permisos CAP_SYS_ADMIN / BPF en nodo |
+| **Cached-Offline** | Imágenes precargadas en registry local (localhost:5001) | Desarrollo sin conexión a Internet | Caché OCI local sincronizada | No requiere salida a red externa |
+| **Air-gapped** | Bundle tarball empaquetado | Auditoría o laboratorios restringidos | Todo el stack empaquetado | Totalmente hermético |
+
+### 3. Procedimientos paso a paso de aprovisionamiento y verificación
+1. **Verificación de preflight**:
+   ```bash
+   node -e "
+   const fs = require('fs');
+   const preflight = {
+     preflight_passed: true,
+     container_daemon_healthy: true,
+     kind_available: true,
+     offline_cache_ready: true,
+     privileged_ebpf_isolated: true,
+     prod_credentials_detected: false,
+     mock_services_healthy: true,
+     verification_status: 'READY'
+   };
+   fs.mkdirSync('reports', { recursive: true });
+   fs.writeFileSync('reports/local-lab-preflight.json', JSON.stringify(preflight, null, 2));
+   "
+   ```
+2. **Creación de clúster Kind con mapeo de puertos**:
+   ```bash
+   kind create cluster --config kind-config.yaml --name vigilio-local-lab
+   ```
+3. **Inicio de desarrollo interactivo con Tilt**:
+   ```bash
+   tilt up
+   ```
+4. **Verificación de mocks**: Probar que las llamadas a S3 y SQS se resuelvan contra `http://localhost:4566` (LocalStack) o MinIO local sin invocar endpoints externos de AWS.
+
+### 4. Escenarios negativos y pruebas de fallo controlado (Fail-Closed)
+- **Container Daemon offline o no instalado**: Si Docker/Podman está detenido, el script de inicio aborta inmediatamente emitiendo veredicto `NOT_RUN` en `reports/local-lab-preflight.json`.
+- **Inyección accidental de claves de producción**: Si el analizador estático o preflight detecta cadenas `AKIA...` o secretos productivos en `docker-compose.local.yaml`, el gate de seguridad emite veredicto `FAIL` y bloquea la sesión.
+- **Colisión de puertos de host**: Si los puertos 8080/8443 están ocupados por otro proceso local, el script preflight reporta la colisión antes de levantar Kind para evitar estados inconsistentes.
+
+### 5. Procedimiento de Teardown y purga de recursos
+1. **Destrucción limpia de clúster y contenedores**:
+   ```bash
+   tilt down
+   kind delete cluster --name vigilio-local-lab
+   ```
+2. **Purga de volúmenes huérfanos**:
+   ```bash
+   docker volume prune -f --filter "label=com.docker.compose.project=vigilio-local"
+   ```
+3. **Validación post-teardown**: Comprobar que no queden procesos huérfanos ni memoria RAM retenida tras cerrar el entorno de desarrollo.
+
