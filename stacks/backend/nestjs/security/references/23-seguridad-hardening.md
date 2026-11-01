@@ -55,7 +55,7 @@ Este checklist complementa DevSecOps. No es teoria: son controles que deben qued
 - `pnpm audit --audit-level=high` y Trivy; Dependency Review cuando GHAS este disponible.
 - Gitleaks/secret scanning en PR.
 - CodeQL y Trivy como gates.
-- Paquetes privados `@vigilio-services/*` y `@vigilioyonatan/*` via GitHub Packages con
+- Paquetes privados `@<organization>/*` vía GitHub Packages con
   `packages: read`.
 
 ## 8. Observabilidad segura

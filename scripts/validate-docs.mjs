@@ -8,6 +8,8 @@
  * 3. Colision de numeracion
  * 4. Estructura Markdown
  * 5. Portal SEO y dependencias CDN versionadas
+ * 6. Portabilidad y ausencia de secretos en documentacion normativa
+ * 7. Contrato de contexto dinamico
  */
 import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
@@ -125,6 +127,93 @@ async function validateSiteShell() {
   return errors;
 }
 
+function isNormativeDocument(file) {
+  const normalized = relative(file);
+  const normative = ['standards/', 'platform/', 'platform-runtime/', 'governance/'].some(
+    (prefix) => normalized.startsWith(prefix),
+  );
+  const historical =
+    normalized.includes('/references/') ||
+    normalized.includes('/case-studies/') ||
+    normalized.includes('historico-');
+  return normative && !historical;
+}
+
+async function validateNormativePortability(files) {
+  const errors = [];
+  const rules = [
+    ['ruta absoluta Windows', /[A-Za-z]:[\\/]Users[\\/][^\s`"']+/i],
+    ['ruta absoluta de usuario Unix', /\/(?:home|Users)\/[^/\s`"']+\//],
+    ['token GitHub con formato real', /\bgh[pousr]_[A-Za-z0-9]{20,}\b/],
+    ['token GitLab con formato real', /\bglpat-[A-Za-z0-9_-]{20,}\b/],
+    ['access key AWS con formato real', /\bAKIA[0-9A-Z]{16}\b/],
+    ['ARN con account ID real', /arn:aws:[^\s:]*:[^\s:]*:\d{12}:/],
+    [
+      'URL interna o RFC1918',
+      /https?:\/\/(?:[^/\s`]+\.(?:internal|local)|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(?:1[6-9]|2\d|3[01])\.\d+\.\d+)(?::\d+)?(?:\/|\b)/i,
+    ],
+    ['credenciales embebidas en URL PostgreSQL', /postgres(?:ql)?:\/\/[^:$\s{]+:[^@$\s{]+@/i],
+    [
+      'password de ejemplo realista',
+      /\b(?:POSTGRES_PASSWORD|DATABASE_PASSWORD|DB_PASSWORD)\s*[:=]\s*(?!\$\{|\$\{\{|<|REDACTED|CHANGE_ME)[^\s#`]+/i,
+    ],
+    ['nombre legacy de workspace', /\b(?:practicing-3|infra-v2|docker-v2|deploy-v2|prod-local-privileged)\b/i],
+  ];
+
+  for (const file of files.filter(isNormativeDocument)) {
+    const content = await readFile(file, 'utf8');
+    const lines = content.split(/\r?\n/);
+    for (const [index, line] of lines.entries()) {
+      for (const [name, pattern] of rules) {
+        if (pattern.test(line)) {
+          errors.push(`${relative(file)}:${index + 1}: ${name}`);
+        }
+      }
+    }
+  }
+  return errors;
+}
+
+async function validatePlatformContextArtifacts() {
+  const errors = [];
+  const schemaPath = path.join(ROOT, 'schemas', 'platform-context.schema.json');
+  const examplePath = path.join(ROOT, 'examples', 'platform-context.example.yaml');
+
+  try {
+    const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+    if (schema?.properties?.schemaVersion?.const !== 1) {
+      errors.push('schemas/platform-context.schema.json: schemaVersion debe fijarse en 1');
+    }
+  } catch (error) {
+    errors.push(
+      `schemas/platform-context.schema.json: JSON invalido -> ${error instanceof Error ? error.message : error}`,
+    );
+  }
+
+  try {
+    const example = await readFile(examplePath, 'utf8');
+    for (const required of [
+      'schemaVersion: 1',
+      'project:',
+      'repositories:',
+      'environments:',
+      'delivery:',
+      'infrastructure:',
+      'labs:',
+    ]) {
+      if (!example.includes(required)) {
+        errors.push(`examples/platform-context.example.yaml: falta ${required}`);
+      }
+    }
+  } catch (error) {
+    errors.push(
+      `examples/platform-context.example.yaml: no se pudo leer -> ${error instanceof Error ? error.message : error}`,
+    );
+  }
+
+  return errors;
+}
+
 function validateNumbering(files) {
   const bySection = new Map();
 
@@ -151,6 +240,8 @@ async function main() {
     ['Numeracion', validateNumbering(files)],
     ['Estructura Markdown', await validateMarkdownStructure(files)],
     ['Portal SEO/supply-chain', await validateSiteShell()],
+    ['Portabilidad normativa', await validateNormativePortability(files)],
+    ['Contexto dinamico de plataforma', await validatePlatformContextArtifacts()],
   ];
 
   let failed = false;

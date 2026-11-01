@@ -830,14 +830,14 @@ Para Fine-Grained Token (recomendado 2026):
 En la maquina local del developer, agregar al `~/.npmrc` global (no al del proyecto):
 
 ```ini
-//npm.pkg.github.com/:_authToken=ghp_TU_TOKEN_AQUI
+//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}
 ```
 
 Forma segura con variable de entorno (preferida):
 
 ```bash
-# en .bashrc, .zshrc o perfil de PowerShell
-export GITHUB_PACKAGES_TOKEN="ghp_TU_TOKEN_AQUI"
+# Inyectar GITHUB_PACKAGES_TOKEN desde el gestor de credenciales del sistema.
+: "${GITHUB_PACKAGES_TOKEN:?GITHUB_PACKAGES_TOKEN no configurado}"
 ```
 
 Y en `~/.npmrc`:
@@ -849,7 +849,7 @@ Y en `~/.npmrc`:
 ### Paso 3: verificar
 
 ```bash
-pnpm install   # resuelve @vigilio-services/* y @vigilioyonatan/* desde GitHub Packages
+pnpm install   # resuelve @<organization>/* desde GitHub Packages
 ```
 
 Si falla con `401 Unauthorized` o `403 Forbidden`:

@@ -91,7 +91,7 @@ Reglas:
 - local no debe depender de secretos de `production`.
 - si se usa `.env.local`, debe estar en `.gitignore`.
 - las credenciales de registro npm privado van en auth file local, no en el repo.
-- `pnpm test:integration` debe ser autosuficiente en local: si no hay PostgreSQL en `127.0.0.1:5432`, usa Podman/Docker para crear o iniciar `bus-impl-postgres-e2e`.
+- `pnpm test:integration` debe ser autosuficiente en local: si no hay PostgreSQL en `${E2E_DATABASE_HOST}:${E2E_DATABASE_PORT}`, usa Podman/Docker para crear o iniciar `${PROJECT_SLUG}-postgres-e2e`.
 - si usas una base externa, define `E2E_DATABASE_ADMIN_URL`, `E2E_DATABASE_URL` y opcionalmente `E2E_AUTO_START_POSTGRES=false`.
 
 ---

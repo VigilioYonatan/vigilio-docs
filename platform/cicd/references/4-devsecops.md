@@ -121,9 +121,9 @@ jobs:
       postgres:
         image: postgres:17-alpine
         env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ${{ vars.TEST_DATABASE_NAME }}
+          POSTGRES_USER: ${{ vars.TEST_DATABASE_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -144,8 +144,8 @@ jobs:
       - run: pnpm test:integration
         env:
           E2E_AUTO_START_POSTGRES: 'false'
-          E2E_DATABASE_ADMIN_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
-          E2E_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/bus_impl_e2e
+          E2E_DATABASE_ADMIN_URL: ${{ secrets.E2E_DATABASE_ADMIN_URL }}
+          E2E_DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
 
   contract:
     name: OpenAPI Contract

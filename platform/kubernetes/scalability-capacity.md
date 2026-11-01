@@ -27,7 +27,7 @@ Establece las directrices técnicas para el escalado elástico de pods y nodos, 
        whenUnsatisfiable: DoNotSchedule
        labelSelector:
          matchLabels:
-           app.kubernetes.io/name: bus-impl
+           app.kubernetes.io/name: ecommerce-bus-impl # ejemplo; resolver desde el workload real
    ```
 
 ## Dimensionamiento De Recursos Y Presupuestos De Disrupción

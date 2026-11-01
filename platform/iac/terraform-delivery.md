@@ -2,12 +2,12 @@
 
 Establece las pautas de arquitectura, estratificación y flujo de despliegue para la infraestructura como código (IaC) administrada con Terraform en Vigilio de forma neutral frente a proveedores de nube.
 
-## Principios De Estratificación De Infraestructura (`infra-v2`)
+## Principios De Estratificación De Infraestructura (`infra/`)
 
 La infraestructura se organiza en capas estrictamente delimitadas para evitar acoplamiento y limitar el radio de impacto de fallos, independientemente de la nube o centro de datos de destino:
 
 ```text
-infra-v2/
+infra/
 ├── bootstrap/       # Aprovisionamiento del backend remoto y bloqueo de estado
 ├── config/          # Esquemas y configuraciones validadas
 ├── modules/         # Módulos reutilizables agnósticos de entorno y proveedor
