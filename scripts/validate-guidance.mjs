@@ -10,7 +10,7 @@ const skills = existsSync(path.resolve(root, '..', 'platform-actions', 'packages
   ? path.resolve(root, '..', 'platform-actions', 'packages', 'vigilio-skills')
   : path.resolve(root, '..', 'vigilio-skills');
 const ignoredDirs = new Set(['.git', '_site', 'node_modules', '.github', 'scripts', '.compat']);
-const immutable = (rel) => rel.startsWith('adr/') || rel.startsWith('software-factory/') || rel === 'AGENTS.md' || rel === '_sidebar.md' ||
+const immutable = (rel) => rel.startsWith('adr/') || rel.startsWith('software-factory/') || rel.startsWith('migration-evidence/') || rel === 'AGENTS.md' || rel === '_sidebar.md' ||
   ['COMPATIBILITY.md', 'OPERATING-MODEL.md', 'threat-model/template.md'].includes(rel);
 const walk = async (dir, out=[]) => {
   for (const e of await readdir(dir, {withFileTypes:true})) {

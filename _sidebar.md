@@ -571,3 +571,6 @@
 
 * **🛠️ Operaciones y Runbooks**
   * [Restauración de PostgreSQL](operations/runbooks/postgresql-restore.md)
+
+* **📋 Auditoría y Evidencia**
+  * [Auditoría Cero Pérdida 2026](migration-evidence/ZERO-LOSS-AUDIT.md)
