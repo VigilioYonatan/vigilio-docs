@@ -40,3 +40,7 @@ node scripts/validate-workflows.mjs
 node scripts/validate-compatibility.mjs
 node scripts/build-site.mjs
 ```
+
+## Orquestación de ingeniería de Docs/Skills
+
+En tareas de ingeniería, consultar [norma Auto-Senior](standards/ai/skill-orchestration-policy.md) y [evidencias de PR](standards/engineering/change-impact-and-review-gates.md) junto a las instrucciones locales; **no** afirmar que el simple enlace ejecuta skills ni CI.

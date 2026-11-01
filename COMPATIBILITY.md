@@ -1,7 +1,7 @@
 # Matriz De Compatibilidad De Plataforma
 
 Esta página describe el snapshot cross-repo verificado. La fuente machine-readable es
-[`compatibility.json`](./compatibility.json) y CI comprueba que no diverja de
+[`compatibility.json`](compatibility.json) y CI comprueba que no diverja de
 `vigilio-platform-actions`, `bus-impl` y `web-mfe`.
 
 ## Snapshot Activo
@@ -10,7 +10,7 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 |---|---|
 | Fecha de validación | `2026-10-12` |
 | Plataforma ejecutable | `Vigilio-Services/vigilio-platform-actions` |
-| Commit inmutable | `dd079500832c8b9cadefcd6dff90223aa7922ed3` |
+| Commit inmutable | `08263de54604c262f1940e20e908006c2be07597` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -28,8 +28,8 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 | `@vigilio-services/devsecops-evidence` | `0.3.1` |
 | `@vigilio-services/devsecops-governance` | `0.5.3` |
 | `@vigilio-services/node-nest-tooling` | `0.3.2` |
-| `@vigilio-services/prompt-builder` | `0.6.3` |
-| `@vigilio-services/vigilio-skills` | `0.7.0` |
+| `@vigilio-services/prompt-builder` | `0.12.0` |
+| `@vigilio-services/vigilio-skills` | `0.8.0` |
 
 ## Baseline Verificado En Consumidores
 
@@ -59,14 +59,14 @@ como instalada en un consumidor hasta que este use una release compatible y ejec
 
 ## Documentos Canónicos
 
-- [Backend Golden Path](./backend-node-nest/21-golden-path-feature.md)
-- [Contratos API backend](./software-factory/backend-api-contracts.md)
-- [Testing backend por riesgo](./software-factory/backend-testing-strategy.md)
-- [Datos y SQL backend](./software-factory/backend-data-sql.md)
-- [Calidad y comentarios de revisión](./software-factory/code-review-quality.md)
-- [Frontend Golden Path](./frontend-web-mfe/6-golden-path-feature-componentes-hooks.md)
-- [Estrategia de testing backend](./backend-node-nest/38-estrategia-testing-2026.md)
-- [Modelo operativo](./OPERATING-MODEL.md)
+- [Backend Golden Path](stacks/backend/nestjs/architecture/references/21-golden-path-feature.md)
+- [Contratos API backend](software-factory/backend-api-contracts.md)
+- [Testing backend por riesgo](software-factory/backend-testing-strategy.md)
+- [Datos y SQL backend](software-factory/backend-data-sql.md)
+- [Calidad y comentarios de revisión](software-factory/code-review-quality.md)
+- [Frontend Golden Path](stacks/frontend/web-mfe/features/6-golden-path-feature-componentes-hooks.md)
+- [Estrategia de testing backend](stacks/backend/nestjs/testing/references/38-estrategia-testing-2026.md)
+- [Modelo operativo](OPERATING-MODEL.md)
 
 ## Gate Cross-Repo
 

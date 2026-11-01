@@ -71,8 +71,10 @@ post:
 ```
 
 `📦 Proceso` identifica el caso de uso de negocio. `🔧 Funcionalidad` explica el resultado observable,
-no la implementacion tecnica. El texto funcional no cambia la convencion tecnica: en el backend
-Node/Nest, controller, service, repository y `operationId` usan `index/show/store/update/destroy`.
+no la implementacion tecnica. El texto funcional no altera el contrato publicado: en CRUD simple Node/Nest puede utilizar
+`index/show/store/update/destroy`; los comandos con semantica de negocio utilizan nombres
+expresivos como `approvePolicy`, `cancelOrder`, `activateSubscription` y `calculatePremium`.
+El `operationId` se mantiene estable y un renombrado publicado pasa por OpenAPI diff.
 
 Los atributos reutilizables documentan significado, ejemplo y restricciones:
 
@@ -115,7 +117,7 @@ metodo, path, auth, required/nullability, status y schemas.
 En code-first, expresar la misma informacion con los adaptadores del stack y validar el OpenAPI
 exportado. En contract-first, el YAML y sus components son el owner. La implementacion NestJS/Zod se
 documenta en
-[Ejemplos de codigo Node/Nest](../backend-node-nest/6-ejemplos-codigo.md#51-caso-de-uso-rrll-con-decoradores-nestjs-y-zod).
+[Ejemplos de codigo Node/Nest](../stacks/backend/nestjs/http/references/6-ejemplos-codigo.md#51-caso-de-uso-rrll-con-decoradores-nestjs-y-zod).
 
 ## Errores, validacion y observabilidad
 

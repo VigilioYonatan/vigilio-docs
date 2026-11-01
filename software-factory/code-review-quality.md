@@ -1,5 +1,7 @@
 # Calidad y Comentarios para Revision de Codigo
 
+**Jerarquía documental vigente (2026-10-25):** esta guía conserva los criterios originales de code review y los ejemplos IC. La fuente normativa **detallada** para comentarios, JSDoc, PHPDoc, TODO/FIXME y su validación es [Comentarios de código y docstrings](../standards/engineering/code-comments-and-docstrings.md); los contratos HTTP públicos se gobiernan por [Diseño REST de endpoints](../standards/api/rest-endpoint-design.md). En caso de detalle contradictorio, usar la guía específica sin modificar por sorpresa el legado.
+
 Esta guia es la fuente canonica transversal para calidad de codigo y comentarios. Aplicar solo los
 criterios pertinentes al diff. La configuracion, formatter, linter, contratos y patrones vigentes del
 repositorio tienen precedencia sobre preferencias genericas.
@@ -33,9 +35,7 @@ Agregar comentarios cuando expliquen algo que el codigo no expresa bien:
 El comentario debe ser breve, actualizado y estar junto a la decision. Referenciar ADR, issue o contrato
 cuando agregue contexto durable.
 
-Bien:
-
-```ts
+✅ Correcto:```ts
 // El proveedor puede reenviar el evento. La clave externa evita duplicar el abono.
 // Ver ADR-014 para la ventana de retencion y la estrategia de replay.
 await ledger.applyOnce(event.externalId, event.amount);
@@ -78,9 +78,7 @@ await ledger.applyOnce(event.externalId, event.amount);
 
 No inventar usuario, ticket ni fecha. El detalle explica impacto o motivo, no repite la instruccion.
 
-Mal:
-
-```ts
+❌ Incorrecto:```ts
 // Incrementa el contador.
 attempts += 1;
 
@@ -90,7 +88,7 @@ attempts += 1;
 
 Para APIs, documentar semantica, restricciones, seguridad y errores en OpenAPI; no copiar toda la
 especificacion dentro del controller. Para procedimientos y funciones sujetos al checklist IC, usar la
-cabecera definida en [Calidad backend de datos y SQL](./backend-data-sql.md).
+cabecera definida en [Calidad backend de datos y SQL](backend-data-sql.md).
 
 ## Excepciones y flujo
 
@@ -120,3 +118,6 @@ cabecera definida en [Calidad backend de datos y SQL](./backend-data-sql.md).
 Aplicar la intencion util —legibilidad, trazabilidad, rendimiento y calidad— con evidencia y sin
 contradecir el stack.
 
+## Revisión de cambios de consumidores y PR
+
+Consultar [análisis de impacto y quality gates](../standards/engineering/change-impact-and-review-gates.md). Se aplica al diff aunque el autor **no** usara skills; mantener evidencia y no inventar fallos de producción.

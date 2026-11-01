@@ -45,31 +45,31 @@ Loki, Tempo, Jaeger, Fluent Bit, OpenSearch y VictoriaMetrics requieren decisió
 
 ## Ejemplos
 
-### Bien: labels limitados
+### ✅ Correcto: labels limitados
 
 ```ts
 httpDuration.observe({ method: 'GET', route: '/orders/:id', status: '200' }, seconds);
 ```
 
-### Mal: cardinalidad ilimitada
+### ❌ Incorrecto: cardinalidad ilimitada
 
 ```ts
 httpDuration.observe({ userId, orderId, url }, seconds);
 ```
 
-### Bien: error seguro
+### ✅ Correcto: error seguro
 
 ```ts
 logger.error({ errorCode, traceId, route }, 'Request failed');
 ```
 
-### Mal: datos sensibles
+### ❌ Incorrecto: datos sensibles
 
 ```ts
 logger.error({ requestBody, authorization, customer }, 'Request failed');
 ```
 
-### Bien: estado verificable
+### ✅ Correcto: estado verificable
 
 ```yaml
 tool: prometheus
@@ -77,7 +77,7 @@ status: adopted
 evidence: deploy/gitops/platform/kube-prometheus-stack.yaml
 ```
 
-### Mal: arquitectura aspiracional
+### ❌ Incorrecto: arquitectura aspiracional
 
 ```yaml
 tools: [prometheus, victoriametrics, tempo, jaeger, loki, opensearch]
@@ -91,3 +91,9 @@ status: production
 - Verifica alertas mediante eventos sintéticos.
 - Verifica redacción mediante payloads sensibles controlados.
 - Conserva evidencia por release.
+
+## ✅ Correcto / ❌ Incorrecto: revisión 2026
+
+- ✅ **Correcto:** Instrumentar logs estructurados con correlación OTel, métricas de baja cardinalidad, SLO y privacidad verificable.
+- ❌ **Incorrecto:** Loguear tokens/PII/payloads completos, usar ID de usuario como etiqueta Prometheus o declarar trazas sin exportador.
+- **Al recibir código existente:** primero caracterizar el comportamiento, después refactorizar en pasos comprobables. [Guía canónica de modernización](../standards/engineering/refactoring-existing-code.md).

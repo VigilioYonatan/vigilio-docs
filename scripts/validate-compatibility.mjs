@@ -82,8 +82,9 @@ async function validatePlatform(platform) {
 
   try {
     const profiles = await readJson(path.join(directory, 'skill-profiles.json'));
-    if (profiles.schema_version !== 1) {
-      fail('skill-profiles.json: schema_version debe ser 1');
+    const schemaVer = profiles.schema_version ?? profiles.schemaVersion;
+    if (schemaVer !== 1 && schemaVer !== 2) {
+      fail('skill-profiles.json: schema_version debe ser 1 o 2');
     }
 
     for (const [profile, expectedSkills] of Object.entries(platform.skill_profiles)) {

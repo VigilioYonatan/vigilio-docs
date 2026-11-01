@@ -4,7 +4,7 @@
   "platform_actions": {
     "repository": "Vigilio-Services/vigilio-platform-actions",
     "checkout_path": "vigilio-platform-actions",
-    "ref": "dd079500832c8b9cadefcd6dff90223aa7922ed3",
+    "ref": "08263de54604c262f1940e20e908006c2be07597",
     "packages": [
       {
         "path": "package.json",
@@ -29,12 +29,12 @@
       {
         "path": "packages/prompt-builder/package.json",
         "name": "@vigilio-services/prompt-builder",
-        "version": "0.6.3"
+        "version": "0.12.0"
       },
       {
         "path": "packages/vigilio-skills/package.json",
         "name": "@vigilio-services/vigilio-skills",
-        "version": "0.7.0"
+        "version": "0.8.0"
       }
     ],
     "required_files": [
@@ -48,6 +48,13 @@
     ],
     "skill_profiles": {
       "core": [
+        "vigilio-auto-senior",
+        "complete-work-no-shortcuts",
+        "review-code-change",
+        "vigilio-architecture-guide",
+        "symbol-ownership-architecture",
+        "precision-skill-reading",
+        "adaptive-context-budget",
         "skill-create-docs",
         "shared-technologies",
         "commit-ai-change",
@@ -57,15 +64,22 @@
         "grill-me",
         "improve-codebase-architecture",
         "architecture-traceability",
-        "review-code-change",
         "token-context-compression"
       ],
       "node-nest": [
+        "vigilio-auto-senior",
+        "complete-work-no-shortcuts",
+        "review-code-change",
+        "vigilio-architecture-guide",
+        "symbol-ownership-architecture",
+        "precision-skill-reading",
+        "adaptive-context-budget",
         "node-nest-technologies",
         "node-nest-build-feature",
         "node-nest-realtime",
         "node-nest-async-workers",
         "node-nest-persistence",
+        "node-nest-security",
         "node-nest-security-aws",
         "platform-observability-sre",
         "node-nest-testing"

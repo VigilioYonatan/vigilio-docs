@@ -59,3 +59,9 @@ de escritura para validar documentación.
 4. Actualizar consumidores con versión exacta o SHA completo.
 5. Ejecutar `skills:check`, governance, tests y smoke según el riesgo.
 6. Conservar evidencia de Jira, release y despliegue cuando sean controles requeridos.
+
+## Arquitectura agnóstica de tecnologías futuras
+
+Vigilio puede descubrir skills de Rust/C++ y extensiones posteriores mediante [metadatos declarativos](standards/ai/dynamic-capability-discovery.md). El catálogo es inventario, la propuesta no es carga, la carga no implica ejecución y una ejecución sin pruebas no constituye aceptación. Cada herramienta externa mantiene su propio control de autoridad y auditoría.
+
+✅ Correcto: stack decidido por requisitos, capacidades y riesgos. ❌ Incorrecto: imponer un framework por el nombre de la petición.

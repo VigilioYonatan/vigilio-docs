@@ -24,7 +24,7 @@ Evita duplicar reglas entre documentación, OpenSpec y skills.
 
 ```yaml
 capability: async.order-events
-canonical_doc: backend-node-nest/45-workers-outbox-sqs.md
+canonical_doc: stacks/backend/nestjs/messaging/references/45-workers-outbox-sqs.md
 implementation: apps/bus-impl-v2/src/outbox
 openspec: openspec/changes/add-compact-ecommerce
 skill: node-nest-async-workers
@@ -62,3 +62,11 @@ status: done
 - Detecta versiones incompatibles.
 - Detecta capacidades sin propietario.
 - Detecta estados sin evidencia.
+
+> Fuente única para **Correcto / Incorrecto: revisión 2026**: [abrir documento canónico](../governance/documentation-dry-and-ownership.md).
+
+### ✅ Correcto / ❌ Incorrecto — Matriz De Trazabilidad De Capacidades
+
+✅ **Correcto:** Para **Matriz De Trazabilidad De Capacidades**, separar configuración y secretos por ambiente, probar arranque y healthchecks.
+
+❌ **Incorrecto:** En **Matriz De Trazabilidad De Capacidades**, hardcodear secretos o prometer despliegue sin pruebas en runtime.
