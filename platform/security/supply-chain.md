@@ -1,6 +1,6 @@
 # Seguridad De La Cadena De Suministro (Supply Chain Security)
 
-Establece las directrices para la atestación criptográfica, generación de SBOM, triaje VEX y verificación en admisión de artefactos de software según el marco SLSA v1.0.
+Establece las directrices para la atestación criptográfica, generación de SBOM, triaje VEX y verificación en admisión de artefactos de software según el marco SLSA v1.2.
 
 ## Estructura De Seguridad De La Cadena De Suministro
 
@@ -23,22 +23,33 @@ Commit en Git ──> CI Runner Seguro ──> Generación de Imagen OCI
                      Pod Ejecutado en Producción
 ```
 
-## Niveles SLSA v1.0 (Build Track): Demostrado Vs Declarado
+## Niveles SLSA v1.2 (Build Track): Demostrado Vs Declarado
 
-El nivel SLSA no se autocertifica ni se infiere por la mera ejecución de un pipeline en CI. De acuerdo con la [especificación oficial de niveles SLSA v1.0](https://slsa.dev/spec/v1.0/levels):
+El marco SLSA v1.0 ha sido oficialmente retirado; la plataforma se alinea estrictamente con la especificación vigente [SLSA Build Track v1.2](https://slsa.dev/spec/v1.2/build-track-basics).
+
+El nivel SLSA no se autocertifica ni se infiere por la mera ejecución de un pipeline en CI. De acuerdo con SLSA v1.2:
 
 1. **Build Level 1 (Procedencia Existente):**
-   - Requiere que exista un documento de procedencia (provenance) generado durante el build que describa cómo se produjo el artefacto, incluyendo los parámetros e inputs de nivel superior.
-   - *Aclaración técnica:* La simple ejecución de pruebas o compilación en un runner de CI **NO** constituye Build L1 si no se emite formalmente el documento de procedencia estructurado.
+   - Requiere la generación de un documento formal de procedencia (provenance) emitido por el build que describa cómo se produjo el artefacto, sus parámetros de invocación e inputs de nivel superior.
+   - *Aclaración técnica:* Ejecutar compilaciones o tests en un runner de CI **NO** constituye Build L1 si no se emite formalmente el documento de procedencia estructurado.
 2. **Build Level 2 (Procedencia Alojada y Firmada):**
-   - La procedencia debe ser generada y firmada criptográficamente por una plataforma de build alojada y confiable (como GitHub Actions con GitHub Attestations o GitLab CI provenance).
-   - Impide que el desarrollador modifique o falsifique los metadatos de procedencia desde su entorno local.
+   - La procedencia debe ser generada y firmada criptográficamente por un servicio de build alojado confiable, impidiendo que el desarrollador falsifique los metadatos de procedencia localmente.
+   - *Precisión técnica:* Utilizar GitHub Actions con GitHub Attestations o GitLab CI provenance **no otorga automáticamente Build L2**; el builder específico, la generación del documento y las políticas de verificación deben satisfacer conjuntamente todos los requisitos de L2.
 3. **Build Level 3 (Plataforma Endurecida y Aislada):**
-   - La plataforma de build proporciona garantías estrictas de aislamiento entre ejecuciones (entornos efímeros y herméticos).
-   - El proceso de compilación es resistente a la manipulación por parte de los administradores del proyecto, usuarios privilegiados o dependencias comprometidas.
+   - Incluye todos los requisitos de Build L2.
+   - Plataforma de build endurecida donde la procedencia es resistente a la falsificación por parte de los tenants (generada por un plano de control fuera del alcance del usuario).
+   - Builds estrictamente aislados entre sí para prevenir contaminación cruzada de estado o caché.
+   - Entorno de ejecución efímero por cada invocación.
+   - Secretos de firma inaccesibles para los pasos de compilación controlados por el usuario.
+   - *Aclaración sobre hermeticidad:* El aislamiento entre builds y el entorno efímero **no deben confundirse con hermeticidad**. Prohibir el acceso a red o exigir builds totalmente herméticos es una propiedad adicional deseable, pero **NO** es un requisito obligatorio para certificar Build L3 en SLSA v1.2.
 
 > [!WARNING]
-> La plataforma declara capacidades compatibles con SLSA, pero el nivel operativo debe ser auditado y demostrado en cada pipeline. Nunca se debe certificar L2 o L3 sin atestaciones verificables registradas en un log de transparencia o firmadas por el runner de build.
+> La plataforma declara capacidades compatibles con SLSA v1.2, pero el nivel operativo debe ser auditado y demostrado en cada pipeline. Nunca se debe certificar L2 o L3 sin atestaciones verificables generadas por un builder auditado.
+
+## Política VIGILIO Frente A Rekor
+
+- **Requisito universal SLSA:** Procedencia auténtica, íntegra y criptográficamente verificable.
+- **Política institucional VIGILIO:** Exigir adicionalmente el registro en el libro mayor de transparencia pública o privada (Rekor / Sigstore) para no repudio y auditoría externa, **siempre que el modelo de confidencialidad del proyecto y las restricciones de datos lo permitan**.
 
 ## Prerrequisitos De Implementación
 
@@ -69,12 +80,12 @@ El nivel SLSA no se autocertifica ni se infiere por la mera ejecución de un pip
 ## Evidencia Requerida Para Auditoría
 
 - Documento SBOM (`sbom.spdx.json`) archivado como artefacto inmutable del build.
-- Atestación de procedencia SLSA (`provenance.json`) firmada mediante OIDC y verificada en Rekor.
+- Atestación de procedencia SLSA v1.2 (`provenance.json`) firmada mediante OIDC y verificada criptográficamente.
 - Archivo VEX (`triage.openvex.json`) firmado digitalmente por el responsable de seguridad si existen excepciones.
 
 ## ✅ Correcto / ❌ Incorrecto
 
-- ✅ **Correcto:** Generar procedencia estructurada y firmar imágenes con Cosign mediante OIDC del runner, bloqueando la admisión si falta la firma.
-- ❌ **Incorrecto:** Autocertificar SLSA Level 3 sin una plataforma de build aislada y resistente a manipulaciones demostrada con atestaciones reales.
+- ✅ **Correcto:** Generar procedencia estructurada bajo SLSA v1.2 y firmar imágenes con Cosign mediante OIDC del runner, bloqueando la admisión si falta la firma.
+- ❌ **Incorrecto:** Confundir aislamiento y efimeridad de Build L3 con hermeticidad de red obligatoria, o asumir Build L2 automáticamente sin auditar el builder.
 - ✅ **Correcto:** Documentar excepciones de CVEs no explotables mediante declaraciones OpenVEX formalizadas y aprobadas por seguridad.
 - ❌ **Incorrecto:** Desactivar la verificación de admisión en el clúster para acelerar un despliegue de emergencia o usar tags flotantes (`latest`).

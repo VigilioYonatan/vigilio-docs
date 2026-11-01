@@ -30,6 +30,7 @@ S3 Bucket (Versioned + KMS SSE + use_lockfile)
 - Versión de Terraform >= 1.10.0 en runners y estaciones de trabajo.
 - Política de bucket S3 con permisos para `s3:GetObject`, `s3:PutObject` y escrituras condicionales para el lockfile.
 - Bucket S3 con versionado habilitado permanentemente (`Status = "Enabled"`).
+- Para backends On-Premise basados en MinIO: probar y validar explícitamente el soporte del mecanismo de locking (`use_lockfile`); no asumirlo únicamente por compatibilidad de API S3 general.
 
 ## Detección Automática De Deriva (Drift Detection)
 

@@ -27,7 +27,7 @@ El backend remoto debe garantizar persistencia duradera, cifrado en reposo y blo
 > - **AWS (Recomendado):** Bucket S3 versionado y cifrado con KMS, utilizando bloqueo nativo de S3 mediante `use_lockfile = true` (disponible desde Terraform 1.10 con escrituras condicionales). La tabla DynamoDB está deprecada para nuevos despliegues y se conserva únicamente para compatibilidad o migración desde infraestructuras legacy.
 > - **Azure:** Azure Blob Storage en contenedor privado con bloqueo por leases nativos.
 > - **GCP:** Google Cloud Storage con bloqueo de objetos y retención de versiones.
-> - **On-Premise / Datacenter Privado:** PostgreSQL con advisory locks, HashiCorp Consul o almacenamiento compatible con S3 (MinIO) con soporte de lockfile.
+> - **On-Premise / Datacenter Privado:** PostgreSQL con advisory locks, HashiCorp Consul o almacenamiento compatible con S3 (MinIO). *Nota crítica de compatibilidad:* Para MinIO o implementaciones S3 on-premise, debe probarse y validarse explícitamente el soporte de escrituras condicionales para locking (`use_lockfile = true`); no debe asumirse únicamente por exponer una API compatible con S3.
 
 ## Prerrequisitos De Ejecución
 
