@@ -4,7 +4,7 @@ Establece las directrices para la atestación criptográfica, generación de SBO
 
 ## Estructura De Seguridad De La Cadena De Suministro
 
-Para garantizar la integridad y trazabilidad desde el commit hasta el pod en ejecución, la plataforma implementa una arquitectura SLSA Nivel 3:
+Para garantizar la integridad y trazabilidad desde el commit hasta el pod en ejecución, la plataforma implementa capacidades compatibles con los requisitos de SLSA. El nivel efectivo demostrado depende de la evidencia verificable del pipeline, no de la mera generación de artefactos de procedencia:
 
 ```text
 Commit en Git ──> CI Runner Seguro ──> Generación de Imagen OCI
@@ -22,6 +22,16 @@ Commit en Git ──> CI Runner Seguro ──> Generación de Imagen OCI
                          ▼
                      Pod Ejecutado en Producción
 ```
+
+## Nivel SLSA Demostrado Vs Declarado
+
+El nivel SLSA no se autocertifica. Se determina por:
+
+1. **Level 1:** El build se ejecuta en un sistema de CI documentado.
+2. **Level 2:** El generador de procedencia es un servicio confiable del runner (GitHub Attestations, GitLab CI provenance).
+3. **Level 3:** El proceso de build es resistente a manipulación por parte de los administradores del proyecto.
+
+No declarar un nivel superior al demostrable por la configuración actual del pipeline.
 
 ## Componentes Y Gobernanza
 
