@@ -37,11 +37,11 @@ El nivel SLSA no se autocertifica ni se infiere por la mera ejecución de un pip
    - *Precisión técnica:* Utilizar GitHub Actions con GitHub Attestations o GitLab CI provenance **no otorga automáticamente Build L2**; el builder específico, la generación del documento y las políticas de verificación deben satisfacer conjuntamente todos los requisitos de L2.
 3. **Build Level 3 (Plataforma Endurecida y Aislada):**
    - Incluye todos los requisitos de Build L2.
-   - Plataforma de build endurecida donde la procedencia es resistente a la falsificación por parte de los tenants (generada por un plano de control fuera del alcance del usuario).
-   - Builds estrictamente aislados entre sí para prevenir contaminación cruzada de estado o caché.
+   - Plataforma de build endurecida donde la procedencia es resistente a la falsificación (generada por un plano de control fuera del alcance de cualquier paso controlado por el usuario).
+   - Aislamiento estricto entre todas las ejecuciones de compilación (incluso entre ejecuciones consecutivas del mismo proyecto o tenant, no únicamente entre tenants distintos) para prevenir contaminación cruzada de estado o caché.
    - Entorno de ejecución efímero por cada invocación.
    - Secretos de firma inaccesibles para los pasos de compilación controlados por el usuario.
-   - *Aclaración sobre hermeticidad:* El aislamiento entre builds y el entorno efímero **no deben confundirse con hermeticidad**. Prohibir el acceso a red o exigir builds totalmente herméticos es una propiedad adicional deseable, pero **NO** es un requisito obligatorio para certificar Build L3 en SLSA v1.2.
+   - *Aclaración sobre hermeticidad:* El aislamiento entre todas las ejecuciones y el entorno efímero **no deben confundirse con hermeticidad**. Prohibir el acceso a red o exigir builds totalmente herméticos es una propiedad adicional deseable, pero **NO** es un requisito obligatorio para certificar Build L3 en SLSA v1.2.
 
 > [!WARNING]
 > La plataforma declara capacidades compatibles con SLSA v1.2, pero el nivel operativo debe ser auditado y demostrado en cada pipeline. Nunca se debe certificar L2 o L3 sin atestaciones verificables generadas por un builder auditado.
