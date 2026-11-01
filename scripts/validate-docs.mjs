@@ -18,7 +18,6 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const EXCLUDED = new Set(['.compat', '.git', '.github', '_site', 'node_modules', 'scripts']);
 const EXCLUDED_FILES = new Set(['AGENTS.md']);
 const NUMBERING_MIRRORS = new Set([
-  'backend-node-nest/18-backend-technologies-skill-2026.md',
 ]);
 
 async function markdownFiles(directory = ROOT, collected = []) {

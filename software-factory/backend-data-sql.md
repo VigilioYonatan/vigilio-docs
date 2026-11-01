@@ -85,7 +85,7 @@ Evidencia: comandos y exit codes, conteos pre/post, duracion, plan y owner opera
 - Registrar comandos, exit codes, integridad y riesgos residuales.
 
 Para PostgreSQL/Drizzle, completar esta baseline con
-[Migraciones PostgreSQL y Drizzle](../backend-node-nest/15-migrations-db.md),
-[Data governance](../backend-node-nest/13-data-governance.md) y
-[Reglas senior de codigo](../backend-node-nest/20-reglas-senior-codigo.md).
+[Migraciones PostgreSQL y Drizzle](../stacks/backend/nestjs/persistence/references/15-migrations-db.md),
+[Data governance](../standards/data/references/13-data-governance.md) y
+[Reglas senior de codigo](../stacks/backend/nestjs/quality/references/20-reglas-senior-codigo.md).
 

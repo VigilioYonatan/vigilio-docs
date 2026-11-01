@@ -53,6 +53,6 @@ observable.
 - Registrar comando, exit code, alcance y cualquier gate omitido o bloqueado.
 
 Para Node/Nest, completar esta baseline con
-[Pruebas Vitest y Playwright](../backend-node-nest/7-pruebas-vitest-playwright.md) y
-[Estrategia de testing 2026](../backend-node-nest/38-estrategia-testing-2026.md).
+[Pruebas Vitest y Playwright](../stacks/backend/nestjs/testing/references/7-pruebas-vitest-playwright.md) y
+[Estrategia de testing 2026](../stacks/backend/nestjs/testing/references/38-estrategia-testing-2026.md).
 

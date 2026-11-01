@@ -39,7 +39,7 @@ Reduce tokens sin reducir evidencia, cobertura o precisión.
 
 ## Ejemplos
 
-### Bien: descubrir primero
+### ✅ Correcto: descubrir primero
 
 ```text
 get_architecture(path="src/orders")
@@ -48,19 +48,19 @@ trace_path(function_name="publishOrder", direction="both")
 get_code_snippet(qualified_name="...")
 ```
 
-### Mal: cargar todo
+### ❌ Incorrecto: cargar todo
 
 ```text
 Leer todos los archivos de src/, tests/, docs/ y node_modules/.
 ```
 
-### Bien: limitar logs
+### ✅ Correcto: limitar logs
 
 ```text
 Conservar primer error, causa, archivo, línea y resumen final.
 ```
 
-### Mal: perder evidencia
+### ❌ Incorrecto: perder evidencia
 
 ```text
 Eliminar stack traces, códigos de salida y nombres de tests fallidos.
@@ -76,3 +76,6 @@ Eliminar stack traces, códigos de salida y nombres de tests fallidos.
 - Resume primero el resultado.
 - Incluye detalles solamente cuando cambien una decisión.
 - Conserva ejemplos necesarios para ejecutar o verificar.
+
+> Fuente única para **Correcto / Incorrecto: revisión 2026**: [abrir documento canónico](../governance/documentation-dry-and-ownership.md).
+

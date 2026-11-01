@@ -54,7 +54,7 @@ commit
 
 ## Ejemplos
 
-### Bien: worker separado
+### ✅ Correcto: worker separado
 
 ```yaml
 api:
@@ -64,13 +64,13 @@ worker:
     queueLength: 20
 ```
 
-### Mal: proceso mezclado
+### ❌ Incorrecto: proceso mezclado
 
 ```yaml
 command: ["node", "dist/main-and-worker.js"]
 ```
 
-### Bien: identidad por proceso
+### ✅ Correcto: identidad por proceso
 
 ```yaml
 serviceAccount:
@@ -79,14 +79,14 @@ serviceAccount:
     eks.amazonaws.com/role-arn: ${WORKER_ROLE_ARN}
 ```
 
-### Mal: credencial estática
+### ❌ Incorrecto: credencial estática
 
 ```yaml
 env:
   AWS_SECRET_ACCESS_KEY: plaintext
 ```
 
-### Bien: rollback automático
+### ✅ Correcto: rollback automático
 
 ```yaml
 analysis:
@@ -94,7 +94,7 @@ analysis:
   latencyP95Ms: 500
 ```
 
-### Mal: promoción temporal
+### ❌ Incorrecto: promoción temporal
 
 ```yaml
 promoteAfterSeconds: 30
@@ -108,3 +108,9 @@ promoteAfterSeconds: 30
 - Prueba migraciones contra copia representativa.
 - Ejecuta smoke y análisis canary.
 - Prueba rollback y recuperación.
+
+## ✅ Correcto / ❌ Incorrecto: revisión 2026
+
+- ✅ **Correcto:** Separar estrategia por runtime (EKS vs Lambda) y validar manifests/IaC, acceso mínimo, health checks, rollback.
+- ❌ **Incorrecto:** Confundir workflows de Lambda con EKS o tratar muestras YAML como un despliegue verificado.
+- **Al recibir código existente:** primero caracterizar el comportamiento, después refactorizar en pasos comprobables. [Guía canónica de modernización](../standards/engineering/refactoring-existing-code.md).

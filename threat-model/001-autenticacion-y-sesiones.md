@@ -91,3 +91,9 @@ cliente -> Authorization: Bearer <at>  -> JwtAuthGuard global valida access toke
 ## Fecha
 
 2026-07-26
+
+## ✅ Correcto / ❌ Incorrecto: revisión 2026
+
+- ✅ **Correcto:** AuthN + AuthZ de recurso/tenant; allowlist de salida, secretos fuera de logs y pruebas de acceso cruzado.
+- ❌ **Incorrecto:** Permitir rutas públicas por comodidad, confiar sólo en `auth` o construir salida con `$request->all()`.
+- **Al recibir código existente:** primero caracterizar el comportamiento, después refactorizar en pasos comprobables. [Guía canónica de modernización](../standards/engineering/refactoring-existing-code.md).

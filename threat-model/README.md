@@ -27,6 +27,14 @@ con su condicion de revision.
 
 | Threat model | Flujo | Estado |
 | --- | --- | --- |
-| [Autenticacion y sesiones](./001-autenticacion-y-sesiones.md) | login, refresh, logout | Vigente |
+| [Autenticacion y sesiones](001-autenticacion-y-sesiones.md) | login, refresh, logout | Vigente |
 
-Plantilla: [`template.md`](./template.md)
+Plantilla: [`template.md`](template.md)
+
+> Fuente única para **Correcto / Incorrecto: revisión 2026**: [abrir documento canónico](../governance/documentation-dry-and-ownership.md).
+
+### ✅ Correcto / ❌ Incorrecto — Modelos de Amenazas (Threat Model)
+
+✅ **Correcto:** Para **Modelos de Amenazas (Threat Model)**, identificar activo, amenaza, mitigación, owner y prueba residual.
+
+❌ **Incorrecto:** En **Modelos de Amenazas (Threat Model)**, confundir una lista genérica de amenazas con mitigaciones implementadas.
