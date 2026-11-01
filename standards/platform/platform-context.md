@@ -11,6 +11,14 @@
 
 El contexto no sustituye a las fuentes ejecutables. Si declara `provider: onprem` pero los manifiestos aprovisionan AWS, el agente debe detenerse y reportar la contradicción.
 
+## Gate Ejecutable
+
+```bash
+pnpm exec vigilio-skills context --required
+```
+
+Sin `--required`, la ausencia del archivo devuelve `NOT_RUN` porque el contrato es opcional. Un YAML inválido, una propiedad desconocida, una ruta absoluta o una ruta que escape del consumidor siempre bloquean el gate. Para evidencia automatizada puede añadirse `--json`.
+
 ## Ejemplo
 
 Consulta [`platform-context.example.yaml`](../../examples/platform-context.example.yaml). Los valores son ilustrativos y deben adaptarse al consumidor.

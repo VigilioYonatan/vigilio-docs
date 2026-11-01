@@ -799,7 +799,7 @@ Lectura de cada linea:
 Reglas:
 
 - Este `.npmrc` se commitea porque no tiene tokens.
-- No agregar `//npm.pkg.github.com/:_authToken=ghp_xxxx` al archivo del repo.
+- No agregar `//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}` al archivo del repo.
 - Tokens reales van en `~/.npmrc` del desarrollador o en variables de entorno de CI.
 - Si el registry interno usa CA privada, documentar `cafile` en el `.npmrc` del desarrollador, nunca en el del repo.
 

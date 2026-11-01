@@ -76,7 +76,7 @@ jobs:
         env:
           POSTGRES_DB: vigilio_test
           POSTGRES_USER: vigilio
-          POSTGRES_PASSWORD: test-only-password
+          POSTGRES_PASSWORD: ${TEST_DATABASE_PASSWORD}
         ports: ['5432:5432']
         options: >-
           --health-cmd 'pg_isready -U vigilio -d vigilio_test'
