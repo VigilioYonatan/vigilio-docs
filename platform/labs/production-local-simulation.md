@@ -1,128 +1,103 @@
-# Simulación Local De Producción Y Laboratorios
+# Simulación Local De Producción Y Laboratorios (`prod-local`)
 
-Define la arquitectura, perfiles de ejecución y procedimientos de validación en entornos locales reproducibles (`prod-local`) que ofrecen una simulación production-like de la infraestructura productiva.
+Define la arquitectura, perfiles de ejecución y procedimientos de validación en entornos locales reproducibles (`prod-local`) que ofrecen una simulación *production-like* alineada exactamente con las [tres arquitecturas de referencia de Vigilio](../architecture/reference-topologies.md), sin imponer Kubernetes cuando el producto opera sobre Docker/Podman Compose.
 
 ## Propósito Del Laboratorio Local
 
-El laboratorio local (`prod-local`) permite a cualquier ingeniero probar el ecosistema completo en su estación de trabajo antes de enviar código a revisión o abrir Pull Requests.
+El laboratorio local (`prod-local`) permite a cualquier ingeniero validar contratos HTTP, migraciones, seguridad de contenedores, redes privadas, observabilidad y flujos asíncronos en su estación de trabajo antes de abrir Pull/Merge Requests.
 
 > [!NOTE]
-> `prod-local` reproduce contratos, configuraciones y comportamientos críticos de la infraestructura. No reproduce capacidad real de cómputo, disponibilidad geográfica multizona ni servicios gestionados propietarios de la nube.
+> `prod-local` reproduce contratos, topología de procesos, políticas de seguridad y flujos de datos críticos. No reproduce capacidad real de cómputo, disponibilidad geográfica multizona, fallos físicos entre racks ni SLAs de servicios gestionados en la nube.
+
+## Los 3 Perfiles De `prod-local` Según Escala De Arquitectura
 
 ```text
-Estación de Trabajo Local (Docker Desktop / Podman / WSL2)
-├── Cluster Kubernetes Local (Kind / k3d)
-│   ├── Backend de dominio (ecommerce-bus-impl, facturacion-bus-impl)
-│   ├── BFF por canal (ecommerce-web-bff, facturacion-web-bff)
-│   ├── Microfrontends (ecommerce-web-mfe, facturacion-web-mfe)
-│   ├── Servicios de Datos (CloudNativePG / Valkey)
-│   ├── Ingress Controller (NGINX / Cilium)
-│   └── Observabilidad (OpenTelemetry Collector + VictoriaMetrics)
-└── Perfil de Seguridad Runtime (<runtime-security-profile>)
-    └── Kernel eBPF + Tetragon Enforcement (en Linux o WSL2)
+Estación de Trabajo Local (Docker Desktop / Rootless Podman / WSL2)
+├── Perfil 1: Compose VPS (Proyectos simples a medianos — SIN Kubernetes)
+│   └── Orquesta directamente <product>-deploy/compose/compose.yaml (sin duplicarlo)
+│       ├── Caddy (TLS local) + Web Distroless + API + Outbox + Worker + Migrate
+│       ├── PostgreSQL + Valkey + NATS JetStream + RustFS (S3) + ClamAV
+│       └── OTel Collector + Prometheus + Alertmanager + Loki + Tempo + Grafana
+├── Perfil 2: Kubernetes GitOps Self-Hosted (Empresas grandes On-Prem)
+│   ├── Clúster Kind aislado: Cilium + Gateway API + Argo CD + Kyverno CEL + CloudNativePG + Mailpit
+│   └── Extensión opcional <runtime-security-profile>: Kernel Linux/WSL2 eBPF + Tetragon Enforcement
+└── Perfil 3: Emulación Cloud Ligera (Empresas grandes AWS / Multicloud)
+    └── Contenedores de aplicación + PostgreSQL + Floci (emulación rápida S3/SNS/SQS/DLQ sin LocalStack)
 ```
 
-## Modos De Ejecución: Estándar Vs Privilegiado
+| Perfil de Laboratorio | Arquitectura Objetivo | Orquestador Requerido | Regla Clave de Fidelidad |
+|---|---|---|---|
+| **1. `compose-vps` (Por defecto para apps simples/medianas)** | [Entrega Cloud-Neutral Compose](../compose/cloud-neutral-vps-delivery.md) | Docker Compose o Rootless Podman Compose (`>= 4.8`) | **Cero Kubernetes.** Consume el mismo `compose.yaml` productivo inyectando variables locales y manejando tokens de registro solo en memoria efímera. |
+| **2. `k8s-gitops` (Estándar y `<runtime-security-profile>`)** | [Kubernetes GitOps](../kubernetes/gitops-delivery.md) · [On-Prem](../onprem/kubernetes-foundation.md) | Kind (`>= 0.27`) / k3d sobre Podman/Docker/WSL2 | Prueba admisión fail-closed de Kyverno CEL, Gateway API, `CloudNativePG` PITR drill, alertas en Mailpit y (en Linux/WSL2) bloqueo eBPF con Tetragon. |
+| **3. `cloud-floci` (Integración Cloud AWS/Azure)** | [Fundación Cloud AWS](../aws/platform-foundation.md) | Compose + **Floci** (puertos aislados AWS/Azure) | Valida S3 privado, `Outbox -> SNS -> SQS + DLQ` e idempotencia sin credenciales `AKIA...` reales ni sobrecarga de memoria de suites pesadas. |
 
-1. **Modo Estándar (`prod-local`):**
-   - No requiere privilegios de root ni acceso directo al kernel.
-   - Ejecuta contenedores de aplicación, base de datos local y stack de observabilidad simulado sobre Docker Desktop, Podman o WSL2.
-   - Ideal para desarrollo ágil, depuración de lógica de negocio y pruebas unitarias/integradas.
-2. **Modo de seguridad runtime (`<runtime-security-profile>`):**
-   - Requiere acceso al kernel de Linux (en estaciones Linux nativas o WSL2 con Docker Desktop configurado para acceso al subsistema eBPF).
-   - Habilita el subsistema eBPF y el despliegue del demonio Tetragon.
-   - Permite verificar localmente el comportamiento ante intrusiones, inyección de fallos y bloqueo activo de llamadas de sistema antes del despliegue en clústeres reales.
+`<runtime-security-profile>` es un rol configurable para validación de kernel eBPF/Tetragon cuando la arquitectura objetivo es Kubernetes, no un nombre rígido de carpeta.
 
-`<runtime-security-profile>` es un rol configurable, no una ruta que deba copiarse literalmente. Puede resolverse como `labs/runtime-security`, `prod-local-security` u otra convención validada por el consumidor.
+## Roles De Aplicación Y Propiedad De Contratos
 
-## Roles De Aplicación Dentro Del Laboratorio
-
-- **Backend de dominio:** implementa reglas de negocio y conserva la autoridad sobre sus datos. `ecommerce-bus-impl` y `facturacion-bus-impl` son ejemplos; para proyectos nuevos se prefieren nombres explícitos como `ecommerce-api` o `facturacion-service`.
-- **BFF (Backend for Frontend):** adapta contratos, agrega respuestas y aplica necesidades específicas de un canal. `ecommerce-web-bff` sirve al frontend web; un canal mobile podría utilizar `ecommerce-mobile-bff`.
-- **MFE (Microfrontend):** frontend modular con ownership, build y despliegue independientes. `ecommerce-web-mfe` y `facturacion-web-mfe` pueden componerse dentro de un shell web sin compartir su lógica interna.
-
-El BFF no sustituye al backend de dominio y el MFE no debe acceder directamente a bases de datos. El flujo recomendado es `MFE -> BFF -> APIs de dominio`; cuando no existe una necesidad real de adaptación por canal, el MFE puede consumir una API pública gobernada sin introducir un BFF innecesario.
+- **Backend de dominio (`<product>-impl` o `<product>-api`):** Implementa reglas de negocio, conserva la autoridad sobre sus datos y ejecuta desde una sola imagen OCI los roles `api`, `outbox`, `worker` y `migration`. **No utiliza carpetas `contracts/` separadas:** cada módulo posee sus schemas Zod 4 y DTOs HTTP exportando OpenAPI verificable en CI.
+- **BFF (Backend for Frontend):** Opcional; existe únicamente cuando un canal concreto requiere adaptación o agregación específica.
+- **Frontend / MFE (`<product>-web`):** Unidad independiente empaquetada con `Containerfile.runtime` Distroless sin tokens persistidos en capas OCI; cuando no hay necesidad real de adaptación por canal, consume directamente la API pública gobernada.
 
 ## Modos De Conectividad Del Laboratorio
 
 Para garantizar reproducibilidad sin sorpresas por dependencias de red:
 
-1. **`online-bootstrap`:** Modo de inicialización inicial que descarga imágenes OCI, charts de Helm y binarios de herramientas especificados en `versions.yaml`.
-2. **`cached-offline`:** Modo de operación regular que reutiliza las capas de imágenes y charts almacenados en la caché local del demonio de contenedores, sin requerir acceso a Internet.
-3. **`air-gapped`:** Modo de laboratorio estricto para entornos aislados; requiere la importación previa de un bundle tarball explícito con todas las imágenes y manifiestos requeridos.
+1. **`online-bootstrap`:** Inicialización que descarga imágenes OCI fijadas y binarios verificados por checksum SHA-256 en `.tools/` según `versions.yaml`.
+2. **`cached-offline`:** Operación regular que reutiliza las capas OCI almacenadas en la caché local del runtime de contenedores sin requerir Internet.
+3. **`air-gapped`:** Modo estricto para entornos aislados mediante importación previa de un bundle tarball verificado con imágenes y manifiestos.
 
-Los servicios de nube externos (como AWS S3 o SQS) se simulan mediante componentes locales equivalentes (MinIO para almacenamiento de objetos, emuladores o Valkey para colas).
+## Especificación Operativa Y Verificación
 
-## Limpieza Y Ciclo De Vida
+### 1. Requisitos e Higiene de Credenciales
+- **Container Runtime:** Docker Desktop o Rootless Podman con soporte cgroups v2 (8 GB RAM mínimo para Perfil 1/3; 16 GB RAM recomendados para Perfil 2 con observabilidad completa).
+- **Reporte de preflight canónico:** `reports/local-lab-preflight.json` generado antes de ejecutar suites E2E o certificar el gate local.
+- **Aislamiento de credenciales:** Prohibición terminante de claves reales cloud (`AKIA...`, tokens productivos) en archivos locales; cualquier token privado de paquetes se inyecta en memoria durante el build y se limpia inmediatamente al finalizar (`try / finally`).
 
-- **Automatización Idempotente:** Scripts de inicialización (`setup.ps1` / `setup.sh`) y destrucción (`teardown.ps1` / `teardown.sh`) garantizan que no queden recursos huérfanos consumiendo memoria en la máquina del desarrollador.
+### 2. Procedimientos de Inicio y Validación por Perfil
+
+**Perfil 1 — Proyectos Simples a Medianos (`compose-vps`, sin Kubernetes):**
+```bash
+# Validar interpolación declarativa de Compose sin tocar servidores
+podman compose --env-file environments/local.env.example -f compose/compose.yaml config --quiet
+
+# Levantar stack completo reutilizando el compose declarativo del producto
+pwsh ./prod-local/scripts/up.ps1
+pwsh ./prod-local/scripts/test.ps1
+```
+
+**Perfil 2 — Proyectos Enterprise Kubernetes GitOps (`k8s-gitops`):**
+```bash
+# Bootstrap de herramientas fijadas con verificación SHA-256 en .tools/
+pwsh ./scripts/bootstrap-tools.ps1
+kind create cluster --config kind-config.yaml --name vigilio-local-lab
+pwsh ./scripts/validate.ps1
+```
+
+**Perfil 3 — Integración Cloud con Emulador Ligero (`cloud-floci`):**
+```bash
+# Validar migraciones, concurrencia PostgreSQL y mensajería S3/SNS/SQS sobre Floci local
+pnpm test:integration
+```
+
+### 3. Escenarios Negativos y Pruebas Fail-Closed
+- **Container Daemon offline o no instalado:** El script de preflight aborta inmediatamente registrando `NOT_RUN` en `reports/local-lab-preflight.json`.
+- **Exposición accidental de puertos internos:** `test.ps1` verifica que PostgreSQL, Valkey, NATS y almacenamiento S3 interno no queden publicados en `0.0.0.0`, fallando cerrado si algún puerto de datos es accesible fuera de la red interna.
+- **Inyección accidental de claves de producción:** Si el analizador estático detecta `AKIA...` o secretos reales, el gate emite `FAIL` y bloquea la ejecución.
+- **Colisión de puertos de host:** El preflight detecta puertos ocupados antes de iniciar Caddy o el Gateway local.
+
+### 4. Procedimiento de Teardown Idempotente
+```bash
+# Perfil 1 (Compose): detener contenedores y limpiar volúmenes temporales de sesión
+pwsh ./prod-local/scripts/down.ps1
+
+# Perfil 2 (Kind): eliminar clúster local sin dejar procesos huérfanos
+kind delete cluster --name vigilio-local-lab
+```
 
 ## ✅ Correcto / ❌ Incorrecto
 
-- ✅ **Correcto:** Validar cambios críticos de arquitectura, contratos y seguridad en el entorno `prod-local` antes de abrir Pull Requests a ramas de integración.
-- ❌ **Incorrecto:** Asumir que un test aprobado en local garantiza tolerancia a fallos multizona o escalado de producción sin pruebas de carga correspondientes.
-- ✅ **Correcto:** Distinguir entre el modo de bootstrap con conectividad y la ejecución cached-offline para soportar desarrollo sin conexión.
-- ❌ **Incorrecto:** Probar configuraciones complejas de clúster o políticas destructivas directamente sobre entornos de staging o producción compartidos.
-
-## Especificación operativa de simulación y laboratorio local
-
-### 1. Requisitos y dependencias de ejecución
-- **Container Runtime**: Docker Desktop (>= 4.25), Podman (>= 4.8) o WSL2 Ubuntu 24.04 con soporte para cgroups v2.
-- **Orquestador Local**: Kind (>= 0.22) o k3d (>= 5.6), Tilt (>= 0.33) para desarrollo iterativo y recarga de contenedores.
-- **Reporte de preflight canónico**: `reports/local-lab-preflight.json` generado automáticamente antes de ejecutar pruebas o abrir PRs.
-- **Aislamiento de credenciales**: Prohibición terminante de variables de entorno de AWS reales (`AKIA...`) en archivos de compose o manifiestos locales.
-
-### 2. Matriz de decisión de perfiles y aislamiento
-| Perfil | Requisitos de Host | Casos de uso | Mocks provistos | Nivel de aislamiento |
-|---|---|---|---|---|
-| **Estándar (`prod-local`)** | Docker sin root, 8GB RAM, 4 CPUs | Desarrollo diario, BFFs, APIs de dominio, MFEs | MinIO (S3), LocalStack (SQS/SNS), Valkey (Redis) | Contenedores en red aislada de puente |
-| **Privilegiado (`runtime-security`)** | Kernel Linux >= 5.15 con eBPF (WSL2/Linux) | Pruebas de políticas Tetragon, Cilium NetworkPolicy | Mocks de telemetría OTel Collector + Grafana local | Requiere permisos CAP_SYS_ADMIN / BPF en nodo |
-| **Cached-Offline** | Imágenes precargadas en registry local (localhost:5001) | Desarrollo sin conexión a Internet | Caché OCI local sincronizada | No requiere salida a red externa |
-| **Air-gapped** | Bundle tarball empaquetado | Auditoría o laboratorios restringidos | Todo el stack empaquetado | Totalmente hermético |
-
-### 3. Procedimientos paso a paso de aprovisionamiento y verificación
-1. **Verificación de preflight**:
-   ```bash
-   node -e "
-   const fs = require('fs');
-   const preflight = {
-     preflight_passed: true,
-     container_daemon_healthy: true,
-     kind_available: true,
-     offline_cache_ready: true,
-     privileged_ebpf_isolated: true,
-     prod_credentials_detected: false,
-     mock_services_healthy: true,
-     verification_status: 'READY'
-   };
-   fs.mkdirSync('reports', { recursive: true });
-   fs.writeFileSync('reports/local-lab-preflight.json', JSON.stringify(preflight, null, 2));
-   "
-   ```
-2. **Creación de clúster Kind con mapeo de puertos**:
-   ```bash
-   kind create cluster --config kind-config.yaml --name vigilio-local-lab
-   ```
-3. **Inicio de desarrollo interactivo con Tilt**:
-   ```bash
-   tilt up
-   ```
-4. **Verificación de mocks**: Probar que las llamadas a S3 y SQS se resuelvan contra `http://localhost:4566` (LocalStack) o MinIO local sin invocar endpoints externos de AWS.
-
-### 4. Escenarios negativos y pruebas de fallo controlado (Fail-Closed)
-- **Container Daemon offline o no instalado**: Si Docker/Podman está detenido, el script de inicio aborta inmediatamente emitiendo veredicto `NOT_RUN` en `reports/local-lab-preflight.json`.
-- **Inyección accidental de claves de producción**: Si el analizador estático o preflight detecta cadenas `AKIA...` o secretos productivos en `docker-compose.local.yaml`, el gate de seguridad emite veredicto `FAIL` y bloquea la sesión.
-- **Colisión de puertos de host**: Si los puertos 8080/8443 están ocupados por otro proceso local, el script preflight reporta la colisión antes de levantar Kind para evitar estados inconsistentes.
-
-### 5. Procedimiento de Teardown y purga de recursos
-1. **Destrucción limpia de clúster y contenedores**:
-   ```bash
-   tilt down
-   kind delete cluster --name vigilio-local-lab
-   ```
-2. **Purga de volúmenes huérfanos**:
-   ```bash
-   docker volume prune -f --filter "label=com.docker.compose.project=vigilio-local"
-   ```
-3. **Validación post-teardown**: Comprobar que no queden procesos huérfanos ni memoria RAM retenida tras cerrar el entorno de desarrollo.
-
+- ✅ **Correcto:** Usar el **Perfil 1 (Compose puro sin K8s)** en proyectos simples a medianos reutilizando el `compose.yaml` de `<product>-deploy`, y reservar Kind (**Perfil 2**) exclusivamente para plataformas con ADR de Kubernetes/GitOps.
+- ❌ **Incorrecto:** Obligar a instalar Kind, Helm y Tilt para desarrollar un monolito modular desplegado en VPS con Compose, o duplicar un segundo `docker-compose.yml` desconectado del archivo productivo.
+- ✅ **Correcto:** Distinguir honestamente lo probado en `prod-local` (`PASS` de contratos, admisión, alertas y restore drill en un host) de lo que sigue bloqueado hasta contar con hardware multi-nodo o cuentas cloud reales (`BLOCKED` / `NOT_RUN`).
+- ❌ **Incorrecto:** Asumir que un test aprobado en `prod-local` demuestra tolerancia a pérdida de zona física o capacidad real bajo tráfico productivo sin pruebas de carga y game days en staging/producción.
