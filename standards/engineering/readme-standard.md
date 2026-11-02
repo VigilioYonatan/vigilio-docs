@@ -13,7 +13,12 @@ El `README.md` no es una formalidad burocrática ni un adorno opcional que se es
 3. **Claridad en la Propiedad de Contratos (ADR 0001)**:
    - **Backend TypeScript/NestJS**: Documentar que los contratos se definen en `src/` y se generan mediante `vigilio-node generate-contracts`.
    - **Backend No-TS / API Externa**: Indicar expresamente que los DTOs e interfaces son locales del consumidor o generados desde OpenAPI.
-4. **Verificación Antes del Despliegue**: Todo README debe declarar los comandos de testing unitario, integración, E2E y linters.
+4. **Cero Versiones Hardcodeadas (Single Source of Truth para Versiones)**:
+   - **PROHIBIDO** inventar o duplicar números de versiones estáticas en el README que queden desfasados del código real.
+   - La versión de Node.js y pnpm debe referenciar `package.json` (`"engines"`, `"packageManager"`) o `.nvmrc` / `.node-version`.
+   - Las versiones de bases de datos y colas deben referenciarse a `docker-compose.yml`.
+   - La política y matriz de versiones global está centralizada en [technology/versions.md](../../technology/versions.md) y en las políticas de plataforma (`policies/platform/node-backend-2026.json`).
+5. **Verificación Antes del Despliegue**: Todo README debe declarar los comandos de testing unitario, integración, E2E y linters.
 
 ---
 
@@ -31,16 +36,18 @@ Todo repositorio en VIGILIO debe estructurar su `README.md` siguiendo este orden
 - **Feature B**: Descripción técnica/funcional.
 
 ## 2. Stack Tecnológico (Tech Stack)
-- **Runtime / Lenguaje**: Node.js 24 LTS, TypeScript 5.8+ (o PHP 8.4+, Rust, etc.)
-- **Framework**: NestJS 11/12 (Backend) / Preact + Vite (Frontend)
-- **Base de Datos & Caché**: PostgreSQL 16 + Drizzle ORM / Valkey (Redis)
-- **Tooling & Linter**: Biome, pnpm, Vitest, Playwright
+- **Runtime / Lenguaje**: Node.js (fijado en `package.json#engines`), TypeScript
+- **Framework**: NestJS (Fastify) en Backend / React o Preact (Vite) en Frontend
+- **Base de Datos & Caché**: PostgreSQL / Valkey (imágenes fijadas en `docker-compose.yml`)
+- **Tooling & Linter**: Biome, pnpm (fijado en `package.json#packageManager`), Vitest, Playwright
 - **CI/CD & Cloud**: GitHub Actions, Docker, AWS EKS / S3 + CloudFront
+- **Línea Canónica de Versiones**: Verificada en [vigilio-docs/technology/versions.md](../../technology/versions.md)
 
 ## 3. Inicio Rápido (Quick Start < 10 min)
 ### Prerrequisitos
-- Node.js >= 24, pnpm >= 11
-- Docker Desktop / Podman en ejecución
+- Node.js: Versión fijada en `package.json` (`"engines"`) o `.nvmrc`
+- pnpm: Versión fijada en `package.json` (`"packageManager"`)
+- Docker Desktop / Podman en ejecución (servicios en `docker-compose.yml`)
 
 ### Instalación y Configuración
 1. Clonar el repositorio:
@@ -72,7 +79,7 @@ Todo repositorio en VIGILIO debe estructurar su `README.md` siguiendo este orden
 Explicación o diagrama Mermaid de Clean Architecture, DDD o Microfrontends.
 
 ## 6. Contratos y API Endpoints
-Tabla de endpoints y ejemplo de request/response con schemas Zod.
+Tabla de endpoints y ejemplo de request/response con schemas Zod y tree-shaking por subpath.
 
 ## 7. Variables de Entorno (Environment Variables)
 Tabla detallando nombre, descripción, obligatoriedad y si es secreta.
@@ -97,15 +104,16 @@ Lista de comprobación rápida para evitar problemas frecuentes.
 Microservicio backend de alta concurrencia encargado del procesamiento de órdenes, validación de clientes y emisión de pólizas de seguros.
 
 ## Stack Tecnológico
-- **Runtime**: Node.js 24.22 LTS + TypeScript
-- **Framework**: NestJS 11 + Clean Architecture & DDD
-- **Persistencia**: PostgreSQL 16 + Drizzle ORM
+- **Runtime**: Node.js (fijado en `package.json#engines`) + TypeScript
+- **Framework**: NestJS + Clean Architecture & DDD
+- **Persistencia**: PostgreSQL + Drizzle ORM (imagen fijada en `docker-compose.yml`)
 - **Colas Asíncronas**: BullMQ + Valkey (Redis)
 - **Contratos**: Schemas Zod generados automáticamente con `vigilio-node generate-contracts`
 - **Testing**: Vitest (Unitarios/Integración) + Playwright API
+- **Baseline de Versiones**: [technology/versions.md](../../technology/versions.md)
 
 ## Quick Start (< 10 min)
-1. **Requisitos**: Node 24+, pnpm 11+, Docker.
+1. **Requisitos**: Node.js (ver `package.json#engines`), pnpm (ver `package.json#packageManager`), Docker.
 2. **Instalar**: `pnpm install`
 3. **Variables**: `cp .env.example .env`
 4. **Base de datos local**: `docker compose up -d postgres redis`
@@ -150,10 +158,10 @@ pnpm run test:devsecops
 Portal web responsive para la administración y suscripción de pólizas de salud, integrado mediante arquitectura de microfrontends.
 
 ## Stack Tecnológico
-- **UI Framework**: Preact / React 19 + Vite 6
+- **UI Framework**: Preact / React + Vite (fijados en `package.json` y `pnpm-lock.yaml`)
 - **Estilos**: Tailwind CSS + Radix UI
 - **Estado & Datos**: TanStack Query + Preact Signals
-- **Contratos**: Consumo del paquete `@vigilioyonatan/bus-contracts` (Schemas Zod puros)
+- **Contratos**: Consumo de `@empresa/orders-contracts/ecommerce-bus-impl` (Tree-Shaking)
 - **Testing**: Vitest + Testing Library + Playwright E2E
 
 ## Quick Start
@@ -187,6 +195,7 @@ pnpm run test:e2e
 | Error Común | Impacto | Solución Senior Mode |
 |---|---|---|
 | **Hardcodear credenciales en código** | Fuga de seguridad grave | Usar variables de entorno en `.env.example` y gitignorar `.env`. |
+| **Hardcodear versiones de herramientas** | Documentación desfasada y drift | Referenciar `package.json` (`engines`, `packageManager`), `docker-compose.yml` y `technology/versions.md`. |
 | **Omitir el paso a paso de arranque** | Desarrolladores bloqueados días | Sección *Quick Start* probada desde cero en una máquina limpia. |
 | **No explicar la estructura de carpetas** | Archivos colocados en lugares erróneos | Árbol anotado en la sección *Repository Structure*. |
 | **Falta de tests o comandos rotos** | Código que falla en producción | Comandos exactos de `test:unit` y `test:e2e` documentados. |
