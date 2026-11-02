@@ -6,7 +6,7 @@
 // products/domain/schemas/product.schema.ts
 import { z } from 'zod';
 export const productSchema = z.object({
-  id: z.uuid(),
+  id: z.string().uuid(),
   nro_poliza: z.string().min(1).max(30),
   product_type: z.enum(['inclusion','exclusion']),
   estado: z.enum(['pendiente','procesado','anulado']),
