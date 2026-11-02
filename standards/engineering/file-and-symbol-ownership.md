@@ -179,12 +179,17 @@ Cuando el backend está en TypeScript/NestJS con Zod:
    - El script `pnpm run build:contracts` ejecuta `vigilio-node generate-contracts`.
    - La herramienta extrae automáticamente los schemas Zod limpios y tipos inferidos de `src/`, eliminando cualquier decorator o import de NestJS.
    - Genera el artefacto compilado listo para consumo (`packages/contracts` o paquete npm versionado).
-3. **El Frontend es ÚNICAMENTE Consumidor**:
-   - Las aplicaciones web, mobile o clientes externos consumen el paquete generado:
+3. **El Frontend es ÚNICAMENTE Consumidor y aplica Tree-Shaking**:
+   - Las aplicaciones web, mobile o clientes externos consumen el paquete generado con importación granular:
      ```typescript
-     import { productSchema, type ProductResponseDto } from '@vigilioyonatan/bus-contracts';
+     // ✅ Importación con tree-shaking por subpath del microservicio
+     import { createOrderSchema, type CreateOrderDto } from '@empresa/orders-contracts/ecommerce-bus-impl';
      ```
-   - **PROHIBIDO** copiar, reescribir o duplicar DTOs e interfaces en el Frontend.
+   - **Optimización de Tree-Shaking y Recursos de Frontend**:
+     - El artefacto de contratos declara `"sideEffects": false` y subpath exports en `package.json` (`exports: { "./ecommerce-bus-impl": "./dist/ecommerce-bus-impl/index.js" }`).
+     - Al tener múltiples microservicios o módulos en el sistema, el bundler del frontend (Vite, Rollup, Webpack 5) elimina código muerto y schemas no utilizados.
+     - El cliente final solo descarga y parsea el JavaScript estrictamente necesario, garantizando mínimo peso de bundle y óptimo rendimiento.
+   - **PROHIBIDO** copiar, reescribir o duplicar DTOs e interfaces en el Frontend si el backend es NestJS.
 
 ### Escenario B: Backend NO hecho en TypeScript / NestJS (Laravel, Python, Go, Java o APIs Externas)
 Cuando el backend utiliza otro lenguaje o es una API externa de terceros:

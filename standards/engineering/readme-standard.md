@@ -113,11 +113,11 @@ Microservicio backend de alta concurrencia encargado del procesamiento de órden
 6. **Ejecutar**: `pnpm run start:dev`
 
 ## Flujo de Contratos (ADR 0001)
-Este microservicio es el **propietario único** de los contratos. Los DTOs se definen en `src/**/presentation/http/dto/` y se compilan automáticamente para el frontend con:
+Este microservicio es el **propietario único** de los contratos. Los DTOs se definen en `src/**/presentation/http/dto/` y se compilan automáticamente para el frontend con soporte estricto de **Tree-Shaking**:
 ```bash
 pnpm run build:contracts
 ```
-El paquete resultante `@vigilioyonatan/bus-contracts` es consumido por los frontends sin duplicar interfaces.
+El paquete resultante publica subpaths específicos por servicio (ej. `@empresa/orders-contracts/ecommerce-bus-impl`) con `"sideEffects": false` en `package.json`, asegurando que el frontend solo empaquete los DTOs y schemas que realmente consume.
 
 ## Variables de Entorno
 | Variable | Descripción | Requerida | Secreta |
@@ -162,10 +162,12 @@ Portal web responsive para la administración y suscripción de pólizas de salu
 3. `pnpm run dev` (abre en `http://localhost:5173`)
 
 ## Consumo de Contratos
-Este frontend **NO declara DTOs locales manuales**. Importa los schemas directamente del paquete de contratos publicado por el backend:
+Este frontend **NO declara DTOs locales manuales**. Importa los schemas directamente del subpath exportado del microservicio backend, beneficiándose de **Tree-Shaking** para minimizar los bundles de JavaScript:
 ```typescript
-import { productResponseSchema, type ProductResponseDto } from '@vigilioyonatan/bus-contracts';
+import { productResponseSchema, type ProductResponseDto } from '@empresa/orders-contracts/ecommerce-bus-impl';
 ```
+> **Beneficio de Rendimiento Senior**: Al importar desde el subpath específico y contar con `"sideEffects": false`, el bundler (Vite) descarta schemas no utilizados de otros microservicios (billing, auth, reporting), reduciendo drásticamente el consumo de CPU y memoria en el navegador del cliente.
+>
 > **Nota Senior Mode**: Si el backend fuera externo o no estuviera en TypeScript, los contratos se definen como interfaces locales en `src/types/` o se generan vía cliente OpenAPI.
 
 ## Testing E2E y Visual
