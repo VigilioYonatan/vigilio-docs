@@ -6,11 +6,11 @@
 
 | Ecosistema | Referencia estable contrastada | Estado en Vigilio | Fuente oficial |
 |---|---|---|---|
-| Node.js | **24.22.1 LTS** (parche 24.22.2 verificado) | Candidato para servicios nuevos; confirmar runtime Lambda/EKS y dependencias | [Node.js releases](https://nodejs.org/en/about/previous-releases) |
+| Node.js | **24.22.2 LTS** | Rama LTS de producción; parche de estabilidad y seguridad (28-oct-2026) | [Node.js releases](https://nodejs.org/en/about/previous-releases) |
 | NestJS | **11.x** (estable conservador) / **12.2.0** (candidato) | Adaptador nativo por defecto es Express; Fastify (`@nestjs/platform-fastify`) es opt-in explícito Vigilio | [NestJS releases](https://github.com/nestjs/nest/releases/tag/v12.2.0) |
-| Zod | **4.6.7** (`^4`, estable) | En schemas usar `z.string().uuid()` y `z.string().email()` — sintaxis universal compatible con adaptadores OpenAPI/NestJS | [Zod](https://zod.dev/) |
+| Zod | **4.6.7** (`^4`, estable) | Estándar Vigilio; usar APIs nativas top-level Zod 4 `z.uuid()`, `z.email()` y `z.iso.datetime()` | [Zod](https://zod.dev/) |
 | PHP | **8.5.12**; alternativa soportada **8.4.27** | Propuesto Laravel nuevo; validar extensiones y Composer | [PHP downloads](https://www.php.net/downloads.php) |
-| Laravel | **13.38.0** / **13.39.0** (rama 13.x) | Candidato; compatible oficialmente con PHP 8.3–8.5 | [Laravel 13](https://laravel.com/docs/13.x/releases), [releases](https://github.com/laravel/framework/releases/tag/v13.38.0) |
+| Laravel | **13.39.0** (rama 13.x) | Versión estable oficial recomendada; compatible con PHP 8.3–8.5 | [Laravel 13](https://laravel.com/docs/13.x/releases), [releases](https://github.com/laravel/framework/releases/tag/v13.39.0) |
 | React Native independiente | **0.88.0**, rama actual verificada | No instalar esta rama directamente sobre Expo sin matriz | [RN releases](https://reactnative.dev/releases/overview) |
 | Expo | **SDK 58** + **React Native 0.88 / React 19.3.0** | Conjunto recomendado; no subir React a 19.3.1 en mobile sin soporte oficial Expo | [Expo SDK 58](https://expo.dev/changelog/sdk-58), [tabla](https://docs.expo.dev/versions/latest/) |
 | React independiente (web) | **19.3.1** | Versión final oficial para web; aislar del bundle móvil Expo | [Releases React](https://github.com/react/react/releases) |
@@ -22,30 +22,30 @@
 | Zustand | **v5** | Rama final estable; fijar parche exacto en lockfile | [Zustand](https://github.com/pmndrs/zustand) |
 | Preact Signals | **v2** | Rama final estable para Preact | [Signals](https://github.com/preactjs/signals) |
 | Drizzle ORM | **0.45.4** | Estable; mantener 0.45.4 y no adoptar 1.0.0-rc en producción | [Releases Drizzle](https://github.com/drizzle-team/drizzle-orm/releases) |
-| Spatie Laravel Data | **4.23.0** / **4.23.1** | Estable v4; compatible declarativamente con Laravel 13 | [Releases Spatie](https://github.com/spatie/laravel-data/releases) |
+| Spatie Laravel Data | **4.23.1** | Estable v4; versión recomendada compatible con Laravel 13 | [Releases Spatie](https://github.com/spatie/laravel-data/releases) |
 | PostgreSQL | **16.x** (LTS maduro) / **18.x** (despliegues nuevos) | Versión exacta y extensiones verificadas por servidor | [PostgreSQL](https://www.postgresql.org/docs/current/) |
 | pgvector | **0.8.7** | Fijar versión; extensión de terceros compilada sobre PG 16/18 | [pgvector](https://github.com/pgvector/pgvector) |
 | Valkey | **8.1.x** (LTS hasta 2028) | Recomendado sobre Redis standalone por licencia y soporte comunitario | [Valkey releases](https://valkey.io/docs/) |
 | Redis | **7.x** | Revisar ciclo de soporte y política de licenciamiento; preferir Valkey | [Redis](https://redis.io/) |
-| RabbitMQ | **4.x** (4.3.x / 4.4.x) | ⚠️ Línea 3.13 terminó soporte comunitario en sep 2024 (EOL); usar 4.x para AMQP | [RabbitMQ releases](https://www.rabbitmq.com/docs) |
-| BullMQ | **v5** (estable prod) / **v6** (rama moderna) | Compatible con Valkey / Redis; workers idempotentes | [BullMQ](https://docs.bullmq.io/) |
-| Biome | **2.5.7** / **2.6.3** | Linter/formateador estricto; no reemplaza typecheck de `tsc` | [Biome](https://biomejs.dev/) |
+| RabbitMQ | **4.4.x / 4.3.x** (rama 4.x) | ⚠️ Rama recomendada; línea 3.13 en fin de soporte comunitario (EOL sep-2024) | [RabbitMQ releases](https://www.rabbitmq.com/docs) |
+| BullMQ | **v6** (moderna) / **v5** (LTS) | Compatible con Valkey 8.1 LTS y Redis; workers idempotentes | [BullMQ](https://docs.bullmq.io/) |
+| Biome | **2.6.3** | Linter y formateador estricto de última generación; no reemplaza typecheck de `tsc` | [Biome](https://biomejs.dev/) |
 | Vitest | **4.1.10** (tooling repo) / **5.0.5** (moderno) | Runner ESM/Vite de alta velocidad | [Vitest](https://vitest.dev/) |
-| Playwright | **1.50+** | E2E browser automation estable | [Playwright](https://playwright.dev/) |
+| Playwright | **1.64.1** | Versión exacta estable auditada para E2E testing | [Playwright](https://playwright.dev/) |
 | Larastan & PHPStan | **Larastan 3.13.2** + **PHPStan 2.x** | Larastan 2.x obsoleto para Laravel 13; exige PHPStan 2 | [Larastan](https://github.com/larastan/larastan) |
 | Pest & PHPUnit | **Pest 5.x / 4.x** + **PHPUnit 12.x / 13.x** | PHPUnit 11 fin de soporte estándar feb 2026; Pest resuelve runner | [Pest](https://pestphp.com/) |
 | pnpm | **11.20.0** (CI) / **12.15** (evaluación) | Mantener compatibilidad con runtime Node de CI antes de upgrade major | [pnpm releases](https://github.com/pnpm/pnpm/releases) |
 
 ## Historial de verificación puntual (no baseline instalado)
 
-- En la revisión de auditoría del 2026-11-01 se consolidaron las observaciones de estabilidad de todo el stack: Node 24.22.2 LTS, PHP 8.5.12/8.4.27, NestJS 11/12 (aclarando adapter Express default vs Fastify opt-in), Zod interoperable (`z.string().uuid()`), RabbitMQ 4.x (reemplazando 3.13 EOL), pgvector 0.8.7, Valkey 8.1 LTS y Larastan 3.13.2 + PHPStan 2.
+- En la revisión de auditoría del 2026-11-01 se consolidaron las observaciones de estabilidad de todo el stack: Node 24.22.2 LTS, PHP 8.5.12/8.4.27, Laravel 13.39.0, NestJS 11/12 (aclarando adapter Express default vs Fastify opt-in), Zod 4 (`z.uuid()`), RabbitMQ 4.x (reemplazando 3.13 EOL), pgvector 0.8.7, Valkey 8.1 LTS, Biome 2.6.3, Playwright 1.64.1 y Larastan 3.13.2 + PHPStan 2.
 - Las ramas Current de Node.js no equivalen a LTS; un parche liberado tampoco garantiza compatibilidad de los adaptadores, extensiones, plugins o imágenes del consumidor.
 - Cuando cambie una versión recomendada, actualizar esta tabla, sus fuentes y el gate de compatibilidad; no propagar el número manualmente a README, skills o controllers.
 
 ## Dependencias por stack: única política
 
-- **NestJS:** `@nestjs/*` (con Fastify adapter como opt-in explícito o Express default), `nestjs-zod`, Zod, Drizzle, driver Postgres, Pino, OTel, Vitest; revisar API mayor, OpenAPI/Scalar, workers y capacidad de runtime. Los contratos de respuesta se derivan de Zod `.pick()` y `createPaginatorDto()`. En schemas usar siempre `z.string().uuid()` y `z.string().email()` para interoperabilidad universal.
-- **Laravel:** Composer resuelve compatibilidad exacta de `laravel/framework` (13.38.0/13.39.0), Pest 5, PHPUnit 12/13, Larastan 3.13.2 con PHPStan 2.x, Pint, Sanctum, Horizon y Scalar. Horizon solo aplica a colas Redis/Valkey; RabbitMQ 4.x y SQS se operan con adapters dedicados.
+- **NestJS:** `@nestjs/*` (con Fastify adapter como opt-in explícito o Express default), `nestjs-zod`, Zod 4, Drizzle, driver Postgres, Pino, OTel, Vitest; revisar API mayor, OpenAPI/Scalar, workers y capacidad de runtime. Los contratos de respuesta se derivan de Zod 4 con sintaxis nativa `z.uuid()`, `.pick()` y `createPaginatorDto()`.
+- **Laravel:** Composer resuelve compatibilidad exacta de `laravel/framework` (13.39.0), Pest 5, PHPUnit 12/13, Larastan 3.13.2 con PHPStan 2.x, Pint, Sanctum, Horizon y Scalar. Horizon solo aplica a colas Redis/Valkey; RabbitMQ 4.x y SQS se operan con adapters dedicados.
 - **Web MFE:** inspeccionar `package.json`, pnpm lock, toolkit Preact 11 / React 19.3.1 / Vite 8.3.5 y contratos reales. Para TanStack Table v9 declarar `features` explícitamente (`stockFeatures` o `tableFeatures`). Alinear UI y state management sin actualizar accidentalmente la pareja backend/cliente.
 - **Mobile Expo:** `npx expo install --check` contra SDK 58; React Native 0.88 y React 19.3.0 deben resolver como un conjunto cerrado. No actualizar React a 19.3.1 en mobile sin certificación de Expo. EAS OTA y builds nativos necesitan comprobación.
 - **Plataforma/IA:** PostgreSQL 16/18 + pgvector 0.8.7 (extensión externa con índices HNSW/GIN); Valkey 8.1.x / RabbitMQ 4.x; modelos de embeddings (Qwen3-Embedding-0.6B) y reranker (Qwen3-Reranker-0.6B) fijados por digest y dimensiones; observabilidad con Phoenix/Langfuse y runner LangGraph 1.5.2 opcional.
@@ -61,7 +61,7 @@
 
 ✅ Correcto: referenciar **esta página** desde cada stack/skill; mantener snapshots YAML como artefactos de compatibilidad no autoritativos mientras los consumidores dependen de ellos; bloquear cambios incompatibles en CI.
 
-❌ Incorrecto: fijar versiones contradictorias en controllers, README y SKILL.md; actualizar Expo y React Native por separado; afirmar que PHP 8.5 o NestJS 12 ya está desplegado porque aparece aquí; asumir que RabbitMQ 3.13 tiene soporte vigente; usar `z.uuid()` top-level sin verificar compatibilidad de adaptadores OpenAPI/NestJS.
+❌ Incorrecto: fijar versiones contradictorias en controllers, README y SKILL.md; actualizar Expo y React Native por separado; afirmar que PHP 8.5 o NestJS 12 ya está desplegado porque aparece aquí; asumir que RabbitMQ 3.13 tiene soporte vigente; mezclar esquemas de validación obsoletos o invocar validadores no tipados.
 
 **Compatibilidad existente:** [`backend-nestjs.yaml`](baselines/backend-nestjs.yaml), [`backend-laravel.yaml`](baselines/backend-laravel.yaml), [`compatibility.json`](../compatibility.json). Son snapshots o artefactos de integración, no otra fuente normativa humana. Su retirada requiere migrar primero las herramientas que los leen.
 
@@ -83,9 +83,9 @@
 | TanStack Table | **9.3.1** | **Major**; migrar `useReactTable`→`useTable` y declarar `features` explícitas | [npm releases](https://www.npmjs.com/package/@tanstack/react-table) |
 | Vite | 8.3.5 | Release estable minor/patch | [Releases Vite](https://github.com/vitejs/vite/releases) |
 | Vitest | 5.0.5 | **Major**; skill repo usa 4.1.10 / 4.1.9 | [Migración Vitest](https://vitest.dev/guide/migration/) |
-| Zod | 4.6.7 | Estable `latest` en npm; usar `z.string().uuid()` para compatibilidad de adaptadores | [Releases Zod](https://github.com/colinhacks/zod/releases) |
+| Zod | 4.6.7 | Estable `latest` en npm; sintaxis nativa `z.uuid()` y `z.email()` | [Releases Zod](https://github.com/colinhacks/zod/releases) |
 | Drizzle ORM | 0.45.4 estable | No adoptar 1.0.0-rc como estable en producción | [Releases Drizzle](https://github.com/drizzle-team/drizzle-orm/releases) |
-| Spatie Laravel Data | 4.23.0 / 4.23.1 | Actualización v4 con tests PHP/Laravel 13 | [Releases Spatie](https://github.com/spatie/laravel-data/releases) |
+| Spatie Laravel Data | 4.23.1 | Estable v4; comprobada con tests PHP/Laravel 13 | [Releases Spatie](https://github.com/spatie/laravel-data/releases) |
 | Expo | **SDK 58 / RN 0.88 / React 19.3.0** | Release unificada; mantener React en 19.3.0 para mobile | [Expo 58](https://expo.dev/changelog/sdk-58) |
 | Preact | v11 | Major estable con pruebas de hidratación | [Preact 11](https://preactjs.com/blog/preact-11/) |
 | pnpm | 11.20.0 / 12.15 | Validar soporte con versión de Node antes de migrar a pnpm 12 | [Releases pnpm](https://github.com/pnpm/pnpm/releases) |

@@ -39,7 +39,7 @@ pnpm add zod@^4
 ```typescript
 import { z } from 'zod';
 export const productSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   nro_poliza: z.string().trim().min(1).max(30),
   estado: z.enum(['pendiente','procesado','anulado']),
 });
@@ -64,7 +64,7 @@ const product = (await response.json()) as ProductSchema; // ❌ si dato externo
 
 ## Nuevas capacidades, migración y breaking changes
 
-Zod v3→v4: API `z.email()`, `z.uuid()` y `z.iso.datetime()` son top-level en Zod 4. La sintaxis canónica transversal de Vigilio es `z.string().uuid()` y `z.string().email()` por compatibilidad con adaptadores OpenAPI/NestJS que todavía consumen la forma encadenada. Zod 4.6 añade `.validate()` bajo condiciones documentadas, no asumir equivalencia sin prueba.
+Zod v3→v4: API top-level `z.email()`, `z.uuid()`, `z.url()`, `z.iso.date()` y `z.iso.datetime()` son nativas de Zod 4. En Vigilio senior mode se adopta esta sintaxis directa y concisa en todos los schemas y DTOs. Zod 4.6 añade además `.validate()` para comprobación booleana de alta velocidad sin serialización redundante.
 
 Aplicar el [protocolo de migración común](README.md#protocolo-de-adopción-y-actualización), sin asumir que una release nueva está desplegada.
 
@@ -84,7 +84,7 @@ Estado de prueba de estos ejemplos documentales: **NOT_RUN** en aplicaciones con
 
 ```typescript
 // domain/schemas/product.schema.ts
-export const productSchema = z.object({ id: z.string().uuid(), estado: z.enum(['pendiente','anulado']), nro_poliza:z.string().min(1) });
+export const productSchema = z.object({ id: z.uuid(), estado: z.enum(['pendiente','anulado']), nro_poliza:z.string().min(1) });
 export type ProductSchema = z.infer<typeof productSchema>;
 
 // presentation/http/dto/register-product.request.dto.ts
@@ -132,7 +132,7 @@ export const offsetPaginationQueryDto = z.object({
 
 ### Migración desde versiones anteriores: decisión concreta
 
-- **Qué cambia o se debe revisar:** Zod 4 usa `z.string().uuid()` y `z.string().email()` como sintaxis canónica Vigilio. Las formas top-level `z.email()` y `z.uuid()` son válidas en Zod 4, pero `z.string().uuid()` se mantiene como baseline universal para compatibilidad con adaptadores OpenAPI/NestJS.
+- **Qué cambia o se debe revisar:** Zod 4 estandariza las APIs top-level `z.uuid()`, `z.email()` y `z.iso.datetime()`, sustituyendo la sintaxis encadenada v3 `z.string().uuid()`. Mantener una sola fuente en Domain Schemas y derivar DTOs con `.pick()` y `z.output`.
 
 ### Responsabilidades y capas
 
@@ -154,7 +154,7 @@ Validación estructura de datos, SQL lo gobierna Drizzle/Eloquent.
 
 ```typescript
 const productSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   estado: z.enum(['pendiente', 'procesado', 'anulado']),
 });
 export type ProductSchema = z.infer<typeof productSchema>;
@@ -186,7 +186,7 @@ Los fragmentos siguientes ilustran **operaciones independientes**. Variables, im
 **✅ Correcto — entidad**
 
 ```typescript
-const productSchema = z.object({ id: z.string().uuid(), estado: z.enum(['pendiente', 'procesado']) });
+const productSchema = z.object({ id: z.uuid(), estado: z.enum(['pendiente', 'procesado']) });
 ```
 
 
@@ -348,7 +348,7 @@ z.string().regex(/^\d+$/).transform(Number).parse(raw)
 ```typescript
 import { z } from 'zod';
 export const productSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   nro_poliza: z.string().trim().min(1).max(30),
   estado: z.enum(['pendiente', 'procesado', 'anulado']),
 });

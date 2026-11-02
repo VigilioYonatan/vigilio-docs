@@ -8,11 +8,11 @@
 // products/domain/schemas/product.schema.ts
 import { z } from 'zod';
 export const productSchema = z.object({
-  id: z.string().uuid(),
-  tenant_id: z.string().uuid(),
+  id: z.uuid(),
+  tenant_id: z.uuid(),
   nro_poliza: z.string().trim().min(1).max(30),
   product_type: z.enum(['inclusion', 'exclusion']),
-  category_id: z.string().uuid(),
+  category_id: z.uuid(),
 });
 export type ProductSchema = z.infer<typeof productSchema>;
 ```
@@ -21,7 +21,7 @@ export type ProductSchema = z.infer<typeof productSchema>;
 // categories/domain/schemas/category.schema.ts (archivo independiente)
 import { z } from 'zod';
 export const categorySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string().trim().min(1),
 });
 export type CategorySchema = z.infer<typeof categorySchema>;
@@ -48,7 +48,7 @@ export type ProductSummary = Pick<ProductSchema, 'id' | 'nro_poliza'>;
 // orders/domain/schemas/order.schema.ts
 import { z } from 'zod';
 export const orderSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: z.enum(['pending', 'shipped', 'cancelled']),
 });
 export type OrderSchema = z.infer<typeof orderSchema>;
@@ -73,9 +73,9 @@ La idempotencia está condicionada a la regla aprobada; en producción validar c
 ```typescript
 // users/domain/schemas/user.schema.ts
 export const userSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password_hash: z.string(), // dato interno; NUNCA serializar públicamente
 });
 export type UserSchema = z.infer<typeof userSchema>;

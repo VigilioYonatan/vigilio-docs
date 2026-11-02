@@ -10,7 +10,7 @@ runtime:
 framework:
   laravel:
     series: '^13.0'
-    observed_stable: '13.38.0'
+    observed_stable: '13.39.0'
 quality:
   pest: '^5.0'
   pest_plugin_laravel: '^5.0'
