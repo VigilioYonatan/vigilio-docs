@@ -1,4 +1,4 @@
-# PHP — Vigilio 8.5 rama disponible; 8.4 alternativa según compatibilidad
+# PHP — Vigilio 8.5.12 (recomendado seguridad) / 8.4.27 (alternativa soportada)
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Lenguaje utilizado en Laravel y servicios PHP. Su código debe usar tipos, enums
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de PHP (backend-php).** Estado a **2026-10-25**: 8.5 rama disponible; 8.4 alternativa según compatibilidad. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://www.php.net/manual/en/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de PHP (backend-php).** Estado a **2026-11-01**: 8.5.12 (recomendado seguridad) / 8.4.27 (alternativa soportada). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://www.php.net/manual/en/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

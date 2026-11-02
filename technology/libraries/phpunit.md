@@ -1,4 +1,4 @@
-# PHPUnit — Vigilio rama resuelta por Laravel/Pest/PHP
+# PHPUnit — Vigilio 12.x / 13.x (gestionado vía Pest 5 / PHP 8.4+)
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Framework de pruebas unitarias/integración PHP. Aisla fixtures y verifica error
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de PHPUnit (testing-php).** Estado a **2026-10-25**: rama resuelta por Laravel/Pest/PHP. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.phpunit.de/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de PHPUnit (testing-php).** Estado a **2026-11-01**: PHPUnit 12.x / 13.x (PHPUnit 11 fin de soporte estándar feb-2026). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.phpunit.de/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

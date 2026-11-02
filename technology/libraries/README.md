@@ -41,11 +41,11 @@
 
 ### Backend NestJS / Node
 
-- [BullMQ — Vigilio línea instalada / compat Valkey Redis](bullmq.md)
+- [BullMQ — Vigilio v6 (moderna) / v5 (LTS) compatible con Valkey y Redis](bullmq.md)
 - [Drizzle Kit — Vigilio línea compatible con Drizzle ORM 0.45.x](drizzle-kit.md)
 - [Drizzle ORM — Vigilio 0.45.4 estable; 1.0.0-rc no es estable](drizzle-orm.md)
 - [NestJS + Zod Adapter — Vigilio línea compatible NestJS 12 / Zod 4](nestjs-zod.md)
-- [NestJS — Vigilio 12.x rama (patch por lockfile y release)](nestjs.md)
+- [NestJS — Vigilio 11.x (conservador) / 12.2.0 (candidato) con Express default](nestjs.md)
 - [Pino — Vigilio línea instalada y adaptador Nest versionado](pino.md)
 - [Socket.IO — Vigilio v4 línea instalada; verificar patch](socket-io.md)
 
@@ -53,24 +53,24 @@
 
 - [Composer — Vigilio 2.x (instalada según composer.lock)](composer.md)
 - [Eloquent ORM — Vigilio Laravel 13.x, adaptador de infraestructura](eloquent.md)
-- [Laravel Framework — Vigilio 13.x; PHP 8.3–8.5 oficialmente](laravel-framework.md)
+- [Laravel Framework — Vigilio 13.39.0 estable (PHP 8.3–8.5 oficialmente)](laravel-framework.md)
 - [Laravel Horizon — Vigilio rama compatible Laravel 13; requiere Redis](laravel-horizon.md)
 - [Laravel Pint — Vigilio línea compatible con PHP/Laravel del proyecto](laravel-pint.md)
 - [Laravel Reverb — Vigilio rama compatible Laravel 13](laravel-reverb.md)
 - [Laravel Sanctum — Vigilio línea compatible Laravel 13](laravel-sanctum.md)
-- [PHP — Vigilio 8.5 rama disponible; 8.4 alternativa según compatibilidad](php.md)
-- [Spatie Laravel Data — Vigilio 4.23.0 estable verificado](spatie-laravel-data.md)
+- [PHP — Vigilio 8.5.12 (recomendado seguridad) / 8.4.27 (alternativa soportada)](php.md)
+- [Spatie Laravel Data — Vigilio 4.23.1 estable verificado](spatie-laravel-data.md)
 
 ### Pruebas TypeScript
 
 - [Mock Service Worker — Vigilio v2 (verificar patch)](msw.md)
-- [Playwright — Vigilio 1.64.x (confirmar patch en lockfile)](playwright.md)
+- [Playwright — Vigilio 1.64.1 estable verificado](playwright.md)
 - [Vitest — Vigilio 5.0.5 estable verificado](vitest.md)
 
 ### Pruebas PHP
 
-- [PHPStan + Larastan — Vigilio línea compatible PHP 8.4/8.5 y Laravel 13](phpstan-larastan.md)
-- [PHPUnit — Vigilio rama resuelta por Laravel/Pest/PHP](phpunit.md)
+- [PHPStan + Larastan — Vigilio Larastan 3.13.2 + PHPStan 2.x (Laravel 13)](phpstan-larastan.md)
+- [PHPUnit — Vigilio 12.x / 13.x (gestionado vía Pest 5 / PHP 8.4+)](phpunit.md)
 - [Pest — Vigilio 5.3.x; requiere PHP 8.4+](pest.md)
 
 ### Expo / React Native
@@ -115,12 +115,12 @@
 
 ### Toolchain y calidad
 
-- [Biome — Vigilio 2.6.x (verificar patch en release oficial)](biome.md)
+- [Biome — Vigilio 2.6.3 estable verificado](biome.md)
 - [pnpm — Vigilio 12.15 (línea mayor estable, gate de adopción)](pnpm.md)
 
 ### Contratos compartidos
 
-- [Zod — Vigilio 4.6.7 estable verificado](zod.md)
+- [Zod — Vigilio 4.6.7 estable](zod.md)
 
 
 ### Complementos presentes en los stacks

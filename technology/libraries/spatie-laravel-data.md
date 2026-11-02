@@ -1,4 +1,4 @@
-# Spatie Laravel Data — Vigilio 4.23.0 estable verificado
+# Spatie Laravel Data — Vigilio 4.23.1 estable verificado
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ DTOs PHP tipados con serialización y validación integradas para Laravel. Separ
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de Spatie Laravel Data (backend-php).** Estado a **2026-10-25**: 4.23.0 estable verificado. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://spatie.be/docs/laravel-data/v4/introduction). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de Spatie Laravel Data (backend-php).** Estado a **2026-11-01**: 4.23.1 estable verificado. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://spatie.be/docs/laravel-data/v4/introduction). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

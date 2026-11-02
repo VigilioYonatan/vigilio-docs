@@ -1,4 +1,4 @@
-# BullMQ — Vigilio línea instalada / compat Valkey Redis
+# BullMQ — Vigilio v6 (moderna) / v5 (LTS) compatible con Valkey y Redis
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Colas y trabajadores sobre Redis/Valkey compatibles para trabajos asíncronos. E
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de BullMQ (backend-node).** Estado a **2026-10-25**: línea instalada / compat Valkey Redis. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.bullmq.io/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de BullMQ (backend-node).** Estado a **2026-11-01**: línea moderna v6 / estable v5 (compatible con Valkey 8.1 LTS y Redis 7.x). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.bullmq.io/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 
