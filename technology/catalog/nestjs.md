@@ -8,7 +8,7 @@ Este documento describe familias tecnológicas; **no sustituye** el lockfile ni 
 | --- | --- | --- |
 | Runtime | Node.js LTS aprobado | `node -v`, engines, lockfile, despliegue |
 | Framework | NestJS 11/12 según baseline compatible | módulos, Swagger, guards, DI, testing |
-| Contratos | Zod (3.23.8+ baseline / 4.x candidate) y OpenAPI | una fuente, `z.infer`, client y diff |
+| Contratos | Zod 4 y OpenAPI | una fuente, `z.infer`, client y diff |
 | DB | PostgreSQL + Drizzle | migrations, typed queries, transactions |
 | Caché | Valkey/Redis según contrato | invalidación, authz, TTL y seguridad |
 | Logs/traces | Pino y OpenTelemetry | instrumentation, redaction, context |

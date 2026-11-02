@@ -3,12 +3,11 @@ stack: backend-nestjs
 status: proposed_upgrade_not_applied
 verified_at: '2026-11-01'
 runtime:
-  node_lts_candidate: '24.22.1'
+  node_lts_candidate: '24.22.2'
 framework:
   nestjs_candidate: '12.2.0'
 contracts:
-  zod: '^3.23.8'
-  zod_candidate: '^4.6.7'
+  zod: '^4'
   output_runtime_validation: risk_based_opt_in
 compatibility_source: ../../compatibility.json
 gates:

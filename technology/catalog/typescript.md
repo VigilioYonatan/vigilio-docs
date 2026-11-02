@@ -10,7 +10,7 @@ Esta guía gobierna el **lenguaje**, no NestJS, React ni Laravel. Para DTOs Zod 
 
 ```typescript
 import { z } from 'zod';
-const productSchema = z.object({ id: z.string().uuid(), estado: z.enum(['pendiente', 'anulado']) });
+const productSchema = z.object({ id: z.uuid(), estado: z.enum(['pendiente', 'anulado']) });
 type ProductSchema = z.infer<typeof productSchema>;
 
 function canCancel(product: ProductSchema): boolean {

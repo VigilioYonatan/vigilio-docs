@@ -26,8 +26,8 @@
 // products/domain/schemas/product.schema.ts
 import { z } from 'zod';
 export const productSchema = z.object({
-  id: z.string().uuid(),
-  tenant_id: z.string().uuid(),
+  id: z.uuid(),
+  tenant_id: z.uuid(),
   nro_poliza: z.string().trim().min(1).max(30),
   product_type: z.enum(['inclusion', 'exclusion']),
   estado: z.enum(['pendiente', 'procesado', 'anulado']),
@@ -128,7 +128,7 @@ export type RegisterUserRequestDto = z.output<typeof registerUserRequestDto>;
 // orders/domain/schemas/order.schema.ts
 import { z } from 'zod';
 export const orderSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   status: z.enum(['pending', 'cancelled', 'shipped']),
 });
 export type OrderSchema = z.infer<typeof orderSchema>;
