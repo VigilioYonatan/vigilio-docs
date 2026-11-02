@@ -578,6 +578,7 @@
 * **Arquitectura adaptable y lectura fiel**
 
   * [Ownership de archivos, constantes, tipos y libs](standards/engineering/file-and-symbol-ownership.md)
+  * [Estándar de README y Onboarding](standards/engineering/readme-standard.md)
   * [Presupuesto adaptativo de contexto](standards/ai/adaptive-context-budget-and-evidence.md)
   * [Lectura precisa de skills y conflictos](standards/ai/precision-skill-reading-and-conflict-resolution.md)
   * [Ownership NestJS](stacks/backend/nestjs/architecture/module-symbol-ownership.md)
