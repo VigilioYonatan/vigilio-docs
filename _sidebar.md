@@ -374,6 +374,8 @@
     * [Use Cases Ddd](stacks/backend/nestjs/use-cases-ddd.md)
   * **Plataforma multicloud**
     * [Readme](platform/README.md)
+    * [Arquitecturas de referencia por escala (3 niveles)](platform/architecture/reference-topologies.md)
+    * [Entrega Cloud-Neutral con Docker y Podman Compose](platform/compose/cloud-neutral-vps-delivery.md)
     * [Github Actions Gitops](platform/cicd/github-actions-gitops.md)
     * [Runtime Options](platform/cloud/runtime-options.md)
     * [Terraform Cdk](platform/iac/terraform-cdk.md)

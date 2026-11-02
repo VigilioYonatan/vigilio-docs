@@ -7,6 +7,9 @@
   "required": ["schemaVersion", "project", "repositories", "environments"],
   "properties": {
     "schemaVersion": { "const": 1 },
+    "topologyTier": {
+      "enum": ["compose-vps", "k8s-gitops-selfhosted", "cloud-aws-gitops"]
+    },
     "project": {
       "type": "object",
       "additionalProperties": false,
@@ -50,7 +53,8 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "provider": { "enum": ["aws", "azure", "gcp", "onprem", "hybrid"] },
+        "provider": { "enum": ["aws", "azure", "gcp", "onprem", "vps", "cloud-neutral", "hybrid"] },
+        "orchestrator": { "enum": ["compose", "kubernetes", "serverless"] },
         "kubernetesDistribution": { "$ref": "#/$defs/name" }
       }
     },
