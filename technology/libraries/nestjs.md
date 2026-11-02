@@ -1,4 +1,4 @@
-# NestJS — Vigilio 12.x rama (patch por lockfile y release)
+# NestJS — Vigilio 11.x (conservador) / 12.2.0 (candidato) con Express default
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Framework Node/TypeScript modular basado en DI para APIs y jobs. El framework pe
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de NestJS (backend-node).** Estado a **2026-10-25**: 12.x rama (patch por lockfile y release). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.nestjs.com/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de NestJS (backend-node).** Estado a **2026-11-01**: 11.x (estable conservador) / 12.2.0 (candidato). Adaptador por defecto: Express; Fastify opt-in explícito. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://docs.nestjs.com/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

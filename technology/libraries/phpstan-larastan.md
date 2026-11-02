@@ -1,4 +1,4 @@
-# PHPStan + Larastan — Vigilio línea compatible PHP 8.4/8.5 y Laravel 13
+# PHPStan + Larastan — Vigilio Larastan 3.13.2 + PHPStan 2.x (Laravel 13)
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Análisis estático para PHP/Laravel. Detecta errores de tipos y acceso a APIs a
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de PHPStan + Larastan (testing-php).** Estado a **2026-10-25**: línea compatible PHP 8.4/8.5 y Laravel 13. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://github.com/larastan/larastan). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de PHPStan + Larastan (testing-php).** Estado a **2026-11-01**: Larastan 3.13.2 + PHPStan 2.x (compatible con Laravel 13). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://github.com/larastan/larastan). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

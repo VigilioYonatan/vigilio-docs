@@ -67,7 +67,7 @@
 
 ## Dependencia Laravel Data (política única)
 
-- **Spatie Laravel Data:** biblioteca `spatie/laravel-data`, **línea v4** (4.23.0 / 4.23.1) documentada oficialmente; la versión instalada y su soporte efectivo deben verificarse en `composer.lock` y en la matriz real de Laravel/PHP antes de introducirla. No presumir que está instalada por incluir la guía. [Instalación oficial](https://spatie.be/docs/laravel-data/v4/installation-setup/), [rendimiento](https://spatie.be/docs/laravel-data/v4/advanced-usage/performance).
+- **Spatie Laravel Data:** biblioteca `spatie/laravel-data`, **línea v4** (4.23.1) documentada oficialmente; la versión instalada y su soporte efectivo deben verificarse en `composer.lock` y en la matriz real de Laravel/PHP antes de introducirla. No presumir que está instalada por incluir la guía. [Instalación oficial](https://spatie.be/docs/laravel-data/v4/installation-setup/), [rendimiento](https://spatie.be/docs/laravel-data/v4/advanced-usage/performance).
 - ✅ Correcto: fijar versión efectiva en Composer lock y ejecutar tests, caching de estructuras y benchmarks.
 - ❌ Incorrecto: convertir `Data` en ORM o en entidad de dominio, o copiar números de versión en varias guías.
 

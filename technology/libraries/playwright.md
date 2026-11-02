@@ -1,4 +1,4 @@
-# Playwright — Vigilio 1.64.x (confirmar patch en lockfile)
+# Playwright — Vigilio 1.64.1 estable verificado
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Automatización E2E de navegadores reales. Prueba rutas, autenticación, accesib
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de Playwright (testing).** Estado a **2026-10-25**: 1.64.x (confirmar patch en lockfile). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://playwright.dev/docs/intro). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de Playwright (testing).** Estado a **2026-11-01**: 1.64.1 estable verificado. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://playwright.dev/docs/intro). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 
