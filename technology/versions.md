@@ -8,7 +8,7 @@
 |---|---|---|---|
 | Node.js | **24.22.1 LTS** (parche 24.22.2 verificado) | Candidato para servicios nuevos; confirmar runtime Lambda/EKS y dependencias | [Node.js releases](https://nodejs.org/en/about/previous-releases) |
 | NestJS | **11.x** (estable conservador) / **12.2.0** (candidato) | Adaptador nativo por defecto es Express; Fastify (`@nestjs/platform-fastify`) es opt-in explícito Vigilio | [NestJS releases](https://github.com/nestjs/nest/releases/tag/v12.2.0) |
-| Zod | **3.x** (`^3.23.8`, estándar masivo) / **4.x** (`4.6.7`) | En schemas usar `z.string().uuid()` y `z.string().email()` para interoperabilidad universal Zod 3/4 | [Zod](https://zod.dev/) |
+| Zod | **4.6.7** (`^4`, estable) | En schemas usar `z.string().uuid()` y `z.string().email()` — sintaxis universal compatible con adaptadores OpenAPI/NestJS | [Zod](https://zod.dev/) |
 | PHP | **8.5.12**; alternativa soportada **8.4.27** | Propuesto Laravel nuevo; validar extensiones y Composer | [PHP downloads](https://www.php.net/downloads.php) |
 | Laravel | **13.38.0** / **13.39.0** (rama 13.x) | Candidato; compatible oficialmente con PHP 8.3–8.5 | [Laravel 13](https://laravel.com/docs/13.x/releases), [releases](https://github.com/laravel/framework/releases/tag/v13.38.0) |
 | React Native independiente | **0.88.0**, rama actual verificada | No instalar esta rama directamente sobre Expo sin matriz | [RN releases](https://reactnative.dev/releases/overview) |
@@ -61,7 +61,7 @@
 
 ✅ Correcto: referenciar **esta página** desde cada stack/skill; mantener snapshots YAML como artefactos de compatibilidad no autoritativos mientras los consumidores dependen de ellos; bloquear cambios incompatibles en CI.
 
-❌ Incorrecto: fijar versiones contradictorias en controllers, README y SKILL.md; actualizar Expo y React Native por separado; afirmar que PHP 8.5 o NestJS 12 ya está desplegado porque aparece aquí; asumir que RabbitMQ 3.13 tiene soporte vigente; usar `z.uuid()` directamente arriesgando caídas en Zod 3.
+❌ Incorrecto: fijar versiones contradictorias en controllers, README y SKILL.md; actualizar Expo y React Native por separado; afirmar que PHP 8.5 o NestJS 12 ya está desplegado porque aparece aquí; asumir que RabbitMQ 3.13 tiene soporte vigente; usar `z.uuid()` top-level sin verificar compatibilidad de adaptadores OpenAPI/NestJS.
 
 **Compatibilidad existente:** [`backend-nestjs.yaml`](baselines/backend-nestjs.yaml), [`backend-laravel.yaml`](baselines/backend-laravel.yaml), [`compatibility.json`](../compatibility.json). Son snapshots o artefactos de integración, no otra fuente normativa humana. Su retirada requiere migrar primero las herramientas que los leen.
 
@@ -83,7 +83,7 @@
 | TanStack Table | **9.3.1** | **Major**; migrar `useReactTable`→`useTable` y declarar `features` explícitas | [npm releases](https://www.npmjs.com/package/@tanstack/react-table) |
 | Vite | 8.3.5 | Release estable minor/patch | [Releases Vite](https://github.com/vitejs/vite/releases) |
 | Vitest | 5.0.5 | **Major**; skill repo usa 4.1.10 / 4.1.9 | [Migración Vitest](https://vitest.dev/guide/migration/) |
-| Zod | 3.23.8 / 4.6.7 | Zod 3 universal en prod; Zod 4 candidate; usar `z.string().uuid()` | [Releases Zod](https://github.com/colinhacks/zod/releases) |
+| Zod | 4.6.7 | Estable `latest` en npm; usar `z.string().uuid()` para compatibilidad de adaptadores | [Releases Zod](https://github.com/colinhacks/zod/releases) |
 | Drizzle ORM | 0.45.4 estable | No adoptar 1.0.0-rc como estable en producción | [Releases Drizzle](https://github.com/drizzle-team/drizzle-orm/releases) |
 | Spatie Laravel Data | 4.23.0 / 4.23.1 | Actualización v4 con tests PHP/Laravel 13 | [Releases Spatie](https://github.com/spatie/laravel-data/releases) |
 | Expo | **SDK 58 / RN 0.88 / React 19.3.0** | Release unificada; mantener React en 19.3.0 para mobile | [Expo 58](https://expo.dev/changelog/sdk-58) |

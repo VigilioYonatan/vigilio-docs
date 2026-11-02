@@ -6,7 +6,7 @@
 - Para proyectos **nuevos**, comprobar la versión estable de NestJS declarada en [versions.md](../versions.md) y compatibilidad real con Zod, `nestjs-zod`, OpenAPI/Scalar, Drizzle, instrumentación y tests.
 - `vigilio-docs/COMPATIBILITY.md` conserva el snapshot del consumidor existente (Node 24.16.0, ecosistema heredado); esta página no afirma que ya se haya migrado.
 - Mantener `pnpm-lock.yaml`, engines, tests de integraciones, `@nestjs/swagger`, versionado de OpenAPI y auth antes de aprobar un upgrade mayor.
-- Reglas de contratos: Zod (3.23.8+ baseline con `z.string().uuid()` / 4.x candidate) con `.pick()`, `createPaginatorDto()`, `z.infer` y validación HTTP query string→number; no hacer `.parse()` de salida por obligación cuando solo se tipa.
+- Reglas de contratos: Zod 4 con `z.string().uuid()`, `.pick()`, `createPaginatorDto()`, `z.infer` y validación HTTP query string→number; no hacer `.parse()` de salida por obligación cuando solo se tipa.
 
 Fuentes: [Node releases](https://github.com/nodejs/node/releases) y [Nest releases](https://github.com/nestjs/nest/releases).
 
