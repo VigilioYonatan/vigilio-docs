@@ -12,6 +12,7 @@ src/modules/auth/
 ├── application/services/auth.service.ts
 ├── infrastructure/argon2-password-hasher.ts
 ├── config/password-hashing.config.ts
+├── constants/auth.constants.ts
 ├── presentation/http/dto/sign-in.request.dto.ts
 └── tests/auth.service.test.ts
 ```
@@ -37,9 +38,18 @@ export class AuthService {
 
 *Snippet ilustrativo:* faltan imports Nest, `AuthModule` y adaptador real; no presentarlo como programa compilado. La política de hash compartida no vive en este service. En tests probar flujo de usuario inexistente (respuesta uniforme, límites, tiempos) y recuperación de sesión; nunca importar infraestructura desde Domain.
 
-**Contraejemplos:** `const HASH_OPTIONS` replicado en tres services, `UserRepository` definido dentro de `AuthService`, DTO mezclado con dominio, `SharedUtils` circular, secretos en `constants.ts`, cambiar `hashing` sin plan de migración.
+**Contraejemplos:** `const HASH_OPTIONS` replicado en tres services, números mágicos quemados dentro del service sin extraer a `constants/`, `UserRepository` definido dentro de `AuthService`, DTO mezclado con dominio, `SharedUtils` circular, secretos en `constants.ts`, cambiar `hashing` sin plan de migración.
+
+## Reglas para Constantes y Contratos en NestJS
+
+### 1. Extracción obligatoria de constantes fuera de los Services
+Toda constante de negocio, límites, TTLs, estados o tasas debe extraerse a `{modulo}/constants/*.constants.ts` (o `config/`). Nunca dejes valores mágicos quemados dentro de los métodos del service. Solo las variables locales temporales de un flujo (`const resultado = a + b`) permanecen dentro de la función.
+
+### 2. Flujo de Contratos (ADR 0001 y Senior Mode)
+- **Cuando el backend es TypeScript/NestJS**: Los contratos (schemas Zod, DTOs de request y response) se crean **únicamente en el Backend** en `presentation/http/dto/` y `domain/schemas/`. La herramienta `vigilio-node generate-contracts` los extrae y compila automáticamente sin decorators de NestJS. El frontend consume el paquete generado (`@vigilioyonatan/*-contracts`) sin duplicar DTOs.
+- **Cuando el backend NO es TypeScript/NestJS (Laravel, Python, Go, API externa)**: No se fuerza ningún generador de contratos. El frontend declara sus propias `interfaces/`, `types/` y DTOs locales normales en su propio proyecto (o usa OpenAPI).
 
 ## ✅ Correcto / ❌ Incorrecto — criterio verificable
 
-- ✅ **Correcto:** Definir `PasswordHasher` como puerto y `PASSWORD_HASHER` como token de DI runtime.
-- ❌ **Incorrecto:** Declarar puertos dentro del servicio y mover `const` temporales sin propósito.
+- ✅ **Correcto:** Extraer números mágicos y estados a `{modulo}/constants/` fuera del service; generar contratos automáticamente desde el backend con `generate-contracts` cuando el backend es TS/Nest; usar interfaces/types locales cuando el backend sea de otra tecnología.
+- ❌ **Incorrecto:** Dejar constantes de negocio hardcodeadas dentro del service, crear carpetas para variables locales temporales o forzar paquetes de contratos ficticios cuando el backend no es TS/Nest.

@@ -102,6 +102,106 @@ shared/core <- varios features, sin dependencias de infraestructura ni del propi
 
 **Promover a archivo propio** cuando hay dos consumidores, contrato público, invariantes de seguridad, configuración cambiante o tests aislables. **Colocalizar** cuando el símbolo es pequeño, privado, estable y no añade dependencia. **Rechazar extracción** si aumenta acoplamiento, crea `shared` cíclico o pierde seguridad/encapsulación. Evidencia: diff, imports afectados, tests ejecutados `PASS/FAIL/BLOCKED/NOT_RUN` y justificación.
 
+## Clarificación operativa: ¿Cuándo crear `constants/` y cuándo NO?
+
+Para evitar interpretaciones erróneas por parte de asistentes de IA y desarrolladores:
+
+### 1. SÍ es obligatorio crear `constants/` (o `config/`):
+Para **constantes de negocio, parámetros de configuración, números mágicos, límites y estados reutilizables**. Mantener estos valores dentro de los métodos del servicio es una mala práctica de acoplamiento.
+
+```typescript
+// ❌ INCORRECTO: Constantes de negocio y números mágicos quemados dentro del Service
+@Injectable()
+export class OrdersService {
+  async processPayment(orderId: string, amount: number) {
+    // Mal: números mágicos y strings quemados en el código de ejecución
+    const taxRate = 0.18;
+    const maxRetries = 3;
+    if (amount > 10000) { /* política de revisión */ }
+    const status = 'PENDING_APPROVAL';
+  }
+}
+
+// ✅ CORRECTO: Extraer a {modulo}/constants/orders.constants.ts
+// src/modules/orders/constants/orders.constants.ts
+export const ORDER_TAX_RATE = 0.18;
+export const ORDER_MAX_PAYMENT_RETRIES = 3;
+export const HIGH_VALUE_ORDER_THRESHOLD_CENTS = 1000000;
+export const ORDER_STATUS = {
+  DRAFT: 'DRAFT',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED',
+} as const;
+
+// src/modules/orders/application/services/orders.service.ts
+import {
+  ORDER_TAX_RATE,
+  ORDER_MAX_PAYMENT_RETRIES,
+  ORDER_STATUS,
+} from '../../constants/orders.constants.js';
+
+@Injectable()
+export class OrdersService {
+  async processPayment(orderId: string, amount: number) {
+    // Limpio, testeable y centralizado
+    const isHighValue = amount > HIGH_VALUE_ORDER_THRESHOLD_CENTS;
+  }
+}
+```
+
+### 2. Cuándo NO crear un archivo de constantes:
+Solo para **variables locales temporales** que representan el flujo de ejecución de una función o método.
+
+```typescript
+// ✅ CORRECTO: Variable local temporal del flujo de una función (se queda en la función)
+async findOrder(id: string): Promise<OrderResponseDto> {
+  const existingOrder = await this.orderRepository.findById(id);
+  const formattedTotal = existingOrder.subtotal * (1 + ORDER_TAX_RATE);
+  return this.presenter.toDto(existingOrder, formattedTotal);
+}
+
+// ❌ INCORRECTO: Mover variables temporales de cálculo a una carpeta const/ externa
+```
+
+---
+
+## Clarificación operativa de Contratos (ADR 0001 y Enfoque Senior Mode)
+
+La arquitectura de contratos distingue claramente la tecnología del backend para evitar sobreingeniería innecesaria:
+
+### Escenario A: Backend hecho en TypeScript / NestJS (Ecosistema Homogéneo)
+Cuando el backend está en TypeScript/NestJS con Zod:
+1. **El Backend es el ÚNICO creador de contratos**:
+   - Todo schema Zod y DTO (`*.request.dto.ts`, `*.response.dto.ts`, `*.schema.ts`) se escribe **exclusivamente dentro de `src/` del Backend**.
+   - **PROHIBIDO** crear paquetes `packages/contracts` o librerías de contratos escritas a mano por desarrolladores.
+2. **Generación automática por máquina**:
+   - El script `pnpm run build:contracts` ejecuta `vigilio-node generate-contracts`.
+   - La herramienta extrae automáticamente los schemas Zod limpios y tipos inferidos de `src/`, eliminando cualquier decorator o import de NestJS.
+   - Genera el artefacto compilado listo para consumo (`packages/contracts` o paquete npm versionado).
+3. **El Frontend es ÚNICAMENTE Consumidor y aplica Tree-Shaking**:
+   - Las aplicaciones web, mobile o clientes externos consumen el paquete generado con importación granular:
+     ```typescript
+     // ✅ Importación con tree-shaking por subpath del microservicio
+     import { createOrderSchema, type CreateOrderDto } from '@empresa/orders-contracts/ecommerce-bus-impl';
+     ```
+   - **Optimización de Tree-Shaking y Recursos de Frontend**:
+     - El artefacto de contratos declara `"sideEffects": false` y subpath exports en `package.json` (`exports: { "./ecommerce-bus-impl": "./dist/ecommerce-bus-impl/index.js" }`).
+     - Al tener múltiples microservicios o módulos en el sistema, el bundler del frontend (Vite, Rollup, Webpack 5) elimina código muerto y schemas no utilizados.
+     - El cliente final solo descarga y parsea el JavaScript estrictamente necesario, garantizando mínimo peso de bundle y óptimo rendimiento.
+   - **PROHIBIDO** copiar, reescribir o duplicar DTOs e interfaces en el Frontend si el backend es NestJS.
+
+### Escenario B: Backend NO hecho en TypeScript / NestJS (Laravel, Python, Go, Java o APIs Externas)
+Cuando el backend utiliza otro lenguaje o es una API externa de terceros:
+1. **NO forzar paquetes de contratos inexistentes**:
+   - No tiene sentido ni es posible ejecutar `generate-contracts` desde un backend PHP, Python o Go.
+2. **Uso legítimo de `interfaces/`, `types/` y `dtos/` locales en el Frontend**:
+   - En este escenario, el frontend **SÍ debe declarar sus propias interfaces TypeScript y DTOs locales** (por ejemplo en `src/types/`, `src/contracts/` o mediante clientes OpenAPI generados).
+   - Se definen validadores Zod locales en el frontend para proteger el borde de entrada de la API.
+   - **Senior Mode pragmático**: La arquitectura se adapta al ecosistema real del proyecto; nunca se inventa un paquete de contratos vacío solo por seguir una plantilla.
+
+---
+
 ## Guías por lenguaje
 
 - [NestJS](../../stacks/backend/nestjs/architecture/module-symbol-ownership.md)
