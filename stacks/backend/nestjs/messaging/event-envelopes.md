@@ -6,11 +6,11 @@ El envelope público usa `snake_case` también dentro de eventos/outbox. Ver [me
 // shared/messaging/schemas/event-envelope.schema.ts
 import { z } from 'zod';
 export const eventEnvelopeBaseSchema = z.object({
-  event_id: z.uuid(),
+  event_id: z.string().uuid(),
   event_type: z.string().min(1),
   schema_version: z.number().int().positive(),
-  occurred_at: z.iso.datetime(),
-  tenant_id: z.uuid(),
+  occurred_at: z.string().datetime(),
+  tenant_id: z.string().uuid(),
 });
 export type EventEnvelope<TPayload> =
   z.infer<typeof eventEnvelopeBaseSchema> & { payload: TPayload };
