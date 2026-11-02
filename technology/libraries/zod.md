@@ -1,4 +1,4 @@
-# Zod — Vigilio 4.6.7 estable verificado
+# Zod — Vigilio 3.23.8+ estable en producción (Zod 4 candidato en evaluación)
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Librería runtime de schemas y validación TypeScript. Una sola fuente estructur
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de Zod (shared).** Estado a **2026-10-25**: 4.6.7 estable verificado. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://zod.dev/v4/changelog). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de Zod (shared).** Estado a **2026-11-01**: línea de producción estable `^3.23.8` (Zod 4.6.7 candidato/opt-in). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://zod.dev/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 
@@ -29,7 +29,7 @@ El flujo muestra la **responsabilidad arquitectónica** de la librería; no repr
 ## Instalación o verificación
 
 ```bash
-pnpm add zod@^4
+pnpm add zod@^3.23.8
 ```
 
 **Gate de instalación:** consultar [procedimiento compartido](README.md#protocolo-de-adopción-y-actualización); estos comandos son indicativos, no ejecuciones sobre un consumidor.

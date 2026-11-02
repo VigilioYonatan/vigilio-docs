@@ -29,7 +29,7 @@ El flujo muestra la **responsabilidad arquitectónica** de la librería; no repr
 ## Instalación o verificación
 
 ```bash
-composer require --dev phpstan/phpstan larastan/larastan
+composer require --dev "phpstan/phpstan:^2.0" "larastan/larastan:^3.13"
 ```
 
 **Gate de instalación:** consultar [procedimiento compartido](README.md#protocolo-de-adopción-y-actualización); estos comandos son indicativos, no ejecuciones sobre un consumidor.
@@ -55,7 +55,7 @@ parameters:
 
 ## Nuevas capacidades, migración y breaking changes
 
-Compat de Larastan depende de Laravel/Illuminate y PHPStan; migrar extension.neon si cambia.
+Larastan 2.x quedó obsoleto para Laravel 13; se exige Larastan 3.x (^3.13.2) junto a PHPStan 2.x. Compat de Larastan depende de Laravel/Illuminate y PHPStan; migrar extension.neon si cambia.
 
 Aplicar el [protocolo de migración común](README.md#protocolo-de-adopción-y-actualización), sin asumir que una release nueva está desplegada.
 

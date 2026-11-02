@@ -1,4 +1,4 @@
-# Valkey / Redis-compatible — Vigilio línea runtime según manifiesto, protocolo y cliente
+# Valkey / Redis-compatible — Vigilio 8.1.x LTS (recomendado sobre Redis 7.x)
 
 ## Qué es, qué hace y cuándo usarla
 
@@ -6,7 +6,7 @@ Almacén key-value in-memory compatible con protocolos Redis. Sirve para caché/
 
 **Ubicación en Vigilio:** usa esta dependencia en su stack propietario; otras skills deben enlazar esta guía, no duplicar sus reglas. **Versión:** la indicada en el encabezado es la línea documentada; consultar `technology/versions.md` y el lockfile antes de copiar APIs o aprobar un upgrade.
 
-> **Guía propia de Valkey / Redis-compatible (data).** Estado a **2026-10-25**: línea runtime según manifiesto, protocolo y cliente. Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://valkey.io/docs/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
+> **Guía propia de Valkey / Redis-compatible (data).** Estado a **2026-11-01**: línea LTS 8.1.x con soporte comunitario Linux Foundation hasta 2028 (recomendado sobre Redis standalone). Versión del proyecto consumidor = `pnpm-lock.yaml` / `composer.lock` / imagen o manifest. Fuente: [documentación oficial](https://valkey.io/docs/). Fuente normativa transversal de versiones: [versions.md](../versions.md). **No implica instalación automática ni upgrade aprobado.**
 
 ## Objetivo, responsabilidad y dónde usar
 

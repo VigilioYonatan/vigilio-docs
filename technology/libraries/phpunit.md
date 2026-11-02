@@ -48,7 +48,7 @@ composer require --dev phpunit/phpunit
 
 ## Nuevas capacidades, migración y breaking changes
 
-Ciertos major PHPunit cambian atributos y deprecations; no mezclar annotations antiguas sin versión.
+PHPUnit 11 culminó soporte estándar en febrero de 2026. Para Laravel 13 y PHP 8.4/8.5 se usa PHPUnit 12.x / 13.x (gestionado vía Pest 5). Ciertos major PHPUnit cambian atributos y deprecations; no mezclar annotations antiguas sin versión.
 
 Aplicar el [protocolo de migración común](README.md#protocolo-de-adopción-y-actualización), sin asumir que una release nueva está desplegada.
 
