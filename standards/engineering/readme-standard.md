@@ -200,3 +200,11 @@ pnpm run test:e2e
 | **No explicar la estructura de carpetas** | Archivos colocados en lugares erróneos | Árbol anotado en la sección *Repository Structure*. |
 | **Falta de tests o comandos rotos** | Código que falla en producción | Comandos exactos de `test:unit` y `test:e2e` documentados. |
 | **Versionado inexistente** | Pérdida de trazabilidad | Seguir SemVer y mantener `CHANGELOG.md` al día. |
+
+
+---
+
+## ✅ Correcto / ❌ Incorrecto
+
+- ✅ **Correcto:** Documentar un *Quick Start* reproducible desde checkout limpio en menos de 10 minutos, referenciar versiones desde `package.json`, `docker-compose.yml` y `technology/versions.md`, y mantener todas las credenciales fuera de Git mediante `.env.example`.
+- ❌ **Incorrecto:** Copiar versiones estáticas que divergen del código real, incluir tokens o cadenas de conexión reales en ejemplos del `README.md`, u omitir los comandos exactos de validación y pruebas.
