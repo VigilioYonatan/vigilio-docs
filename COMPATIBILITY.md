@@ -8,9 +8,9 @@ Esta página describe el snapshot cross-repo verificado. La fuente machine-reada
 
 | Campo | Valor |
 |---|---|
-| Fecha de validación | `2026-10-12` |
+| Fecha de validación | `2026-11-17` |
 | Plataforma ejecutable | `Vigilio-Services/vigilio-platform-actions` |
-| Commit inmutable | `362b6194f111c6210523156940cd8a3f633b4a33` |
+| Commit inmutable | `dc8a5002481245a1cfbfc55d9f95f1b0e8d5cd0a` |
 | Node.js | `24.16.0` |
 | pnpm | `11.7.0` |
 
@@ -28,8 +28,8 @@ Estas son las versiones declaradas por el commit de plataforma validado:
 | `@vigilio-services/devsecops-evidence` | `0.3.1` |
 | `@vigilio-services/devsecops-governance` | `0.5.3` |
 | `@vigilio-services/node-nest-tooling` | `0.3.2` |
-| `@vigilio-services/prompt-builder` | `0.12.0` |
-| `@vigilio-services/vigilio-skills` | `0.8.0` |
+| `@vigilio-services/prompt-builder` | `0.12.1` |
+| `@vigilio-services/vigilio-skills` | `0.8.3` |
 
 ## Baseline Verificado En Consumidores
 
@@ -49,8 +49,8 @@ proyectos no deben degradar una dependencia únicamente para hacer coincidir nú
 
 | Perfil | Skills |
 |---|---|
-| `core` | `skill-create-docs`, `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `codebase-context-efficiency`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `architecture-traceability`, `review-code-change`, `token-context-compression` |
-| `node-nest` | `node-nest-technologies`, `node-nest-build-feature`, `node-nest-realtime`, `node-nest-async-workers`, `node-nest-persistence`, `node-nest-security-aws`, `platform-observability-sre`, `node-nest-testing` |
+| `core` | `vigilio-auto-senior`, `complete-work-no-shortcuts`, `review-code-change`, `vigilio-architecture-guide`, `symbol-ownership-architecture`, `repository-readme-architecture`, `precision-skill-reading`, `adaptive-context-budget`, `skill-create-docs`, `shared-technologies`, `commit-ai-change`, `coderabbit-compliance`, `codebase-context-efficiency`, `diagnosing-bugs`, `grill-me`, `improve-codebase-architecture`, `architecture-traceability`, `token-context-compression` |
+| `node-nest` | `vigilio-auto-senior`, `complete-work-no-shortcuts`, `review-code-change`, `vigilio-architecture-guide`, `symbol-ownership-architecture`, `repository-readme-architecture`, `precision-skill-reading`, `adaptive-context-budget`, `node-nest-technologies`, `node-nest-build-feature`, `node-nest-realtime`, `node-nest-async-workers`, `node-nest-persistence`, `node-nest-security`, `node-nest-security-aws`, `platform-observability-sre`, `node-nest-testing` |
 | `openspec` | `openspec-apply-change`, `openspec-archive-change`, `openspec-explore`, `openspec-propose`, `openspec-sync-specs`, `openspec-update-change` |
 
 Los perfiles publicados adicionales se resuelven desde `skill-profiles.json`. No declarar una skill

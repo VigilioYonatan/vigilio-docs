@@ -16,18 +16,23 @@
       "required": ["name", "type"],
       "properties": {
         "name": { "$ref": "#/$defs/name" },
-        "type": { "enum": ["application", "platform", "service", "workspace"] }
+        "type": {
+          "enum": ["application", "platform", "service", "workspace", "frontend", "bff", "worker", "library"]
+        },
+        "owner": { "$ref": "#/$defs/name" },
+        "lifecycle": { "enum": ["experimental", "production", "deprecated"] }
       }
     },
     "repositories": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["application", "infrastructure", "gitops", "images"],
+      "required": ["application", "infrastructure", "gitops"],
       "properties": {
-        "application": { "$ref": "#/$defs/relativePath" },
-        "infrastructure": { "$ref": "#/$defs/relativePath" },
-        "gitops": { "$ref": "#/$defs/relativePath" },
-        "images": { "$ref": "#/$defs/relativePath" }
+        "application": { "$ref": "#/$defs/repoOrRelativePath" },
+        "infrastructure": { "$ref": "#/$defs/repoOrRelativePath" },
+        "gitops": { "$ref": "#/$defs/repoOrRelativePath" },
+        "images": { "$ref": "#/$defs/repoOrRelativePath" },
+        "documentation": { "$ref": "#/$defs/repoOrRelativePath" }
       }
     },
     "environments": {
@@ -58,6 +63,27 @@
         "kubernetesDistribution": { "$ref": "#/$defs/name" }
       }
     },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metrics", "logs", "traces", "sloProfile"],
+      "properties": {
+        "metrics": { "type": "boolean" },
+        "logs": { "type": "boolean" },
+        "traces": { "type": "boolean" },
+        "sloProfile": { "type": "string", "minLength": 1 }
+      }
+    },
+    "reviewApps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "ttl", "dataProfile"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "ttl": { "type": "string", "pattern": "^[0-9]+[hm]$" },
+        "dataProfile": { "type": "string", "enum": ["synthetic"] }
+      }
+    },
     "labs": {
       "type": "object",
       "additionalProperties": false,
@@ -76,6 +102,15 @@
       "type": "string",
       "minLength": 1,
       "pattern": "^(?![A-Za-z]:)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "repoOrRelativePath": {
+      "oneOf": [
+        { "$ref": "#/$defs/relativePath" },
+        {
+          "type": "string",
+          "pattern": "^https://(?!.*(?:glpat-|ghp_|@))[A-Za-z0-9._/-]+$"
+        }
+      ]
     }
   }
 }

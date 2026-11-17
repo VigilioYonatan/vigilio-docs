@@ -18,19 +18,23 @@ Nunca inventes nombres de servicios, organizaciones, clústeres, registros, cuen
 | Tema | Requisito |
 |---|---|
 | Arquitectura | Declarativa, versionada, auditable y con ownership explícito. |
-| Entrega | Artefactos inmutables promovidos mediante gates; no reconstruidos por entorno. |
-| Seguridad | Fail-closed en controles críticos, mínimo privilegio y excepciones con propietario y vencimiento. |
-| Datos sensibles | Secretos y PII fuera de Git, logs, métricas, trazas y ejemplos publicados. |
-| Cambios existentes | Inspeccionar baseline, locks y pruebas antes de modificar; evitar reescrituras masivas no solicitadas. |
-| Evidencia | Registrar qué se ejecutó, sobre qué commit o digest, con resultado reproducible. |
+| Entrega | Artefactos inmutables por digest (`@sha256:`) promovidos mediante gates; no reconstruidos por entorno. |
+| GitOps | Git es la única fuente de verdad declarativa de Kubernetes; Argo CD concilia el estado sin `kubectl patch` permanentes. |
+| Seguridad | Fail-closed en controles críticos, mínimo privilegio (`mr-untrusted` aislado de firma y producción) y excepciones con propietario y vencimiento. |
+| Datos sensibles | Secretos, claves privadas y PII fuera de Git, logs, métricas, trazas, evidencias y ejemplos publicados. |
+| Clasificación | Diferenciar `DECLARED`, `STATIC_TESTED`, `APPLIED`, `RUNTIME_VERIFIED`, `CERTIFIED_LAB`, `NOT_RUN`, `BLOCKED_EXTERNAL` y `FAIL`; nunca etiquetar evidencia `LAB` como `PRODUCTION_LIKE`. |
+| Cleanup y baja | Todo recurso efímero (`review/*`) declara `owner` y `TTL`, usa datos sintéticos y cuenta con eliminación equivalente e idempotente. |
+| Soporte y evolución | Plantillas, schemas y acciones evolucionan con SemVer (`N` / `N-1`), guía de migración y ruta de rollback comprobada. |
+| Cambios existentes | Inspeccionar baseline, locks y pruebas antes de modificar; evitar reescrituras masivas no solicitadas ni `reset --hard` / `force-push`. |
+| Evidencia | Registrar qué se ejecutó, sobre qué commit o digest, con hashes SHA-256 y resultado reproducible. |
 
 ## Evidencia Mínima
 
 - Commit, digest o versión inmutable del artefacto evaluado.
 - Comando, workflow o procedimiento realmente ejecutado.
-- Resultado `PASS`, `FAIL`, `NOT_RUN` o `BLOCKED`, sin convertir ausencia de evidencia en éxito.
-- Propietario y enlace al runbook cuando exista impacto operativo.
-- Coste, rollback y radio de impacto cuando sean relevantes.
+- Resultado `PASS`, `PASS_LAB`, `FAIL`, `NOT_RUN` o `BLOCKED_EXTERNAL`, sin convertir ausencia de evidencia en éxito.
+- Propietario y enlace resoluble al runbook y dashboard cuando exista impacto operativo.
+- Coste, cleanup verificado, rollback y radio de impacto cuando sean relevantes.
 
 ## Excepciones
 
@@ -40,7 +44,7 @@ Una excepción requiere motivo, propietario, alcance, ticket, compensaciones y T
 
 - Preserva cambios del usuario y separa hallazgos preexistentes de cambios introducidos por la tarea.
 - No declares herramientas, controles o entornos como activos sólo porque exista configuración aspiracional.
-- Si una verificación requiere acceso, credenciales o infraestructura no disponibles, reporta `NOT_RUN` o `BLOCKED`.
+- Si una verificación requiere acceso, credenciales, otra persona u otro host físico no disponibles, reporta `NOT_RUN` o `BLOCKED_EXTERNAL`.
 - Consulta [refactorización de código existente](../engineering/refactoring-existing-code.md) cuando el trabajo modifique una base heredada.
 
 ## Validación Del Contexto
@@ -49,5 +53,5 @@ El contrato opcional y su precedencia se definen en [contexto dinámico de plata
 
 ## ✅ Correcto / ❌ Incorrecto
 
-- ✅ **Correcto:** Resolver el contexto desde configuración validada y manifiestos reales, ejecutar gates y conservar evidencia verificable.
-- ❌ **Incorrecto:** Copiar nombres de un ejemplo, asumir que existe producción o aprobar un control porque el documento describe cómo debería funcionar.
+- ✅ **Correcto:** Resolver el contexto desde configuración validada y manifiestos reales, ejecutar gates fail-closed, limpiar recursos efímeros y conservar evidencia verificable clasificada honestamente (`LAB` vs global).
+- ❌ **Incorrecto:** Copiar nombres de un ejemplo, exponer secretos en logs, asumir que existe producción física en una laptop o aprobar un control porque el documento describe cómo debería funcionar.
